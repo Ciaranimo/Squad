@@ -3,6 +3,15 @@
 
     <item
         is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/9.6.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="4a36600281a648769411ef642c331851732bf29e">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tasks-9.6.1_39c38821d2146fd1732e4ec07b215257f285326a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/Users/ciaranbyrne/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.1.1/support-annotations-25.1.1.jar"
         jumboMode="true"
         optimize="true"
@@ -12,48 +21,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.1.1/jars/classes.jar"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/9.6.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="ecb496cc08dd52551fc5ec6db3bc0632e95a89bb">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-25.1.1_e1453e5a4db1a31e900b7add0f32fa63b4c5f792/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="c03bf57f358aa10d253f21989e93bcf6014b3b17">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.1.1_1c413f1711bc8b47fd5fa15ee66e4a79fa53d778/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="7bde4c34162092e0a77e7f12dc85ed77c484cf5c">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.1.1_7662c25f287231ff0669f1621538bf0ba4018b45/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="e2719c102dca3a7a5b02ce07f769362da6ddb4ab">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.1.1_cdfb6d9b72a6bb517e5060c12fda45f44985aac9/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="538fc208d77b4f52f86de4e4c0a3e49c093fba68">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_ff6ab1ffeb98940d71bd0cc1eef5e090717e9a98/classes.dex" />
+        sha1="eccaaa9ffa6bb4bfbd2e870f01aaf69655d353be">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-9.6.1_10f113c6108be48986432761408ddb5add53d249/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -66,12 +39,93 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.1.1/jars/classes.jar"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="0fb891e8f0cfba0513043a7bb357513d229ca2cd">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.1.1_584ded973965aa2aa890417ac98be1765da35044/classes.dex" />
+        sha1="9ff3c473fc8c8e1a35eabc02af530372a1389124">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_ff6ab1ffeb98940d71bd0cc1eef5e090717e9a98/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth/9.6.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="2a18547ea91d258866d132c2a763185f15b01b25">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-9.6.1_b8b17ad975874dd1f5610b2890d1af4a9113f76b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.firebase/firebase-database-connection/9.6.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="db0a4170961a16af6d7a5222bf90a5876eea4227">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-database-connection-9.6.0_b0b2ff0d309e9670dd72605e7aaf7bbc942a76ba/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.14.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="42a3ae86dd3ae2876d3e95c2e6e104ae57a50a65">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.facebook.android-facebook-android-sdk-4.14.1_6c4a1954ff5fe9632cc0b2fa84443b245cb62139/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics/9.6.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="a9f41e6463de88c3f979d796382fc24fb7e9cd41">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-9.6.0_b4bd603991920c6206675a1fce917ed7bba70273/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d9ecde39b460470e655de6e47c05573d2d5a8bfb">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-cardview-v7-23.4.0_58f110c86a33afe61dc7b93a23011d58ef75f98d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.1.1_d710bbd33f08b6a83c74e9abd2522bf3b2311a90/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.firebase/firebase-database/9.6.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="5243af50631020511cf2403789678149b1a319e6">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-database-9.6.0_2f3cefd9bec0bdc4995675c67a685798c70ae5ab/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="c03bf57f358aa10d253f21989e93bcf6014b3b17">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.1.1_1c413f1711bc8b47fd5fa15ee66e4a79fa53d778/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.4.0_f29e7e6d167e396de92ed5831ace25d61b4c0e08/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -79,17 +133,80 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="71fcc10d629a00211d57f4c797690306069b38b4">
+        sha1="e3f081c1e32365f6647eb85663a3d1a518765857">
         <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_e7ae2a615c15edf2d6aa99495ae7d321e33fb4ef/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.1.1/jars/classes.jar"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.firebase/firebase-iid/9.6.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="0d191c1a09e4892d059e5ce749e4ad4e08129e35">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-25.1.1_b4057462a87f29c386e14382b23544527e427ab4/classes.dex" />
+        sha1="d39f676be8400123523882d189a1d84040d34339">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-iid-9.6.0_a8e08f478271888f2191b92b369eca047e5544e7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.firebase/firebase-common/9.6.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1ef72e72bc0d05602c366582afa9439f58bb31d6">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-common-9.6.1_1779ad4e0a9a1b126b64ec408cf10a8ddbe58321/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="ecb496cc08dd52551fc5ec6db3bc0632e95a89bb">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-25.1.1_e1453e5a4db1a31e900b7add0f32fa63b4c5f792/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="7bde4c34162092e0a77e7f12dc85ed77c484cf5c">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.1.1_7662c25f287231ff0669f1621538bf0ba4018b45/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.firebaseui/firebase-ui-auth/0.6.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="8ac09931704b91e7b4d281f5e34b3b006b628c22">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.firebaseui-firebase-ui-auth-0.6.0_14b3d16885a1a2b02c3c9f58697095f804301cfb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.6.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="af7582c6b327449c6d32518e6a10307860b7b5d6">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-9.6.1_885ed27ddd0ffbfaa1cae72d8aea50d9b4879ade/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-module/9.6.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="6ffe8b28ab61e5ee92ab9431a220379790c71ddf">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-module-9.6.1_123a0aad9587260813d2154f4582e2b5c0556d05/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-common/9.6.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="77558e74bb2056ef38516296f13a27c4c4fc3e5c">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-common-9.6.1_acf3208edb273a99a7b8c92146b26add8270eaf2/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -102,12 +219,93 @@
     </item>
     <item
         is-multidex="true"
-        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.1/jars/classes.jar"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.1.1_d710bbd33f08b6a83c74e9abd2522bf3b2311a90/classes.dex" />
+        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.4.0_669346b9b740ce5a76a9b414fb822098657b86f2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth/9.6.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1f4bb2577a30d0b3268fed038ed59230709ad593">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-9.6.0_a73cf50ee87def4e387119f9f5024ac9afe897e8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics-impl/9.6.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="74d1712880eb2b4ab37ddf3c6a3232c883756726">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-impl-9.6.0_aa8a004225a320d11313980a6ea3289861a8439f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-tasks-1.4.0_fbb2d06f30d0590eb78cbbe97e181ccfc6f9cdaa/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="e2719c102dca3a7a5b02ce07f769362da6ddb4ab">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.1.1_cdfb6d9b72a6bb517e5060c12fda45f44985aac9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.4.0/8ad21bf21784dacce5f2043afb97218cc377e835/bolts-applinks-1.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="8ad21bf21784dacce5f2043afb97218cc377e835">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-applinks-1.4.0_98c7a42d412e455d2f486b04721472ec8ac171fd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="0fb891e8f0cfba0513043a7bb357513d229ca2cd">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.1.1_584ded973965aa2aa890417ac98be1765da35044/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.1.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="0d191c1a09e4892d059e5ce749e4ad4e08129e35">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-25.1.1_b4057462a87f29c386e14382b23544527e427ab4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.android.support/customtabs/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="2d1eaa9e0b98f8fc4c2b989d9b30d4f1480648ac">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-customtabs-23.4.0_ee5481b023b92351bd28a7749b426f542f087bf7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth-base/9.6.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="0ef21408e3142ffbfbd4a7ec1762c3325c6c386c">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-base-9.6.0_318356bfa12eb388f8d7c271a1af9662f84e2d5e/classes.dex" />
     </item>
 
 </items>
