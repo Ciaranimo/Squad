@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         };
     }
     //TODO
-    //sign out button STEP 6 - need to build button xml, getting error on mGoogleApiclient - can try alternate one in FriendlyChat
+    //sign out button STEP 6 - need to build button xml, getting error on mGoogleApiclient - can try alternate one in FrienlyCha
     /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -109,4 +109,6 @@ public class MainActivity extends AppCompatActivity {
         //attach Firebase Authentication state listener
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
+
+
 }
