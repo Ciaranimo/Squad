@@ -21,6 +21,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -50,6 +52,14 @@ public class SignInActivity extends AppCompatActivity implements
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
 
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
+    // for email registration
+    private EditText etEmail;
+    private EditText etPassword;
+
+    private Button btnRegisterEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +67,10 @@ public class SignInActivity extends AppCompatActivity implements
 
         // Assign fields
         mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
+
+        etEmail = (EditText) findViewById(R.id.etEmail);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+        btnRegisterEmail = (Button) findViewById(R.id.btnRegisterEmail);
 
         // Set click listeners
         mSignInButton.setOnClickListener(this);
@@ -73,6 +87,19 @@ public class SignInActivity extends AppCompatActivity implements
 
         // Initialize FirebaseAuth
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+        // **Auth stage listener for email sign up
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+                if(firebaseAuth.getCurrentUser() != null ){
+
+                    // Intent user account
+
+                }
+            }
+        };
 
     }
 
@@ -138,5 +165,11 @@ public class SignInActivity extends AppCompatActivity implements
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+    }
+
+    protected void onStart(){
+        super.onStart();
+        // ** TVaC
+        mFirebaseAuth.addAuthStateListener(mAuthListener);
     }
 }
