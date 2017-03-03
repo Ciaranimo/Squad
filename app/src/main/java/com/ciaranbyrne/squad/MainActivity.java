@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
     private SharedPreferences mSharedPreferences;
 
+    private Button btnEditSquad;
 
 
     @Override
@@ -56,6 +59,21 @@ public class MainActivity extends AppCompatActivity {
             }
             */
         }
+
+        // Intent to Edit pplayers screen
+        btnEditSquad = (Button) findViewById(R.id.btnEditSquad);
+
+        btnEditSquad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Explicit Intent by specifying its class name
+                Intent i = new Intent(MainActivity.this, EditPlayersActivity.class);
+
+                // Starts TargetActivity
+                startActivity(i);
+            }
+        });
+
 
     }
 

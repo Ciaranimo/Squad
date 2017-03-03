@@ -21,31 +21,31 @@
         android:layout_marginTop="19dp"
         android:id="@+id/tvHeadingEditPlayers" />
 
-    <ExpandableListView
+    <ListView
         android:layout_width="match_parent"
-        android:id="@+id/listPlayers"
-        android:layout_height="260dp"
-        android:layout_below="@+id/tvHeadingEditPlayers"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
+        android:id="@+id/list_players"
+        android:layout_above="@+id/btnAddPlayer"
+        android:layout_marginTop="60dp" />
 
     <Button
         android:text="Add Player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/listPlayers"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="15dp"
-        android:id="@+id/btnAddPlayer" />
+        android:id="@+id/btnAddPlayer"
+        android:layout_marginBottom="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 
-    <Button
-        android:text="Save Details"
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
         android:layout_alignBottom="@+id/btnAddPlayer"
-        android:layout_toEndOf="@+id/btnAddPlayer"
-        android:layout_marginStart="11dp"
-        android:id="@+id/btnSaveEditPlayerScreen" />
+        android:layout_alignParentStart="true"
+        android:id="@+id/etNewPlayer"
+        android:hint="Enter player name...." />
 
 </RelativeLayout>

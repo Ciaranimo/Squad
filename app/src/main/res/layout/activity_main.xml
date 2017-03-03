@@ -40,11 +40,12 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:text="@string/edit_matches"
+        android:text="Edit Squad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnEditMatches"
         android:layout_below="@+id/btnBookPitchMenu"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:id="@+id/btnEditSquad"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

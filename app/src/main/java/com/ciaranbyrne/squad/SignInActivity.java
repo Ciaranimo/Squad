@@ -169,7 +169,7 @@ public class SignInActivity extends AppCompatActivity implements
 
     protected void onStart(){
         super.onStart();
-        // ** TVaC
+        // ** TVAC //TODO
         mFirebaseAuth.addAuthStateListener(mAuthListener);
     }
 }
