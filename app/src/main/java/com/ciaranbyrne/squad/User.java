@@ -4,17 +4,17 @@ package com.ciaranbyrne.squad;
  * Created by ciaranbyrne on 05/03/2017.
  */
 
-public class Squad {
+public class User {
 
     private String mName;
     private String mUid;
     private Boolean mPlaying;
 
-    public Squad(){
+    public User(){
 
     }
 
-    public Squad (String name, String uid, Boolean playing){
+    public User (String name, String uid, Boolean playing){
 
         mName = name;
         mUid = uid;

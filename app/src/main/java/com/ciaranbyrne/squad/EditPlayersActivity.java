@@ -35,19 +35,19 @@ public class EditPlayersActivity extends AppCompatActivity {
         // instantiate arraylist to show players
         //mPlayersList = (ListView) findViewById(R.id.list_players);
 
-        // From github code, testing creating new Squad
-        Squad player = new Squad("Tom", "1234", TRUE);
-        mDatabase.push().setValue(player);
+        // From github code, testing creating new User
+        User user = new User("Tom", "1234", TRUE);
+        mDatabase.push().setValue(user);
 
         ListView playersView = (ListView) findViewById(R.id.list_players);
 
         // Create customer Firebase ListAdapter sub class
         // TODO look at GITHUB tutorial
-        mAdapter = new FirebaseListAdapter<Squad>(this, Squad.class, android.R.layout.two_line_list_item, mDatabase) {
+        mAdapter = new FirebaseListAdapter<User>(this, User.class, android.R.layout.two_line_list_item, mDatabase) {
             @Override
-            protected void populateView(View view, Squad squadPlayer, int position) {
-                ((TextView)view.findViewById(android.R.id.text1)).setText(squadPlayer.getName());
-                ((TextView)view.findViewById(android.R.id.text2)).setText(String.valueOf(squadPlayer.getPlaying()));
+            protected void populateView(View view, User user, int position) {
+                ((TextView)view.findViewById(android.R.id.text1)).setText(user.getName());
+                ((TextView)view.findViewById(android.R.id.text2)).setText(String.valueOf(user.getPlaying()));
 
 
             }
@@ -61,7 +61,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         btnAddPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDatabase.push().setValue(new Squad(etNewPlayer.getText().toString(),"1234", TRUE));
+                mDatabase.push().setValue(new User(etNewPlayer.getText().toString(),"1234", TRUE));
                 etNewPlayer.setText("");
             }
         });
@@ -71,8 +71,8 @@ public class EditPlayersActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 for (DataSnapshot msgSnapshot: snapshot.getChildren()) {
-                    Squad player = msgSnapshot.getValue(Squad.class);
-                    Log.i("Squad", player.getName());
+                    User player = msgSnapshot.getValue(User.class);
+                    Log.i("User", player.getName());
                 }
             }
             @Override
