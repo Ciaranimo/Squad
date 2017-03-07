@@ -2,7 +2,6 @@ package com.ciaranbyrne.squad;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
-
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences mSharedPreferences;
 
     private Button btnEditSquad;
+    private TextView tvDisplayName;
 
 
     @Override
@@ -79,13 +78,27 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+
+        tvDisplayName = (TextView) findViewById(R.id.tv_display_name);
+
+        tvDisplayName.setText(userInfo());
+
+    }// End of onCreate
+
+        // Firebase Authentication state listener
+
+
+
+    //get logged in user information
+    public String userInfo(){
         // Access user information
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // Name, email address, and profile photo Url
             String name = user.getDisplayName();
             String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
+            //Uri photoUrl = user.getPhotoUrl();
 
             // Check if user's email is verified
             boolean emailVerified = user.isEmailVerified();
@@ -94,42 +107,11 @@ public class MainActivity extends AppCompatActivity {
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getToken() instead.
             String uid = user.getUid();
+            return name;
         }
+        return "";
 
-
-
-
-
-    }// End of onCreate
-
-        // Firebase Authentication state listener
-
-
-    // Firebase sign out from Friendly
-    // TODO Sign out not working correctly
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-
-        switch(item.getItemId()){
-            case R.id.sign_out_menu:
-                //sign out
-                FirebaseAuth.getInstance().signOut();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-
-
 
 /*
     @Override
@@ -164,27 +146,43 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-   /*
+
+
+
+    //TODO - looks like it is working
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sign_out_menu:
+                FirebaseAuth.getInstance().signOut();
+
+                // mFirebaseAuth.signOut();
+                //Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                mUsername = ANONYMOUS;
+                startActivity(new Intent(this, SignInActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
-    */
 
-
-    //TODO
-    //sign out button STEP 6 - need to build button xml, getting error on mGoogleApiclient - can try alternate one in FrienlyCha
     /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+
+
+        switch(item.getItemId()){
             case R.id.sign_out_menu:
-                mFirebaseAuth.signOut();
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-                mUsername = ANONYMOUS;
-                startActivity(new Intent(this, SignInActivity.class));
+                //sign out
+                FirebaseAuth.getInstance().signOut();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
