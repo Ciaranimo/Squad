@@ -8,14 +8,14 @@ import android.net.Uri;
 
 public class User {
 
-    private String name;
+    private String mName;
     private Boolean mPlaying;
 
     // Firebase variables for user
     private String email;
     private Uri photoUrl;
     private Boolean emailVerified;
-    private String uid;
+    private String mUid;
 
     public User(){
 
@@ -23,8 +23,8 @@ public class User {
 
     public User (String name, String uid, Boolean playing){
 
-        name = name;
-        uid = uid;
+        mName = name;
+        mUid = uid;
         mPlaying = playing;
 
         email = email;
@@ -35,19 +35,19 @@ public class User {
     }
 
    public String getName(){
-       return name;
+       return mName;
    }
 
    public void setName(String name){
-       this.name = name;
+       this.mName = name;
    }
 
    public String getUid(){
-       return uid;
+       return mUid;
    }
 
    public void setUid(String uid){
-       this.uid = uid;
+       this.mUid = uid;
    }
 
    public Boolean getPlaying(){

@@ -42,7 +42,6 @@ public class EditPlayersActivity extends AppCompatActivity {
         ListView playersView = (ListView) findViewById(R.id.list_players);
 
         // Create customer Firebase ListAdapter sub class
-        // TODO look at GITHUB tutorial
         mAdapter = new FirebaseListAdapter<User>(this, User.class, android.R.layout.two_line_list_item, mDatabase) {
             @Override
             protected void populateView(View view, User user, int position) {

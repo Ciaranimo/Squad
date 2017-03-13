@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import static java.lang.Boolean.TRUE;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
+    private FirebaseUser user;
     private DatabaseReference usersDatabase;
 
 
@@ -62,18 +64,19 @@ public class MainActivity extends AppCompatActivity {
         //Initialize Firebase components
         // get database reference to read data
         usersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+
         // Initialize Firebase Auth - get user and check logged in
 
         //GET CURRENT USER INFO
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        if (mFirebaseUser == null) {
+        user = mFirebaseAuth.getCurrentUser();
+        if (user == null) {
             // Not signed in, launch the Sign In activity
             startActivity(new Intent(this, SignInActivity.class));
             finish();
             return;
         } else {
-            mUsername = mFirebaseUser.getDisplayName();
+            mUsername = user.getDisplayName();
            /* if (mFirebaseUser.getPhotoUrl() != null) {
                 mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
             }
@@ -91,8 +94,12 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    usersDatabase.child(mFirebaseUser.getUid()).setValue(true);
-                    usersDatabase.child(mFirebaseUser.getDisplayName()).setValue(true);
+                    // usersDatabase.child(mFirebaseUser.getUid()).setValue(true);
+                    // usersDatabase.child(mFirebaseUser.getDisplayName()).setValue(true);
+
+                    //mDatabase.push().setValue(new User(etNewPlayer.getText().toString(),"1234", TRUE));
+                    usersDatabase.push().setValue(new User(user.getDisplayName(), user.getUid(), TRUE));
+
 
                 } else {
                     // User is signed out
