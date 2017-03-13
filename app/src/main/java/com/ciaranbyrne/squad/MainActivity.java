@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,15 +32,22 @@ public class MainActivity extends AppCompatActivity {
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+    private DatabaseReference usersDatabase;
+
+
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
 
     private String mUsername;
+
+
     private GoogleApiClient mGoogleApiClient;
     private SharedPreferences mSharedPreferences;
 
     private Button btnEditSquad;
     private TextView tvDisplayName;
+
+
 
 
     @Override
@@ -49,7 +60,11 @@ public class MainActivity extends AppCompatActivity {
         mUsername = ANONYMOUS;
 
         //Initialize Firebase components
-        // Initialize Firebase Auth
+        // get database reference to read data
+        usersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        // Initialize Firebase Auth - get user and check logged in
+
+        //GET CURRENT USER INFO
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         if (mFirebaseUser == null) {
@@ -63,7 +78,30 @@ public class MainActivity extends AppCompatActivity {
                 mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
             }
             */
+            tvDisplayName = (TextView) findViewById(R.id.tv_display_name);
+
+            tvDisplayName.setText(userInfo());
         }
+
+        // add user instance to realtime database
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    usersDatabase.child(mFirebaseUser.getUid()).setValue(true);
+                    usersDatabase.child(mFirebaseUser.getDisplayName()).setValue(true);
+
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
+
 
         // Intent to Edit pplayers screen
         btnEditSquad = (Button) findViewById(R.id.btnEditSquad);
@@ -80,14 +118,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        tvDisplayName = (TextView) findViewById(R.id.tv_display_name);
 
-        tvDisplayName.setText(userInfo());
 
     }// End of onCreate
-
-        // Firebase Authentication state listener
-
 
 
     //get logged in user information
@@ -124,12 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
     */
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in.
-        // TODO: Add code to check if user is signed in.
-    }
+
 
     @Override
     public void onPause() {
@@ -146,7 +174,19 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+    }
 
 
     //TODO - looks like it is working

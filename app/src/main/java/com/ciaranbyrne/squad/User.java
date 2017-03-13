@@ -1,14 +1,21 @@
 package com.ciaranbyrne.squad;
 
+import android.net.Uri;
+
 /**
  * Created by ciaranbyrne on 05/03/2017.
  */
 
 public class User {
 
-    private String mName;
-    private String mUid;
+    private String name;
     private Boolean mPlaying;
+
+    // Firebase variables for user
+    private String email;
+    private Uri photoUrl;
+    private Boolean emailVerified;
+    private String uid;
 
     public User(){
 
@@ -16,25 +23,31 @@ public class User {
 
     public User (String name, String uid, Boolean playing){
 
-        mName = name;
-        mUid = uid;
+        name = name;
+        uid = uid;
         mPlaying = playing;
+
+        email = email;
+        photoUrl = photoUrl;
+        emailVerified = emailVerified;
+
+
     }
 
    public String getName(){
-       return mName;
+       return name;
    }
 
    public void setName(String name){
-       mName = name;
+       this.name = name;
    }
 
    public String getUid(){
-       return mUid;
+       return uid;
    }
 
    public void setUid(String uid){
-       mUid = uid;
+       this.uid = uid;
    }
 
    public Boolean getPlaying(){
@@ -42,9 +55,30 @@ public class User {
    }
 
    public void setPlaying(Boolean playing){
-       mPlaying = playing;
+       this.mPlaying = playing;
    }
 
+   public String getEmail(){
+       return email;
+   }
 
+   public void setEmail(String email){
+       this.email = email;
+   }
 
+    public Uri getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(Uri photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
 }

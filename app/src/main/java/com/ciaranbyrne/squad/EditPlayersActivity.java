@@ -31,7 +31,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         setContentView(com.ciaranbyrne.squad.R.layout.activity_edit_players);
 
         // get database reference to read data
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("players");
         // instantiate arraylist to show players
         //mPlayersList = (ListView) findViewById(R.id.list_players);
 

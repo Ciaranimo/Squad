@@ -66,6 +66,8 @@ public class SignInActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_sign_in);
 
         // Assign fields
+
+        // TODO EMAIL REGISTER BUTTON
         mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
 
         etEmail = (EditText) findViewById(R.id.etEmail);
