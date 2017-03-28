@@ -129,6 +129,11 @@ public class MainActivity extends AppCompatActivity {
 
     }// End of onCreate
 
+    private void writeNewUser(String userId, String name, String email) {
+        User user = new User(name, email);
+
+        usersDatabase.child(userId).setValue(user);
+    }
 
     //get logged in user information
     public String userInfo(){
@@ -196,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //TODO - looks like it is working
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

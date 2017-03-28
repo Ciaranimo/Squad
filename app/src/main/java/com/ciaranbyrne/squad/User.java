@@ -8,23 +8,24 @@ import android.net.Uri;
 
 public class User {
 
-    private String mName;
-    private Boolean mPlaying;
+    public String mName;
+    public Boolean mPlaying;
 
     // Firebase variables for user
-    private String email;
-    private Uri photoUrl;
-    private Boolean emailVerified;
-    private String mUid;
+    public String email;
+    public Uri photoUrl;
+    public Boolean emailVerified;
+    public String mUid;
 
     public User(){
 
     }
 
-    public User (String name, String uid, Boolean playing){
+    public User (String uid, String name, Boolean playing){
 
-        mName = name;
         mUid = uid;
+        mName = name;
+
         mPlaying = playing;
 
         email = email;

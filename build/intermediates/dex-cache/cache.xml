@@ -2,31 +2,22 @@
 <items version="2" >
 
     <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/5c812aa104a3cb637d0179f6eb84ca1573ac60a9/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="849da156edbc1201f5cd6e237524187442a62af3">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_30a39194d2ab5b2f38ee0bb03513c0137a13de63.jar" />
-    </item>
-    <item
         is-multidex="true"
-        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="/Users/ciaranbyrne/.android/build-cache/f5149f91b103aa08e678fb29d68542b39dc15e1c/output/jars/libs/internal_impl-25.0.0.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_ff6ab1ffeb98940d71bd0cc1eef5e090717e9a98/classes.dex" />
+        sha1="f2e3b9bc1ec25f652e8007ce7774c991e38f6a00">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.0_2b70a8c56cc6890da2a89bc297d7b1a92c6c7172/classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/4c82a3eb05187542434c83f774ae2069b4f03834/output/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/74bc4d3ff2fc17db7c4e641b113d431bc521be9c/output/jars/classes.jar"
+        jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="985be85104f6d0c5c5e51e7b7e60d8883a98ac64">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_76265a4ec80721bfda7adddf747a94119568f092.jar" />
+        sha1="76fb65a4b41ea42dab8a1310ed772a2420c96b52">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_7d5616d0cde1d549c772fbc8368205bf156f776c/classes.dex" />
     </item>
     <item
         is-multidex="false"
@@ -39,48 +30,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/5605164789669de72e8002cd7383d3c9f51dc5cc/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="ce6e6e59212db0893fc36e5b579cf319a84aade8">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_c91920455d7d7976b0c024b5262d7f0e26f79ffc.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="/Users/ciaranbyrne/.android/build-cache/de568abd56f199e08781e119c196ba9c959b6c3d/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.1"
         sha1="fb0229499e600b485a276d4e31161a3ae31c144c">
         <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_41481a118613b658f456529c6580769a6abe75dc.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/7864f1d898a217d75a3e58a0157ed62e38e31948/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_a054af33d65bd759fa79767e7fea7855b185c523.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/f6eec8382f5a0bfcc0680ff5fb0e739e88692932/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="777627dcaf0eaacd4212220e8f2d0c63def91774">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_ac0eda055ddf2d2ef086374a3e1bb1f2caf4e16b.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/5e507f4b543db0f073e8f135114b158cd130eb7d/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="26384be22ddc74cfe197ebda9edbc7d1fd8bd537">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_2e7283aa51d7a64cd67dfbe4305aaae22a6298a4.jar" />
     </item>
     <item
         is-multidex="false"
@@ -101,13 +56,22 @@
         <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/glide-3.6.1_ee1d4f47cf622ee475f4251f88ec5463422814be.jar" />
     </item>
     <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/847689d88ff27f4f3dd432bff7114260a7c5ce3b/output/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/752a451ebbce0d4367abd7d97011b29eafba261c/output/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="26674000177e45447a0326a6ad84612761199a13">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_112e645dcd1cc2ef44c39c9235aba69aab27f3be.jar" />
+        sha1="ee5faf4dee5b6a4364bf51587871047dde7c703a">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.0_a9c84925ea915658e807802a505d239dd5fec700/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/ab8ede42121db053000e916990a842cebd918ed1/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="4ccbcda5c72027c7f7c14be9ff8640d9cb0d8da0">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3ad81a3ed509422fb32be2ba14d0de096f91bea9/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -117,6 +81,15 @@
         revision="25.0.1"
         sha1="db2ae3ca30943c11d70d5089ad46575f9cf36f63">
         <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e7ae2a615c15edf2d6aa99495ae7d321e33fb4ef/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/c7dcccc4bf8811ba3d36c760625bcfe10f18b973/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="0c6d948e6cb9ea6f535d175fb61ba2930719c0e9">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_630f584753190f93720729eed306d8d0d2d4c2a4/classes.dex" />
     </item>
     <item
         is-multidex="false"
@@ -137,31 +110,13 @@
         <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_47810f91241041dfad2af04e29a1ce4a350e195a.jar" />
     </item>
     <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/be77e48c923575de3b3ee4be09e054c1576f5416/output/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/ab8ede42121db053000e916990a842cebd918ed1/output/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="c76f6507a42aec274953e882bf3c49a570843ef5">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_7949fe7589d5a36deb772e8ad2559fc4da77eb15.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/81b4a3b1d96c86ea9008a890f887263332238f5f/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="ae809d521d9f7da5337a82edd64eea23a76e788d">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_00371e1c09aa237574110d73ee9b74ddb8d23f73.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/7c55fbcd3bb21f0eb76ef036f18ca5db017b67e4/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="73a2c740a76aa4ba46168ed8bcdee1966e48a589">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_5f7de2204afef9d43852ba83b5602a3c29e16aac.jar" />
+        sha1="3b61a70884adaf0be3fc06c70c801e3e6df13133">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.0_b0e62ff2e542cab52d38fcd2a78037696474e885/classes.dex" />
     </item>
     <item
         is-multidex="false"
@@ -189,6 +144,15 @@
         revision="25.0.1"
         sha1="a383a583c346ce8ea5767d77f4fe58e1d8e5f221">
         <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_a73974e86e4ae8341e2ebf6258a641f9dfb4bfd9.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/6fb31031b42c3020778782f021bf340207c484d5/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3ecf022b8368bb00ea9508017b8ef988a78eb839/classes.dex" />
     </item>
     <item
         is-multidex="false"
@@ -245,6 +209,15 @@
         <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_c5c0690f58d66422fd0eda42ca478d4c8a5788f4.jar" />
     </item>
     <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/cf3d609081c5903fa2347e9cde15f59fec0b5f0c/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="26674000177e45447a0326a6ad84612761199a13">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_897f8cc91bf7605c5799443dc27d6285df562902/classes.dex" />
+    </item>
+    <item
         is-multidex="false"
         jar="/Users/ciaranbyrne/.android/build-cache/9f381b6bbe7d096b4d5e7202382ed7b4bb168e81/output/jars/classes.jar"
         jumboMode="false"
@@ -252,42 +225,6 @@
         revision="25.0.1"
         sha1="c7ed3fd9d5a9687980dac6c504abd91ad3dfa238">
         <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_95e61da1f1ae404e53fbd92e563d3033f6c6606a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/90ad3044a550299bdb2fc8a4fecb7993214d7894/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="3347c3e7056fabc88bdbd8fdae65ddf2b674d977">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_f3a21afb573d699df713626b84557e0f36908f77.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.0.0/support-annotations-25.0.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="a22d2cc94da87b254451fa8ed28afc30b4653773">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/support-annotations-25.0.0_3387948ab59c75c08c31015d0e45f6dd13358d30.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/3576e48af4430b93a865b020dfba4d759d2d5d41/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="8bb364f67ec2eba2356872b2b4ddfe8aada2d5ac">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_f2f4beea6218183623fc8f9ae4c94d5f4044d763.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/b6d7a1eafe32a5528c17aac0f1bcd47d7c85bf9a/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.1"
-        sha1="22031b047b12904b888549ba36c0c30d83b1aea1">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_1aef3397cf640f4056e973466cc762ed425f6bc6.jar" />
     </item>
     <item
         is-multidex="false"
@@ -354,6 +291,222 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/78b7b128922d5ced8772dfaaccf5604d0701603d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="8bc45ce1f63d1a391fd38b32a201be5a42f9c95d">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_80a85b5174eab27891b4c5d9d3a0036c27cb3eb0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/847689d88ff27f4f3dd432bff7114260a7c5ce3b/output/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_d87418b5d64091714fe60bfeb3675e4f1429e6e3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/5c812aa104a3cb637d0179f6eb84ca1573ac60a9/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="849da156edbc1201f5cd6e237524187442a62af3">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_30a39194d2ab5b2f38ee0bb03513c0137a13de63.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_ff6ab1ffeb98940d71bd0cc1eef5e090717e9a98/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/4c82a3eb05187542434c83f774ae2069b4f03834/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="985be85104f6d0c5c5e51e7b7e60d8883a98ac64">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_76265a4ec80721bfda7adddf747a94119568f092.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/5605164789669de72e8002cd7383d3c9f51dc5cc/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="ce6e6e59212db0893fc36e5b579cf319a84aade8">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_c91920455d7d7976b0c024b5262d7f0e26f79ffc.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/abd46a021db68bc337d06b11823ad8e01d50d72c/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="5e497d60f0cb6ce87c458ac5420a46d0fed49bd0">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_864351255316c2f5c9170393b718fa56fa437154/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/7864f1d898a217d75a3e58a0157ed62e38e31948/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_a054af33d65bd759fa79767e7fea7855b185c523.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/f578dff57ebe6d9e0fe5ef1b68caa3ec65495e50/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="26384be22ddc74cfe197ebda9edbc7d1fd8bd537">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_cb7c092c1026fb5f7531370de6b34c0d4a92a0aa/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/f5149f91b103aa08e678fb29d68542b39dc15e1c/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="75b1f366ff0bbc78f8b1f7cf0dc82e7c53afef6a">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3ea889e167760dbaf8c8b51119c7bb08be0f4521/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/f6eec8382f5a0bfcc0680ff5fb0e739e88692932/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="777627dcaf0eaacd4212220e8f2d0c63def91774">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_ac0eda055ddf2d2ef086374a3e1bb1f2caf4e16b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/5e507f4b543db0f073e8f135114b158cd130eb7d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="26384be22ddc74cfe197ebda9edbc7d1fd8bd537">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_2e7283aa51d7a64cd67dfbe4305aaae22a6298a4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/847689d88ff27f4f3dd432bff7114260a7c5ce3b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="26674000177e45447a0326a6ad84612761199a13">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_112e645dcd1cc2ef44c39c9235aba69aab27f3be.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/fe4b855444db2de6f7e41eb2c6d7865f40c54f90/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d29714cc76b38157e3cbd034c66e1ec808eb4c19">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_5cbb31a628ab9b6bd641a20602da80d74abf7b50/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/fa366ce141a45f6be7ebc5a981dfa5ea515c741b/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="53a420cd4f49274db6bd43475f8006ba67ef6bbd">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_f79e316468e829b46fc6eea174668941c5026f88/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/be77e48c923575de3b3ee4be09e054c1576f5416/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="c76f6507a42aec274953e882bf3c49a570843ef5">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_7949fe7589d5a36deb772e8ad2559fc4da77eb15.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/81b4a3b1d96c86ea9008a890f887263332238f5f/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="ae809d521d9f7da5337a82edd64eea23a76e788d">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_00371e1c09aa237574110d73ee9b74ddb8d23f73.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/7c55fbcd3bb21f0eb76ef036f18ca5db017b67e4/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="73a2c740a76aa4ba46168ed8bcdee1966e48a589">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_5f7de2204afef9d43852ba83b5602a3c29e16aac.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/cf3d609081c5903fa2347e9cde15f59fec0b5f0c/output/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.0_918f71b96040d25e84adde86cd95e166038ef697/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/90ad3044a550299bdb2fc8a4fecb7993214d7894/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="3347c3e7056fabc88bdbd8fdae65ddf2b674d977">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_f3a21afb573d699df713626b84557e0f36908f77.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.0.0/support-annotations-25.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="a22d2cc94da87b254451fa8ed28afc30b4653773">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/support-annotations-25.0.0_3387948ab59c75c08c31015d0e45f6dd13358d30.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/74bc4d3ff2fc17db7c4e641b113d431bc521be9c/output/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="665d21a8a069c96b4d9e8b434f5096d865b4e261">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.0_e22edbb8fc688582a21c2a1dc96ae0a43a652862/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/3576e48af4430b93a865b020dfba4d759d2d5d41/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="8bb364f67ec2eba2356872b2b4ddfe8aada2d5ac">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_f2f4beea6218183623fc8f9ae4c94d5f4044d763.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/ciaranbyrne/.android/build-cache/b6d7a1eafe32a5528c17aac0f1bcd47d7c85bf9a/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.1"
+        sha1="22031b047b12904b888549ba36c0c30d83b1aea1">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_1aef3397cf640f4056e973466cc762ed425f6bc6.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/ciaranbyrne/.android/build-cache/b97f9d1bf983c39e81c32ff3099a8934e3721aab/output/jars/classes.jar"
         jumboMode="false"
         optimize="true"
@@ -371,22 +524,22 @@
         <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_d007ff79bbd815a3d2bf5172b4e6c325b454156d.jar" />
     </item>
     <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/78b7b128922d5ced8772dfaaccf5604d0701603d/output/jars/classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/0707722c8deca576ba473202c3890988a27ac04e/output/jars/classes.jar"
+        jumboMode="true"
         optimize="true"
         revision="25.0.1"
         sha1="8bc45ce1f63d1a391fd38b32a201be5a42f9c95d">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/classes_80a85b5174eab27891b4c5d9d3a0036c27cb3eb0.jar" />
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_32552e49e4e1f9d5343653e3d32bebf7adb86430/classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="/Users/ciaranbyrne/.android/build-cache/847689d88ff27f4f3dd432bff7114260a7c5ce3b/output/jars/libs/internal_impl-25.0.0.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="/Users/ciaranbyrne/.android/build-cache/752a451ebbce0d4367abd7d97011b29eafba261c/output/jars/classes.jar"
+        jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_d87418b5d64091714fe60bfeb3675e4f1429e6e3.jar" />
+        sha1="07daa0b6e1d455c82a38422ffe287c18823d339a">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_1b53e52cdc93186e6f9dfef707771f72ec6c0889/classes.dex" />
     </item>
     <item
         is-multidex="false"

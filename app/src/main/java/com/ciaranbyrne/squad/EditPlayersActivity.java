@@ -35,7 +35,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         // instantiate arraylist to show players
         //mPlayersList = (ListView) findViewById(R.id.list_players);
 
-        // From github code, testing creating new User
+        // testing creating new User
         User user = new User("Tom", "1234", TRUE);
         mDatabase.push().setValue(user);
 
@@ -80,8 +80,6 @@ public class EditPlayersActivity extends AppCompatActivity {
             }
         });
         */
-
-
 
     }// End of onCreate
 
