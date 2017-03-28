@@ -15,17 +15,17 @@ public class User {
     public String email;
     public Uri photoUrl;
     public Boolean emailVerified;
-    public String mUid;
+   // public String mUid;
 
     public User(){
 
     }
 
-    public User (String uid, String name, Boolean playing){
+    public User ( String name, String email, Boolean playing){
 
-        mUid = uid;
+      //  mUid = uid;
         mName = name;
-
+        email = email;
         mPlaying = playing;
 
         email = email;
@@ -42,7 +42,7 @@ public class User {
    public void setName(String name){
        this.mName = name;
    }
-
+/*
    public String getUid(){
        return mUid;
    }
@@ -50,7 +50,7 @@ public class User {
    public void setUid(String uid){
        this.mUid = uid;
    }
-
+*/
    public Boolean getPlaying(){
        return mPlaying;
    }

@@ -94,11 +94,11 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    // usersDatabase.child(mFirebaseUser.getUid()).setValue(true);
-                    // usersDatabase.child(mFirebaseUser.getDisplayName()).setValue(true);
 
                     //mDatabase.push().setValue(new User(etNewPlayer.getText().toString(),"1234", TRUE));
-                    usersDatabase.push().setValue(new User(user.getDisplayName(), user.getUid(), TRUE));
+
+                    //usersDatabase.push().setValue(new User(user.getDisplayName(), user.getUid(), TRUE));
+                    writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),TRUE);
 
 
                 } else {
@@ -129,8 +129,9 @@ public class MainActivity extends AppCompatActivity {
 
     }// End of onCreate
 
-    private void writeNewUser(String userId, String name, String email) {
-        User user = new User(name, email);
+    // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
+    private void writeNewUser(String userId, String name, String email, Boolean playing) {
+        User user = new User(name, email, TRUE);
 
         usersDatabase.child(userId).setValue(user);
     }

@@ -36,7 +36,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         //mPlayersList = (ListView) findViewById(R.id.list_players);
 
         // testing creating new User
-        User user = new User("Tom", "1234", TRUE);
+        User user = new User("Tom", "EMAIL STRING", TRUE);
         mDatabase.push().setValue(user);
 
         ListView playersView = (ListView) findViewById(R.id.list_players);
@@ -60,7 +60,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         btnAddPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDatabase.push().setValue(new User(etNewPlayer.getText().toString(),"1234", TRUE));
+                mDatabase.push().setValue(new User(etNewPlayer.getText().toString(),"EMAIL STRING", TRUE));
                 etNewPlayer.setText("");
             }
         });
