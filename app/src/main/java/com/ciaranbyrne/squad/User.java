@@ -28,7 +28,6 @@ public class User {
         email = email;
         mPlaying = playing;
 
-        email = email;
         photoUrl = photoUrl;
         emailVerified = emailVerified;
 
