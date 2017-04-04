@@ -66,21 +66,21 @@
     </item>
     <item
         is-multidex="true"
+        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="2437f140946da2f5b43461634bbb63bfc0c520b0">
+        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e7ae2a615c15edf2d6aa99495ae7d321e33fb4ef/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/Users/ciaranbyrne/.android/build-cache/ab8ede42121db053000e916990a842cebd918ed1/output/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
         sha1="4ccbcda5c72027c7f7c14be9ff8640d9cb0d8da0">
         <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3ad81a3ed509422fb32be2ba14d0de096f91bea9/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="db2ae3ca30943c11d70d5089ad46575f9cf36f63">
-        <dex dex="/Users/ciaranbyrne/Documents/year_4/Software_Project/Code/Squad/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e7ae2a615c15edf2d6aa99495ae7d321e33fb4ef/classes.dex" />
     </item>
     <item
         is-multidex="true"
