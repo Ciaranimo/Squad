@@ -34,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser user;
-    private DatabaseReference usersDatabase;
 
+    private DatabaseReference usersDatabase;
+    private DatabaseReference groupsDatabase;
 
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         //Initialize Firebase components
         // get database reference to read data
         usersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        groupsDatabase = FirebaseDatabase.getInstance().getReference("groups");
+
 
         // Initialize Firebase Auth - get user and check logged in
 
@@ -99,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //usersDatabase.push().setValue(new User(user.getDisplayName(), user.getUid(), TRUE));
                     writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),TRUE);
+                    editGroup(user);
 
 
                 } else {
@@ -110,12 +115,13 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-        // Intent to Edit pplayers screen
+        // Intent to Edit players screen
         btnEditSquad = (Button) findViewById(R.id.btnEditSquad);
 
         btnEditSquad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // Explicit Intent by specifying its class name
                 Intent i = new Intent(MainActivity.this, EditPlayersActivity.class);
 
@@ -135,6 +141,14 @@ public class MainActivity extends AppCompatActivity {
 
         usersDatabase.child(userId).setValue(user);
     }
+
+    // TODO WRITE NEW GROUP
+    private void editGroup(FirebaseUser member){
+        Group group = new Group(member);
+
+        String groupId = groupsDatabase.push().getKey();
+    }
+
 
     //get logged in user information
     public String userInfo(){

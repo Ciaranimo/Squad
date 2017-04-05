@@ -1,7 +1,5 @@
 package com.ciaranbyrne.squad;
 
-import android.net.Uri;
-
 /**
  * Created by ciaranbyrne on 05/03/2017.
  */
@@ -13,7 +11,6 @@ public class User {
 
     // Firebase variables for user
     public String email;
-    public Uri photoUrl;
     public Boolean emailVerified;
    // public String mUid;
 
@@ -28,10 +25,7 @@ public class User {
         email = email;
         mPlaying = playing;
 
-        photoUrl = photoUrl;
         emailVerified = emailVerified;
-
-
     }
 
    public String getName(){
@@ -66,13 +60,6 @@ public class User {
        this.email = email;
    }
 
-    public Uri getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(Uri photoUrl) {
-        this.photoUrl = photoUrl;
-    }
 
     public Boolean getEmailVerified() {
         return emailVerified;
