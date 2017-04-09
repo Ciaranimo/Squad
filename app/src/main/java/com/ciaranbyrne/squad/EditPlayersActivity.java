@@ -9,10 +9,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import static java.lang.Boolean.TRUE;
 
 public class EditPlayersActivity extends AppCompatActivity {
 
@@ -20,7 +20,13 @@ public class EditPlayersActivity extends AppCompatActivity {
     private DatabaseReference playersDatabase;
     private DatabaseReference groupsDatabase;
     private FirebaseListAdapter mAdapter;
+    //Firebase instance variables
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser firebaseUser;
 
+    private User user;
+    private Player player;
+    private Group group;
 
     private Button btnAddPlayer;
     private EditText etNewPlayer;
@@ -38,17 +44,35 @@ public class EditPlayersActivity extends AppCompatActivity {
         //mPlayersList = (ListView) findViewById(R.id.list_players);
 
         // testing creating new User
-       // User user = new User("Tom", "EMAIL STRING", TRUE);
-        // playersDatabase.push().setValue(user);
+        // TODO FIREBASE USER
+       Player player = new Player("Tom", "12345");
+        playersDatabase.push().setValue(player);
+
+        // test creating new Group
+        //GET CURRENT USER INFO
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = mFirebaseAuth.getCurrentUser();
+        FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+
+        String uId = firebaseUser.getUid();
+        String name = firebaseUser.getDisplayName();
+
+        // ERROR is something to do with Firebase user strings
+       User user = new User(uId, name);
+
+        Group group = new Group();
+
+        group.addMember(user);
+        groupsDatabase.push().setValue(group);
 
         ListView playersView = (ListView) findViewById(R.id.list_players);
 
-        // Create customer Firebase ListAdapter sub class
+        // Create  Firebase ListAdapter sub class
         mAdapter = new FirebaseListAdapter<User>(this, User.class, android.R.layout.two_line_list_item, playersDatabase) {
             @Override
             protected void populateView(View view, User user, int position) {
                 ((TextView)view.findViewById(android.R.id.text1)).setText(user.getName());
-                ((TextView)view.findViewById(android.R.id.text2)).setText(String.valueOf(user.getPlaying()));
+              //TODO  ((TextView)view.findViewById(android.R.id.text2)).setText(String.valueOf(user.getPlaying()));
 
 
             }
@@ -57,65 +81,20 @@ public class EditPlayersActivity extends AppCompatActivity {
 
         etNewPlayer = (EditText) findViewById(R.id.etNewPlayer);
         // TODO GET CONTACT INFO -  crashing app- from stack overflow http://stackoverflow.com/questions/1721279/how-to-read-contacts-on-android-2-0
-        /*
-        etNewPlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null, null, null, null);
-                while (cursor.moveToNext()) {
-                    String contactId = cursor.getString(cursor.getColumnIndex(
-                            ContactsContract.Contacts._ID));
-                    String hasPhone = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                    if (Boolean.parseBoolean(hasPhone)) {
-                        // You know it has a number so now query it like this
-                        Cursor phones = getContentResolver().query( ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ contactId, null, null);
-                        while (phones.moveToNext()) {
-                            String phoneNumber = phones.getString(phones.getColumnIndex( ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        }
-                        phones.close();
-                    }
 
-                    Cursor emails = getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = " + contactId, null, null);
-                    while (emails.moveToNext()) {
-                        // This would allow you get several email addresses
-                        String emailAddress = emails.getString(
-                                emails.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                    }
-                    emails.close();
-                }
-                cursor.close();
-            }
-        });
-        */
         
         // Add user to database
         btnAddPlayer = (Button) findViewById(R.id.btnAddPlayer);
         btnAddPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playersDatabase.push().setValue(new User(etNewPlayer.getText().toString(),"EMAIL STRING", TRUE));
+               //TODO playersDatabase.push().setValue(new User(etNewPlayer.getText().toString(),"EMAIL STRING", TRUE));
                 etNewPlayer.setText("");
             }
         });
 
 
 
-
-        /* TODO Querying last 5 entries from github tut, gives error at runtime
-        playersDatabase.limitToLast(5).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                for (DataSnapshot msgSnapshot: snapshot.getChildren()) {
-                    User player = msgSnapshot.getValue(User.class);
-                    Log.i("User", player.getName());
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-               // Log.e("Chat", "The read failed: " + error.getText());
-            }
-        });
-        */
 
     }// End of onCreate
 

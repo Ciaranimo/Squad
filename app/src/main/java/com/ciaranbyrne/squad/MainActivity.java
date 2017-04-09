@@ -20,8 +20,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import static java.lang.Boolean.TRUE;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -102,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
                     //mDatabase.push().setValue(new User(etNewPlayer.getText().toString(),"1234", TRUE));
 
                     //usersDatabase.push().setValue(new User(user.getDisplayName(), user.getUid(), TRUE));
-                    writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),TRUE);
-                    editGroup(user);
+                    writeNewUser(user.getUid(),user.getDisplayName());
+                  //TODO  writeNewGroup(user);
 
 
                 } else {
@@ -136,17 +134,19 @@ public class MainActivity extends AppCompatActivity {
     }// End of onCreate
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
-    private void writeNewUser(String userId, String name, String email, Boolean playing) {
-        User user = new User(name, email, TRUE);
+    private void writeNewUser(String userId, String name) {
+        User user = new User(userId, name);
 
         usersDatabase.child(userId).setValue(user);
     }
 
     // TODO WRITE NEW GROUP
-    private void editGroup(FirebaseUser member){
-        Group group = new Group(member);
+    private void writeNewGroup(User user){
+        Group group = new Group();
+      // TODO  User m = group.addMember(User user);
 
-        String groupId = groupsDatabase.push().getKey();
+
+       // String groupId = groupsDatabase.push().getKey();
     }
 
 
