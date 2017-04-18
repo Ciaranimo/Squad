@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
-
     private String mUsername;
 
 
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        mUsername = ANONYMOUS;
+       // mUsername = ANONYMOUS;
 
         //Initialize Firebase components
         // get database reference to read data
@@ -100,7 +99,9 @@ public class MainActivity extends AppCompatActivity {
                     //mDatabase.push().setValue(new User(etNewPlayer.getText().toString(),"1234", TRUE));
 
                     //usersDatabase.push().setValue(new User(user.getDisplayName(), user.getUid(), TRUE));
-                    writeNewUser(user.getUid(),user.getDisplayName());
+
+
+                    writeNewUser(user.getUid(),user.getEmail(),user.getDisplayName());
                   //TODO  writeNewGroup(user);
 
 
@@ -134,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
     }// End of onCreate
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
-    private void writeNewUser(String userId, String name) {
-        User user = new User(userId, name);
+    private void writeNewUser(String userId, String name, String email) {
+        User user = new User(name, email);
 
         usersDatabase.child(userId).setValue(user);
     }
