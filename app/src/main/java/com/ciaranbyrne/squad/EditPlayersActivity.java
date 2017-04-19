@@ -2,9 +2,7 @@ package com.ciaranbyrne.squad;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -13,8 +11,6 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -30,10 +26,13 @@ public class EditPlayersActivity extends AppCompatActivity {
     private DatabaseReference playersDatabase;
     private DatabaseReference groupsDatabase;
     private DatabaseReference mDatabase;
+    private FirebaseDatabase mFirebaseDatabase;
+
     private FirebaseListAdapter mAdapter;
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser firebaseUser;
+    private ChildEventListener mChildEventListener;
 
     private User user;
     private Player player;
@@ -57,8 +56,10 @@ public class EditPlayersActivity extends AppCompatActivity {
         setContentView(com.ciaranbyrne.squad.R.layout.activity_edit_players);
 
         // get database reference to read data
-        playersDatabase = FirebaseDatabase.getInstance().getReference().child("players");
-        groupsDatabase = FirebaseDatabase.getInstance().getReference().child("groups");
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        playersDatabase = mFirebaseDatabase.getReference().child("players");
+        groupsDatabase = mFirebaseDatabase.getReference().child("groups");
+        mDatabase = mFirebaseDatabase.getReference();
         // instantiate arraylist to show players
         //mPlayersList = (ListView) findViewById(R.id.list_players);
 
@@ -73,47 +74,43 @@ public class EditPlayersActivity extends AppCompatActivity {
         firebaseUser = mFirebaseAuth.getCurrentUser();
         FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
 
-        String uId = firebaseUser.getUid();
+        final String uId = firebaseUser.getUid();
         String name = firebaseUser.getDisplayName();
 
         // ERROR is something to do with Firebase user strings
        User user = new User(uId, name);
 
 
-        // Adding users to groups
-        String groupId = groupsDatabase.push().getKey();
-        Group group = new Group(groupId, name);
+        // Adding users to groups - Setting Group ID to be the same as User Id
+        final String groupId = firebaseUser.getUid();
+     //   Group group = new Group(groupId, name);
        // groupsDatabase.child(groupId).setValue(group);
-        members.put("JIM",true);
-        members.put("TONY",true);
+       // members.put("JIM",true);
 
-        group.setMembers(members);
-        groupsDatabase.child(groupId).setValue(group);
-        Log.i(TAG,group.toString());
-        // TEST
-      //  writeGroup(groupId,uId);
-
+       // group.setMembers(members);
+       // groupsDatabase.child(groupId).setValue(group);
 
         //*TEST* Adding player to that group
-        final Player player = new Player(uId,name,TRUE,groupId);
+      //  final Player player = new Player(uId,name,TRUE,groupId);
         playersDatabase.push().setValue(player);
         playersListView = (ListView) findViewById(R.id.list_players);
 
-
+        /*
         //TVAC TUTORIAL 13 - Retrieve data - NOT WORKING
         final ArrayAdapter<String> playersArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, playerArrayList);
         playersListView.setAdapter(playersArrayAdapter);
 
-
-        playersDatabase.addChildEventListener(new ChildEventListener() {
+        mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String value = dataSnapshot.getValue(String.class);
+               // String value = dataSnapshot.getValue(String.class);
 
-              // Player player = dataSnapshot.getValue(Player.class);
-                playerArrayList.add(value);
+                // May need playerAdapter like messageAdapter class
+                Player player = dataSnapshot.getValue(Player.class);
+//                playerArrayList.add(player);
 
                 playersArrayAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -135,8 +132,10 @@ public class EditPlayersActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
-
+        };
+        // SHOULD I BE LISTENING TO PLAYERS OR GROUPS??? POSSIBLY SHOULD BE LISTENING TO GROUP CHILD NODE FOR THIS USER ONLY>>>
+        playersDatabase.addChildEventListener(mChildEventListener);
+        */
 
         /*
         // Create  Firebase ListAdapter sub class
@@ -164,7 +163,12 @@ public class EditPlayersActivity extends AppCompatActivity {
         btnAddPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playersDatabase.push().setValue(new Player("ID STRING", etNewPlayer.getText().toString(), TRUE, "GROUP ID GOES HERE"));
+             //   playersDatabase.push().setValue(new Player("ID STRING", etNewPlayer.getText().toString(), TRUE, "GROUP ID GOES HERE"));
+
+                // groupsDatabase.child(groupId).child("members").child(uId).push().setValue(new Player("BRAND NEW TEST",etNewPlayer.getText().toString(),TRUE," NEW TEST"));
+
+
+            writeNewPlayer("ID STRING123",etNewPlayer.getText().toString(),TRUE, "GROUP ID LALALALA");
                 etNewPlayer.setText("");
             }
         });
@@ -172,7 +176,21 @@ public class EditPlayersActivity extends AppCompatActivity {
 
 
 
+
+
     }// End of onCreate
+
+    // Method to write to Groups and Players DB simultaneously & without overwriting
+    public void writeNewPlayer(String uid, String name, Boolean playing, String groupId){
+        String key = mDatabase.child("groups").push().getKey();
+        Player player = new Player(uid, name, playing, groupId);
+        Map<String, Object> playerValues = player.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        childUpdates.put("/players" , playerValues);
+        childUpdates.put("/groups/" + groupId + "/" + key, playerValues);
+        mDatabase.updateChildren(childUpdates);
+    }
     /*
     private void writeGroup(String groupId, String memberId) {
         // Create new post at /user-posts/$userid/$postid and at

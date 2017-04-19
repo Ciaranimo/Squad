@@ -1,5 +1,7 @@
 package com.ciaranbyrne.squad;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,5 +67,16 @@ public class Player {
 
     public void setGroups(Map<String, Boolean> groups) {
         this.groups = groups;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("uid", uid);
+        result.put("name", name);
+        result.put("playing", playing);
+        result.put("groupId", groupId);
+
+        return result;
     }
 }
