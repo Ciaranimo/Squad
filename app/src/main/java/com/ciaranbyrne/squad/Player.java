@@ -11,11 +11,11 @@ import java.util.Map;
 
 public class Player {
 
-    private String uid;
-    private String name;
-    private Boolean playing;
-    private String groupId;
-    private Map<String, Boolean> groups = new HashMap<>();
+    public String uid;
+    public String name;
+    public Boolean playing;
+    public String groupId;
+    public Map<String, Boolean> groups = new HashMap<>();
 
 
     public Player(String uid, String name, Boolean playing, String groupId) {
