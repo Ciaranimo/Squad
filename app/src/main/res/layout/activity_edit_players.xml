@@ -38,14 +38,21 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
-    <EditText
+    <SearchView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
         android:layout_alignBottom="@+id/btnAddPlayer"
-        android:layout_alignParentStart="true"
         android:id="@+id/etNewPlayer"
         android:hint="Enter player name...." />
+
+    <TextView
+        android:id="@+id/searchViewResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etNewPlayer"
+        android:layout_centerHorizontal="true"
+        android:text="hello" />
 
 </RelativeLayout>

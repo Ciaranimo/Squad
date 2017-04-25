@@ -48,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvDisplayName;
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,16 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-
-                    //mDatabase.push().setValue(new User(etNewPlayer.getText().toString(),"1234", TRUE));
-
-                    //usersDatabase.push().setValue(new User(user.getDisplayName(), user.getUid(), TRUE));
-
-
                     writeNewUser(user.getUid(),user.getEmail(),user.getDisplayName());
-                  //TODO  writeNewGroup(user);
-
-
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -128,9 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-
-
 
     }// End of onCreate
 
