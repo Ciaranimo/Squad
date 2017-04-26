@@ -13,9 +13,11 @@ import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -31,17 +33,19 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.lang.Boolean.TRUE;
 
 public class EditPlayersActivity extends AppCompatActivity {
 
+    static final String TAG = "EditPlayersAcvity";
+
     private TextView resultText;
     //Firebase database variables
     private DatabaseReference playersDatabase;
     private DatabaseReference groupsDatabase;
+    private DatabaseReference usersGroupDatabase;
     private DatabaseReference mDatabase;
     private FirebaseDatabase mFirebaseDatabase;
 
@@ -52,9 +56,12 @@ public class EditPlayersActivity extends AppCompatActivity {
 
     // instance variables
     private Button btnAddPlayer;
-    private EditText etNewPlayer;
+    private SearchView etNewPlayer;
     private ListView playersListView;
     private PlayersAdapter playersAdapter;
+    private ArrayList<Player> playerList;
+    // ARRAY LIST FOR KEYS
+    private ArrayList<String> keysList;
 
     // For read permissions on Contacts
     final private int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 987;
@@ -64,35 +71,50 @@ public class EditPlayersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.ciaranbyrne.squad.R.layout.activity_edit_players);
+        //GET CURRENT USER INFO
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = mFirebaseAuth.getCurrentUser();
+        FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+        // Adding users to groups - Setting Group ID to be the same as User Id
+        final String groupId = firebaseUser.getUid();
 
         // get database reference to read data
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         playersDatabase = mFirebaseDatabase.getReference().child("players");
         groupsDatabase = mFirebaseDatabase.getReference().child("groups");
+        usersGroupDatabase = mFirebaseDatabase.getReference().child("groups").child(groupId);
+
         mDatabase = mFirebaseDatabase.getReference();
-
-        //GET CURRENT USER INFO
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = mFirebaseAuth.getCurrentUser();
-        FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
-
 
         // Initialize references to views
         playersListView = (ListView) findViewById(R.id.list_players);
-        // Adding users to groups - Setting Group ID to be the same as User Id
-        final String groupId = firebaseUser.getUid();
-       // etNewPlayer = (EditText) findViewById(R.id.etNewPlayer);
+
+        etNewPlayer = (SearchView) findViewById(R.id.etNewPlayer);
         // for contacts picker
        // outputText = (TextView) findViewById(R.id.textView1);
 
-        // TODO For contact search
+        //  For contact search
         resultText = (TextView)findViewById(R.id.searchViewResult);
 
 
         //Initialize ListView and adapter for Database Reading players list
-        List<Player> playerList = new ArrayList<>();
+        playerList = new ArrayList<>();
         playersAdapter = new PlayersAdapter(this,R.layout.list_entry, playerList);
         playersListView.setAdapter(playersAdapter);
+        //  INITIALIZE KEYS ARRAY
+        keysList = new ArrayList<>();
+        // LONG CLICK REMOVES PLAYERS
+        playersListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String clickedKey = keysList.get(position);
+                usersGroupDatabase.child(clickedKey).removeValue();
+
+                return true;
+            }
+        });
 
 
         // Add user to database
@@ -103,9 +125,8 @@ public class EditPlayersActivity extends AppCompatActivity {
 
                 String playerName = resultText.getText().toString();
                 writeNewPlayer("ID STRING123",playerName,TRUE, groupId);
-
+                resultText.setText("");
                 Toast.makeText(getApplicationContext(), "" + playerName + " added to your Squad", Toast.LENGTH_LONG).show();
-                etNewPlayer.setText("");
             }
         });
 
@@ -114,11 +135,17 @@ public class EditPlayersActivity extends AppCompatActivity {
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-               // String value = dataSnapshot.getValue(String.class);
+                Log.d(TAG, dataSnapshot.getKey() + ":" + dataSnapshot.getValue().toString());
+
+                // String value = dataSnapshot.getValue(String.class);
                 Player player = dataSnapshot.getValue(Player.class);
+                //  ADDING KEY TO KEYS LIST
+                keysList.add(dataSnapshot.getKey().toString());
+
                 playersAdapter.add(player);
 
-            //    playersAdapter.notifyDataSetChanged();
+                updateListView();
+
             }
 
             @Override
@@ -126,9 +153,15 @@ public class EditPlayersActivity extends AppCompatActivity {
 
             }
 
+            // Code for deleting items from http://shrikanth.in/android/2015/09/09/firebase-crud-android.html
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
+                String deletedKey = dataSnapshot.getKey();
+                int removedIndex = keysList.indexOf(deletedKey);
+                keysList.remove(removedIndex);
+                playerList.remove(removedIndex);
+                updateListView();
             }
 
             @Override
@@ -149,15 +182,24 @@ public class EditPlayersActivity extends AppCompatActivity {
     }// End of onCreate
 
 
+    //  updates list view and adapter, called in child event listener
+    private void updateListView(){
+        playersAdapter.notifyDataSetChanged();
+        playersListView.invalidate();
+        Log.d(TAG, "Length: " + playerList.size());
+    }
+
     // Write player to players & groups node method
     public void writeNewPlayer(String uid, String name, Boolean playing, String groupId){
-        String key = mDatabase.child("groups").push().getKey();
+        String groupsKey = mDatabase.child("groups").push().getKey();
+        String playersKey = mDatabase.child("players").push().getKey();
+
         Player player = new Player(uid, name, playing, groupId);
         Map<String, Object> playerValues = player.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
 
-        childUpdates.put("/players" , playerValues);
-        childUpdates.put("/groups/" + groupId + "/" + key, playerValues);
+        childUpdates.put("/players/" + playersKey, playerValues);
+        childUpdates.put("/groups/" + groupId + "/" + groupsKey, playerValues);
         mDatabase.updateChildren(childUpdates);
     }
 
@@ -272,7 +314,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         }
     }
 
-    // TODO METHOD FOR SEARCHING CONTACTS
+    //  METHOD FOR SEARCHING CONTACTS
     private void setupSearchView() {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) findViewById(R.id.etNewPlayer);
@@ -281,7 +323,7 @@ public class EditPlayersActivity extends AppCompatActivity {
     }
 
 
-    // TODO Handle suggestion pick user action
+    //  Handle suggestion pick user action
     @Override
     protected void onNewIntent(Intent intent) {
         if (ContactsContract.Intents.SEARCH_SUGGESTION_CLICKED.equals(intent.getAction())) {
@@ -294,10 +336,10 @@ public class EditPlayersActivity extends AppCompatActivity {
             resultText.setText("should search for query: '" + query + "'...");
         }
     }
-    // got contact picker from here 0
+    // got contact picker from here
     // https://looksok.wordpress.com/2013/06/15/android-searchview-tutorial-edittext-with-phone-contacts-search-and-autosuggestion/
 
-    // TODO get contact display name
+    //  get contact display name
     private String getDisplayNameForContact(Intent intent) {
         Cursor phoneCursor = getContentResolver().query(intent.getData(), null, null, null, null);
         phoneCursor.moveToFirst();
