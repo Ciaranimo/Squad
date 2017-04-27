@@ -54,6 +54,9 @@ public class EditPlayersActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private ChildEventListener mChildEventListener;
 
+    // 7 Firebase Authenticate TODO
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
     // instance variables
     private Button btnAddPlayer;
     private SearchView etNewPlayer;

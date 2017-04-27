@@ -3,17 +3,17 @@ package com.ciaranbyrne.squad;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,15 +32,13 @@ public class MainActivity extends AppCompatActivity {
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser user;
-
+    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference usersDatabase;
     private DatabaseReference groupsDatabase;
 
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private String mUsername;
-
-
     private GoogleApiClient mGoogleApiClient;
     private SharedPreferences mSharedPreferences;
 
@@ -53,54 +51,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-       // mUsername = ANONYMOUS;
+        mUsername = ANONYMOUS;
 
         //Initialize Firebase components
         // get database reference to read data
         usersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         groupsDatabase = FirebaseDatabase.getInstance().getReference("groups");
-
-
-        // Initialize Firebase Auth - get user and check logged in
-
-        //GET CURRENT USER INFO
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
-        user = mFirebaseAuth.getCurrentUser();
-        if (user == null) {
-            // Not signed in, launch the Sign In activity
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
-            return;
-        } else {
-            mUsername = user.getDisplayName();
-           /* if (mFirebaseUser.getPhotoUrl() != null) {
-                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-            }
-            */
-            tvDisplayName = (TextView) findViewById(R.id.tv_display_name);
 
-            tvDisplayName.setText(userInfo());
-        }
-
-        // add user instance to realtime database
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    writeNewUser(user.getUid(),user.getEmail(),user.getDisplayName());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
-
+        //Initialize views
+        tvDisplayName = (TextView) findViewById(R.id.tv_display_name);
 
         // Intent to Edit players screen
         btnEditSquad = (Button) findViewById(R.id.btnEditSquad);
@@ -117,6 +80,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Firebase Authentication state listener initialize TODO
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            //on signedInInitialize called
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                //check if user logged in
+                if(user != null){
+                    //user is signed in
+                    //calls methods at boottom
+                    onSignedInInitialize(user.getDisplayName());
+                    // add user instance to realtime database
+                    writeNewUser(user.getUid(),user.getEmail(),user.getDisplayName());
+                    readUserInfo(user.getDisplayName());
+                    Toast.makeText(MainActivity.this, "Signed in" , Toast.LENGTH_SHORT).show();
+                }else{
+                    //user is not signed in - commence with login flow (built in to firebase)
+                    onSignedOutCleanUp();
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setProviders(
+                                            AuthUI.EMAIL_PROVIDER,
+                                            AuthUI.GOOGLE_PROVIDER)
+                                    .build(),
+                            RC_SIGN_IN);
+                }
+            }
+        };
+
+
     }// End of onCreate
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
@@ -125,16 +120,33 @@ public class MainActivity extends AppCompatActivity {
 
         usersDatabase.child(userId).setValue(user);
     }
+    //GET CURRENT USER INFO
 
-    // TODO WRITE NEW GROUP
-    private void writeNewGroup(User user){
-        Group group = new Group();
-      // TODO  User m = group.addMember(User user);
+    private void readUserInfo(String mUsername) {
+        user = mFirebaseAuth.getCurrentUser();
+        if (user == null) {
+            // Not signed in, launch the Sign In activity
+            //   startActivity(new Intent(this, SignInActivity.class));
+            finish();
+            return;
+        } else {
+            mUsername = user.getDisplayName();
+           /* if (mFirebaseUser.getPhotoUrl() != null) {
+                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
+            }
+            */
 
-
-       // String groupId = groupsDatabase.push().getKey();
+            tvDisplayName.setText(userInfo());
+        }
     }
 
+
+    //read listener attached / TODO //
+    private void onSignedInInitialize(String username) {
+        mUsername = username;
+        //call method when user signed in
+     //   attachDatabaseReadListener();
+    }
 
     //get logged in user information
     public String userInfo(){
@@ -159,62 +171,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-/*
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
-    }
-
-    */
-
-
 
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
         if (mAuthStateListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
     }
 
-
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sign_out_menu:
-                FirebaseAuth.getInstance().signOut();
+    public void onResume(){
+        super.onResume();
+        //Auth state change called - database listener attacehd
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
 
-                // mFirebaseAuth.signOut();
-                //Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-                mUsername = ANONYMOUS;
-                startActivity(new Intent(this, SignInActivity.class));
+
+    @Override // TODO //
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.sign_out_menu:
+                //sign out
+                AuthUI.getInstance().signOut(this);
+                // user is now signed out
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+
         }
     }
 
@@ -226,20 +211,29 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    /*
+    //TODO
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public void onActivityResult (int requestCode,int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode == RC_SIGN_IN){
+            if(resultCode == RESULT_OK){
+                Toast.makeText(this,"Signed in ",Toast.LENGTH_SHORT).show();
+            }else if(resultCode == RESULT_CANCELED){
+                Toast.makeText(this,"Sign in Cancelled ",Toast.LENGTH_SHORT).show();
+                finish();
+            }
 
-
-        switch(item.getItemId()){
-            case R.id.sign_out_menu:
-                //sign out
-                FirebaseAuth.getInstance().signOut();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
-    */
+
+    // TODO /
+    private void onSignedOutCleanUp(){
+        // unset user name
+        mUsername = ANONYMOUS;
+        //clear messages from adapter, user not signed in should be able to see msgs
+       // mMessageAdapter.clear();
+        //detach listener
+      //  detachDatabaseReadListener();
+    }
 
 }
