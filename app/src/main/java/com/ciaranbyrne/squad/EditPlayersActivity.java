@@ -39,9 +39,8 @@ import static java.lang.Boolean.TRUE;
 
 public class EditPlayersActivity extends AppCompatActivity {
 
-    static final String TAG = "EditPlayersAcvity";
+    static final String TAG = "EditPlayersActivity";
 
-    private TextView resultText;
     //Firebase database variables
     private DatabaseReference playersDatabase;
     private DatabaseReference groupsDatabase;
@@ -58,6 +57,7 @@ public class EditPlayersActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     // instance variables
+    private TextView resultText;
     private Button btnAddPlayer;
     private SearchView etNewPlayer;
     private ListView playersListView;
@@ -74,6 +74,7 @@ public class EditPlayersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.ciaranbyrne.squad.R.layout.activity_edit_players);
+
         //GET CURRENT USER INFO
         mFirebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = mFirebaseAuth.getCurrentUser();
@@ -85,7 +86,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         playersDatabase = mFirebaseDatabase.getReference().child("players");
         groupsDatabase = mFirebaseDatabase.getReference().child("groups");
-        usersGroupDatabase = mFirebaseDatabase.getReference().child("groups").child(groupId);
+        usersGroupDatabase = mFirebaseDatabase.getReference().child("groups").child(groupId).child("members");
 
         mDatabase = mFirebaseDatabase.getReference();
 
@@ -98,7 +99,6 @@ public class EditPlayersActivity extends AppCompatActivity {
 
         //  For contact search
         resultText = (TextView)findViewById(R.id.searchViewResult);
-
 
         //Initialize ListView and adapter for Database Reading players list
         playerList = new ArrayList<>();
@@ -114,6 +114,7 @@ public class EditPlayersActivity extends AppCompatActivity {
 
                 String clickedKey = keysList.get(position);
                 usersGroupDatabase.child(clickedKey).removeValue();
+                Toast.makeText(getApplicationContext(),  "Player removed from your Squad", Toast.LENGTH_LONG).show();
 
                 return true;
             }
@@ -177,7 +178,7 @@ public class EditPlayersActivity extends AppCompatActivity {
 
             }
         };
-        groupsDatabase.child(groupId).addChildEventListener(mChildEventListener);
+        groupsDatabase.child(groupId).child("members").addChildEventListener(mChildEventListener);
 
         permissionsCheck();
 
@@ -202,7 +203,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         Map<String, Object> childUpdates = new HashMap<>();
 
         childUpdates.put("/players/" + playersKey, playerValues);
-        childUpdates.put("/groups/" + groupId + "/" + groupsKey, playerValues);
+        childUpdates.put("/groups/" + groupId  +"/members/" + groupsKey , playerValues);
         mDatabase.updateChildren(childUpdates);
     }
 

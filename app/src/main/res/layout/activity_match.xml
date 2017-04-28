@@ -22,98 +22,100 @@
         android:layout_marginTop="19dp"
         android:id="@+id/tvHeadingEditMatch" />
 
-    <EditText
-        android:layout_width="150dp"
+
+    <Spinner
+        android:id="@+id/timeSpinner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="time"
-        android:textSize="20sp"
-        android:inputType="time"
-        android:ems="10"
-        android:layout_marginTop="12dp"
-        android:id="@+id/etTime"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/tvHeadingEditMatch"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentStart="true" />
 
-    <TextView
-        android:text="@string/time_lbl_string"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="69dp"
-        android:id="@+id/tvTimeLbl"
-        android:layout_alignBaseline="@+id/etTime"
-        android:layout_alignBottom="@+id/etTime"
-        android:layout_toStartOf="@+id/etTime" />
-
-    <TextView
-        android:text="@string/date"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etTime"
-        android:layout_alignStart="@+id/tvTimeLbl"
-        android:id="@+id/tvDateLbl" />
-
-    <EditText
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/date"
-        android:inputType="date"
-        android:ems="10"
-        android:layout_below="@+id/tvTimeLbl"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/etDate"
-        android:layout_toEndOf="@+id/tvTimeLbl" />
 
     <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/switchEvenTeams"
-        android:layout_alignBottom="@+id/tvEvenTeamsLbl"
-        android:layout_alignEnd="@+id/tvHeadingEditMatch"
-        android:layout_below="@+id/switchWeekly" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Even Teams"
+        android:layout_alignTop="@+id/switchWeekly"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="47dp" />
 
     <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/switchWeekly"
-        android:layout_below="@+id/etDate"
-        android:layout_alignStart="@+id/switchEvenTeams" />
-
-    <TextView
-        android:text="@string/even_teams"
-        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvEvenTeamsLbl"
-        android:layout_below="@+id/switchWeekly"
-        android:layout_alignStart="@+id/tvWeeklySwitch" />
-
-    <Button
-        android:text="@string/save_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
-        android:id="@+id/btnSaveMatch" />
-
-    <TextView
-        android:text="@string/weekly"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvWeeklySwitch"
-        android:layout_below="@+id/etDate"
-        android:layout_alignStart="@+id/tvDateLbl" />
-
-    <Button
-        android:text="Edit Players"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnEditPlayers"
+        android:lineSpacingExtra="12sp"
+        android:text="Weekly"
+        android:textAlignment="viewStart"
         android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/switchEvenTeams"
+        android:layout_marginEnd="25dp" />
+
+    <Button
+        android:id="@+id/btnSaveMatch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save_details"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/btnEditPlayers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Players"
+        android:layout_above="@+id/btnSaveMatch"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/daySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timeSpinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp" />
+
+    <SeekBar
+        android:id="@+id/seekBarPlayers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="19dp"
+        android:layout_above="@+id/switchEvenTeams"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/tvNumberOfPlayers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select the number of players from slider"
+        android:layout_above="@+id/seekBarPlayers"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:id="@+id/tvResultPlayerNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvNumberOfPlayers"
+        android:layout_alignParentEnd="true"
+        />
+
+    <TextView
+        android:id="@+id/tvDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/switchWeekly"
+        android:layout_below="@+id/switchWeekly"
+        android:layout_marginTop="28dp" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvDay"
         android:layout_alignEnd="@+id/switchEvenTeams"
-        android:layout_alignStart="@+id/tvEvenTeamsLbl" />
+        android:layout_marginEnd="22dp"
+        android:text="TextView" />
 
 </RelativeLayout>

@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // Explicit Intent by specifying its class name
-                Intent i = new Intent(MainActivity.this, EditPlayersActivity.class);
+                Intent i = new Intent(MainActivity.this, MatchActivity.class);
 
                 // Starts TargetActivity
                 startActivity(i);
@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
     private void writeNewUser(String userId, String name, String email) {
+
+
         User user = new User(name, email);
 
         usersDatabase.child(userId).setValue(user);
@@ -187,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
-
-    @Override // TODO //
+    // Sign out
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.sign_out_menu:
@@ -226,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // TODO /
+    //
     private void onSignedOutCleanUp(){
         // unset user name
         mUsername = ANONYMOUS;
