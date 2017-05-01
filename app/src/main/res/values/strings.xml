@@ -27,4 +27,6 @@
     <string name="save_details">Save Details</string>
     <string name="findContact">Find Contact</string>
     <string name="day">Day</string>
+    <string name="save_phone_number">Save Phone Number</string>
+    <string name="enter_phone_number_and_save">Enter phone Number and Save....</string>
 </resources>

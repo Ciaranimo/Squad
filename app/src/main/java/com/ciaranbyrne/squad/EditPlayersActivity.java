@@ -123,7 +123,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         });
 
 
-        // Add user to database
+        // Add player to database
         btnAddPlayer = (Button) findViewById(R.id.btnAddPlayer);
         btnAddPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -355,7 +355,6 @@ public class EditPlayersActivity extends AppCompatActivity {
         int idDisplayName = phoneCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
 
         String name = phoneCursor.getString(idDisplayName);
-
 
         phoneCursor.close();
         return name;

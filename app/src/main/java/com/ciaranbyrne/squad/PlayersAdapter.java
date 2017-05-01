@@ -19,7 +19,6 @@ public class PlayersAdapter extends ArrayAdapter<Player> {
     }
 
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -30,10 +29,10 @@ public class PlayersAdapter extends ArrayAdapter<Player> {
         }
         // Lookup view for data population
         TextView tvName = (TextView) convertView.findViewById(R.id.playerNameTextView);
-        TextView tvEmail = (TextView) convertView.findViewById(R.id.playerEmailTextView);
+        TextView tvPhone = (TextView) convertView.findViewById(R.id.playerPhoneTextView);
         // Populate the data into the template view using the data object
         tvName.setText(player.name);
-        tvEmail.setText(player.getUid());
+        tvPhone.setText(player.phoneNum);
         // Return the completed view to render on screen
         return convertView;
     }

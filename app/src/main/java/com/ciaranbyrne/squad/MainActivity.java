@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         mUsername = ANONYMOUS;
 
@@ -97,11 +96,15 @@ public class MainActivity extends AppCompatActivity {
                 if(user != null){
                     //user is signed in
                     //calls methods at boottom
-                    onSignedInInitialize(user.getDisplayName());
+                    onSignedInInitialize(user.getDisplayName(),user.getUid());
                     // add user instance to realtime database
-                   writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),"");
+                    // TODO This method is causing issues,
+                    userHasPhoneNumber(user.getUid());
+                    writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),"");
                     readUserInfo(user.getDisplayName());
                     Toast.makeText(MainActivity.this, "Signed in" , Toast.LENGTH_SHORT).show();
+
+
                 }else{
                     //user is not signed in - commence with login flow (built in to firebase)
                     onSignedOutCleanUp();
@@ -117,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        userHasPhoneNumber(userId);
+
 
 
     }// End of onCreate
@@ -135,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                   //  Toast.makeText(MainActivity.this,"User exists ",Toast.LENGTH_SHORT).show();
 
                 }else {
-                    //user does not exist, do something else
+                    //user does not exist, add to DB
                     usersDatabase.child(userId).setValue(user);
                //     Toast.makeText(MainActivity.this,"User doesnt exist ",Toast.LENGTH_SHORT).show();
 
@@ -150,29 +153,33 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // TODO Check if user has input phone number
+    // TODO Check if user has input phone number - causing issues
     private void userHasPhoneNumber(String userId){
-        // Checks if user exists
-        usersDatabase.child(userId).child("phoneNum").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.getValue().equals("") ){
-                    //user has phone, do something
-                    Toast.makeText(MainActivity.this,"User has phone Num ",Toast.LENGTH_SHORT).show();
+        if(userId != null) {
+            // Checks if phonNum exists
+            usersDatabase.child(userId).child("phoneNum").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        //user has phone, do something
+                        Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
 
-                }else {
-                    //user does not have phone number, do something else
-                    Toast.makeText(MainActivity.this,"User doesnt have phone num ",Toast.LENGTH_SHORT).show();
+                    } else {
+                        //user does not have phone number, do something else
+                        Toast.makeText(MainActivity.this, "User does NOT have phone num ", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+            });
+        }else{
+            Toast.makeText(MainActivity.this,"Phone Number check didnt work", Toast.LENGTH_LONG).show();
+        }
     }
 
     //GET CURRENT USER INFO
@@ -198,12 +205,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     //read listener attached /  //
-    private void onSignedInInitialize(String username) {
+    private void onSignedInInitialize(String username, String userId) {
         mUsername = username;
+        userId = userId;
+
+
+
         //call method when user signed in
      //   attachDatabaseReadListener();
     }
+    // TODO
+    private void attachDatabaseReadListener(){
 
+    }
     //get logged in user information
     public String userInfo(){
         // Access user information
@@ -212,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
             // Name, email address, and profile photo Url
             String name = user.getDisplayName();
             String email = user.getEmail();
+            String userId = user.getUid();
             //Uri photoUrl = user.getPhotoUrl();
 
             // Check if user's email is verified
@@ -220,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
             // The user's ID, unique to the Firebase project. Do NOT use this value to
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getToken() instead.
-            String uid = user.getUid();
             return name;
         }
         return "";
@@ -241,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         //Auth state change called - database listener attacehd
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+
     }
 
     // Sign out
@@ -291,8 +306,5 @@ public class MainActivity extends AppCompatActivity {
       //  detachDatabaseReadListener();
     }
 
-    private void checkUserPhoneNum(){
-        //if(usersDatabase.child(userId))
-    }
 
 }

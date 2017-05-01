@@ -19,7 +19,7 @@
         tools:text="Player Name" />
 
     <TextView
-        android:id="@+id/playerEmailTextView"
+        android:id="@+id/playerPhoneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"

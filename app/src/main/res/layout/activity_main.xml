@@ -20,32 +20,21 @@
         android:layout_marginTop="19dp"
         android:id="@+id/tvWelcome" />
 
-    <ListView
-        android:layout_width="match_parent"
-
-        android:id="@+id/listMatches"
-        android:layout_height="260dp"
-        android:layout_alignTop="@+id/tv_display_name"
-        android:layout_alignParentStart="true" />
-
     <Button
-        android:text="Book Pitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:id="@+id/btnBookPitchMenu"
-        android:layout_below="@+id/listMatches"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnEditSquad"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:text="Book Pitch" />
 
     <Button
-        android:text="Edit Squad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnBookPitchMenu"
         android:id="@+id/btnEditSquad"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:text="Edit Squad" />
 
     <TextView
         android:id="@+id/tv_display_name"
@@ -54,5 +43,14 @@
         android:layout_below="@+id/tvWelcome"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.ciaranbyrne.squad.InputPhoneFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_display_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp" />
 
 </RelativeLayout>
