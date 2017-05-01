@@ -18,8 +18,11 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static com.ciaranbyrne.squad.R.id.daySpinner;
 import static com.ciaranbyrne.squad.R.id.timeSpinner;
@@ -101,7 +104,7 @@ public class MatchActivity extends AppCompatActivity {
         // Time Spinner for selection
         timeSpin = (Spinner) findViewById(timeSpinner);
         timeSpin.setAdapter((adapterTimesSpinner));
-
+      //  readMatchTimes();
         timeSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -110,6 +113,7 @@ public class MatchActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                readMatchTimes();
 
             }
         });
@@ -119,17 +123,19 @@ public class MatchActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String str = timeSpin.getSelectedItem().toString();
-                tvTimes.setText("Time: " + str);
+                tvTimes.setText(str);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                readMatchTimes();
             }
         });
 
         // Day Spinner
         daySpin = (Spinner) findViewById(daySpinner);
         daySpin.setAdapter(adapterDaysSpinner);
+      //  readMatchDays();
 
         daySpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -139,7 +145,7 @@ public class MatchActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                readMatchDays();
             }
         });
 
@@ -149,18 +155,22 @@ public class MatchActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String str = daySpin.getSelectedItem().toString();
-                tvDays.setText("Day: " + str);
+                tvDays.setText(str);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                readMatchDays();
             }
         });
         // End Spinners
 
+
+
         // Seekbar
         seekBarPlayersNum = (SeekBar) findViewById(R.id.seekBarPlayers);
         seekBarPlayersNum.setMax(22);
+     //   readSeekbarNum();
         seekBarPlayersNum.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
@@ -179,9 +189,11 @@ public class MatchActivity extends AppCompatActivity {
             }
         }); // END SEEKBAR
 
-        //Switches //TODO
+
+
+        //Switches //
         //set the switch to ON
-        switchWeekly.setChecked(true);
+       // readWeeklySwitch();
         //attach a listener to check for changes in state
         switchWeekly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -191,7 +203,7 @@ public class MatchActivity extends AppCompatActivity {
             }
         });
 
-        switchEvenTeams.setChecked(true);
+       // readEvenTeamsSwitch();
         switchEvenTeams.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isEvenChecked) {
@@ -237,4 +249,93 @@ public class MatchActivity extends AppCompatActivity {
         Toast.makeText(this, "Match details added", Toast.LENGTH_SHORT).show();
     }
 
+    // Read Match days from DB
+    private void readMatchDays() {
+        matchesDatabase.child("matchDay").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String matchDay = dataSnapshot.getValue().toString();
+                daySpin.setSelection(adapterDaysSpinner.getPosition(matchDay));
+                //mySpinner.setSelection(arrayAdapter.getPosition("Category 2"))
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    // Read Match times from DB
+    private void readMatchTimes() {
+        matchesDatabase.child("matchTime").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String matchTime = dataSnapshot.getValue().toString();
+                timeSpin.setSelection(adapterTimesSpinner.getPosition(matchTime));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    // Read weekly switch from DB
+    private void readWeeklySwitch(){
+        matchesDatabase.child("weekly").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Boolean matchWeekly = Boolean.valueOf(dataSnapshot.getValue().toString());
+                switchWeekly.setChecked(matchWeekly);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    // Read even teams switch from DB
+    private void readEvenTeamsSwitch(){
+        matchesDatabase.child("evenTeams").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Boolean matchEven = Boolean.valueOf(dataSnapshot.getValue().toString());
+                switchEvenTeams.setChecked(matchEven);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //Read seekbar Number from DB
+    private void readSeekbarNum(){
+        matchesDatabase.child("matchNumbers").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Boolean matchEven = Boolean.valueOf(dataSnapshot.getValue().toString());
+                //switchEvenTeams.setChecked(matchEven);
+                int matchNum = Integer.parseInt(dataSnapshot.getValue().toString());
+                seekBarPlayersNum.setProgress(matchNum);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        readSeekbarNum();
+        readEvenTeamsSwitch();
+        readWeeklySwitch();
+        readMatchDays();
+        readMatchTimes();
+    }
 }

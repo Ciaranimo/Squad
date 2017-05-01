@@ -5,24 +5,28 @@ package com.ciaranbyrne.squad;
  */
 
 public class User {
+    private String uId;
     private String name;
     private String email;
+    private String phoneNum;
 
 
-    public User(String name, String email) {
+    public User(String uId, String name, String email, String phoneNum) {
+        this.uId = uId;
         this.name = name;
         this.email = email;
+        this.phoneNum = phoneNum;
     }
     public User() {
 
     }
 
     public String getUid() {
-        return email;
+        return uId;
     }
 
-    public void setUid(String email) {
-        this.email = email;
+    public void setUid(String uId) {
+        this.uId = uId;
     }
 
     public void setName(String name) {
@@ -31,5 +35,21 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
     }
 }

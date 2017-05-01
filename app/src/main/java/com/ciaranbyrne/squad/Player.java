@@ -15,14 +15,16 @@ public class Player {
     public String name;
     public Boolean playing;
     public String groupId;
+    public String phoneNum;
     public Map<String, Boolean> groups = new HashMap<>();
 
 
-    public Player(String uid, String name, Boolean playing, String groupId) {
+    public Player(String uid, String name, Boolean playing, String groupId, String phoneNum) {
         this.name = name;
         this.uid = uid;
         this.playing = playing;
         this.groupId = groupId;
+        this.phoneNum = phoneNum;
     }
 
     public Player() {
@@ -65,6 +67,14 @@ public class Player {
         return groups;
     }
 
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
     public void setGroups(Map<String, Boolean> groups) {
         this.groups = groups;
     }
@@ -76,6 +86,7 @@ public class Player {
         result.put("name", name);
         result.put("playing", playing);
         result.put("groupId", groupId);
+        result.put("phoneNum", phoneNum);
 
         return result;
     }

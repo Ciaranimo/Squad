@@ -58,6 +58,7 @@ public class EditPlayersActivity extends AppCompatActivity {
 
     // instance variables
     private TextView resultText;
+    private TextView resultNum;
     private Button btnAddPlayer;
     private SearchView etNewPlayer;
     private ListView playersListView;
@@ -95,14 +96,15 @@ public class EditPlayersActivity extends AppCompatActivity {
 
         etNewPlayer = (SearchView) findViewById(R.id.etNewPlayer);
         // for contacts picker
-       // outputText = (TextView) findViewById(R.id.textView1);
+        // outputText = (TextView) findViewById(R.id.textView1);
 
         //  For contact search
-        resultText = (TextView)findViewById(R.id.searchViewResult);
+        resultText = (TextView) findViewById(R.id.searchViewResult);
+        resultNum = (TextView) findViewById(R.id.searchViewNum);
 
         //Initialize ListView and adapter for Database Reading players list
         playerList = new ArrayList<>();
-        playersAdapter = new PlayersAdapter(this,R.layout.list_entry, playerList);
+        playersAdapter = new PlayersAdapter(this, R.layout.list_entry, playerList);
         playersListView.setAdapter(playersAdapter);
         //  INITIALIZE KEYS ARRAY
         keysList = new ArrayList<>();
@@ -114,7 +116,7 @@ public class EditPlayersActivity extends AppCompatActivity {
 
                 String clickedKey = keysList.get(position);
                 usersGroupDatabase.child(clickedKey).removeValue();
-                Toast.makeText(getApplicationContext(),  "Player removed from your Squad", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Player removed from your Squad", Toast.LENGTH_LONG).show();
 
                 return true;
             }
@@ -128,8 +130,10 @@ public class EditPlayersActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String playerName = resultText.getText().toString();
-                writeNewPlayer("ID STRING123",playerName,TRUE, groupId);
+                String playerNum = resultNum.getText().toString();
+                writeNewPlayer("ID STRING123", playerName, TRUE, groupId, playerNum);
                 resultText.setText("");
+                resultNum.setText("");
                 Toast.makeText(getApplicationContext(), "" + playerName + " added to your Squad", Toast.LENGTH_LONG).show();
             }
         });
@@ -157,7 +161,6 @@ public class EditPlayersActivity extends AppCompatActivity {
 
             }
 
-            // Code for deleting items from http://shrikanth.in/android/2015/09/09/firebase-crud-android.html
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
@@ -187,23 +190,23 @@ public class EditPlayersActivity extends AppCompatActivity {
 
 
     //  updates list view and adapter, called in child event listener
-    private void updateListView(){
+    private void updateListView() {
         playersAdapter.notifyDataSetChanged();
         playersListView.invalidate();
         Log.d(TAG, "Length: " + playerList.size());
     }
 
     // Write player to players & groups node method
-    public void writeNewPlayer(String uid, String name, Boolean playing, String groupId){
+    public void writeNewPlayer(String uid, String name, Boolean playing, String groupId, String phoneNum) {
         String groupsKey = mDatabase.child("groups").push().getKey();
         String playersKey = mDatabase.child("players").push().getKey();
 
-        Player player = new Player(uid, name, playing, groupId);
+        Player player = new Player(uid, name, playing, groupId, phoneNum);
         Map<String, Object> playerValues = player.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
 
         childUpdates.put("/players/" + playersKey, playerValues);
-        childUpdates.put("/groups/" + groupId  +"/members/" + groupsKey , playerValues);
+        childUpdates.put("/groups/" + groupId + "/members/" + groupsKey, playerValues);
         mDatabase.updateChildren(childUpdates);
     }
 
@@ -221,7 +224,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         String Phone_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
         String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
 
-        Uri EmailCONTENT_URI =  ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+        Uri EmailCONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
         String EmailCONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
         String DATA = ContactsContract.CommonDataKinds.Email.DATA;
 
@@ -229,24 +232,24 @@ public class EditPlayersActivity extends AppCompatActivity {
 
         ContentResolver contentResolver = getContentResolver();
 
-        Cursor cursor = contentResolver.query(CONTENT_URI, null,null, null, null);
+        Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null);
 
         // Loop for every contact in the phone
         if (cursor.getCount() > 0) {
 
             while (cursor.moveToNext()) {
 
-                String contact_id = cursor.getString(cursor.getColumnIndex( _ID ));
-                String name = cursor.getString(cursor.getColumnIndex( DISPLAY_NAME ));
+                String contact_id = cursor.getString(cursor.getColumnIndex(_ID));
+                String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
 
-                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex( HAS_PHONE_NUMBER )));
+                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
 
                 if (hasPhoneNumber > 0) {
 
                     output.append("\n First Name:" + name);
 
                     // Query and loop for every phone number of the contact
-                    Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[] { contact_id }, null);
+                    Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[]{contact_id}, null);
 
                     while (phoneCursor.moveToNext()) {
                         phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
@@ -257,7 +260,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                     phoneCursor.close();
 
                     // Query and loop for every email of the contact
-                    Cursor emailCursor = contentResolver.query(EmailCONTENT_URI,	null, EmailCONTACT_ID+ " = ?", new String[] { contact_id }, null);
+                    Cursor emailCursor = contentResolver.query(EmailCONTENT_URI, null, EmailCONTACT_ID + " = ?", new String[]{contact_id}, null);
 
                     while (emailCursor.moveToNext()) {
 
@@ -273,7 +276,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                 output.append("\n");
             }
 
-           // outputText.setText(output);
+            // outputText.setText(output);
         }
     }
 
@@ -285,7 +288,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Do your work here
-                   // fetchContacts();
+                    // fetchContacts();
                     setupSearchView();
 
                 } else {
@@ -297,7 +300,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         }
     }
 
-    public void permissionsCheck(){
+    public void permissionsCheck() {
         if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
 
@@ -305,14 +308,14 @@ public class EditPlayersActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         new String[]{android.Manifest.permission.READ_CONTACTS},
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{android.Manifest.permission.READ_CONTACTS},
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
             }
         } else {
             //do your work here
-          //  fetchContacts();
+            //  fetchContacts();
             setupSearchView();
 
         }
@@ -333,7 +336,9 @@ public class EditPlayersActivity extends AppCompatActivity {
         if (ContactsContract.Intents.SEARCH_SUGGESTION_CLICKED.equals(intent.getAction())) {
             //handles suggestion clicked query
             String displayName = getDisplayNameForContact(intent);
+            String displayNum = getPhoneNumForContact(intent);
             resultText.setText(displayName);
+            resultNum.setText(displayNum);
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // handles a search query
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -348,14 +353,38 @@ public class EditPlayersActivity extends AppCompatActivity {
         Cursor phoneCursor = getContentResolver().query(intent.getData(), null, null, null, null);
         phoneCursor.moveToFirst();
         int idDisplayName = phoneCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+
         String name = phoneCursor.getString(idDisplayName);
 
-       // int idDisplayNum = phoneCursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
-        //String phoneNum = phoneCursor.getString(idDisplayNum);
 
         phoneCursor.close();
         return name;
     }
 
+    // get contact Phone num
+    private String getPhoneNumForContact(Intent intent) {
+        Cursor phoneCursor = getContentResolver().query(intent.getData(), null, null, null, null);
+        phoneCursor.moveToFirst();
+
+        String hasPhone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+        String contactId = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.Contacts._ID));
+        if (hasPhone.equalsIgnoreCase("1"))
+            hasPhone = "true";
+        else
+            hasPhone = "false";
+
+        String phoneNumber = null;
+        if (Boolean.parseBoolean(hasPhone)) {
+            Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+            if (phones != null) {
+                while (phones.moveToNext()) {
+                    phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                }
+            }
+
+            phones.close();
+        }
+        return phoneNumber;
+    }
 
 }

@@ -17,8 +17,11 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser user;
+
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference usersDatabase;
     private DatabaseReference groupsDatabase;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private String mUsername;
+    private String userId;
     private GoogleApiClient mGoogleApiClient;
     private SharedPreferences mSharedPreferences;
 
@@ -61,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         groupsDatabase = FirebaseDatabase.getInstance().getReference("groups");
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+        userId = mFirebaseAuth.getCurrentUser().getUid();
 
         //Initialize views
         tvDisplayName = (TextView) findViewById(R.id.tv_display_name);
@@ -92,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     //calls methods at boottom
                     onSignedInInitialize(user.getDisplayName());
                     // add user instance to realtime database
-                    writeNewUser(user.getUid(),user.getEmail(),user.getDisplayName());
+                   writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),"");
                     readUserInfo(user.getDisplayName());
                     Toast.makeText(MainActivity.this, "Signed in" , Toast.LENGTH_SHORT).show();
                 }else{
@@ -110,18 +117,64 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+        userHasPhoneNumber(userId);
 
 
     }// End of onCreate
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
-    private void writeNewUser(String userId, String name, String email) {
+    private void writeNewUser(final String userId, final String name, final String email, final String phoneNum) {
+        final User user = new User(userId, name, email, phoneNum);
 
+        // Checks if user exists
+        usersDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null){
+                    //user exists, do something
+                  //  Toast.makeText(MainActivity.this,"User exists ",Toast.LENGTH_SHORT).show();
 
-        User user = new User(name, email);
+                }else {
+                    //user does not exist, do something else
+                    usersDatabase.child(userId).setValue(user);
+               //     Toast.makeText(MainActivity.this,"User doesnt exist ",Toast.LENGTH_SHORT).show();
 
-        usersDatabase.child(userId).setValue(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
+
+    // TODO Check if user has input phone number
+    private void userHasPhoneNumber(String userId){
+        // Checks if user exists
+        usersDatabase.child(userId).child("phoneNum").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.getValue().equals("") ){
+                    //user has phone, do something
+                    Toast.makeText(MainActivity.this,"User has phone Num ",Toast.LENGTH_SHORT).show();
+
+                }else {
+                    //user does not have phone number, do something else
+                    Toast.makeText(MainActivity.this,"User doesnt have phone num ",Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     //GET CURRENT USER INFO
 
     private void readUserInfo(String mUsername) {
@@ -133,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         } else {
             mUsername = user.getDisplayName();
+
            /* if (mFirebaseUser.getPhotoUrl() != null) {
                 mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
             }
@@ -143,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //read listener attached / TODO //
+    //read listener attached /  //
     private void onSignedInInitialize(String username) {
         mUsername = username;
         //call method when user signed in
@@ -219,7 +273,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode == RC_SIGN_IN){
             if(resultCode == RESULT_OK){
-                Toast.makeText(this,"Signed in ",Toast.LENGTH_SHORT).show();
             }else if(resultCode == RESULT_CANCELED){
                 Toast.makeText(this,"Sign in Cancelled ",Toast.LENGTH_SHORT).show();
                 finish();
@@ -236,6 +289,10 @@ public class MainActivity extends AppCompatActivity {
        // mMessageAdapter.clear();
         //detach listener
       //  detachDatabaseReadListener();
+    }
+
+    private void checkUserPhoneNum(){
+        //if(usersDatabase.child(userId))
     }
 
 }
