@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private String mUsername;
-    private String userId;
+    private String mUserId;
     private GoogleApiClient mGoogleApiClient;
     private SharedPreferences mSharedPreferences;
 
@@ -62,11 +63,11 @@ public class MainActivity extends AppCompatActivity {
         //Initialize Firebase components
         // get database reference to read data
         usersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-        groupsDatabase = FirebaseDatabase.getInstance().getReference("groups");
+        groupsDatabase = FirebaseDatabase.getInstance().getReference().child("groups");
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        userId = mFirebaseAuth.getCurrentUser().getUid();
+        mUserId = mFirebaseAuth.getCurrentUser().getUid();
 
         //Initialize views
         tvDisplayName = (TextView) findViewById(R.id.tv_display_name);
@@ -98,9 +99,8 @@ public class MainActivity extends AppCompatActivity {
                     //calls methods at boottom
                     onSignedInInitialize(user.getDisplayName(),user.getUid());
                     // add user instance to realtime database
-                    // TODO This method is causing issues,
-                    userHasPhoneNumber(user.getUid());
-                    writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),"");
+
+                    writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),null);
                     readUserInfo(user.getDisplayName());
                     Toast.makeText(MainActivity.this, "Signed in" , Toast.LENGTH_SHORT).show();
 
@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-
     }// End of onCreate
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
@@ -137,11 +136,16 @@ public class MainActivity extends AppCompatActivity {
                     //user exists, do something
                   //  Toast.makeText(MainActivity.this,"User exists ",Toast.LENGTH_SHORT).show();
 
+                    // TODO This method is causing issues,
+                    userHasPhoneNumber(mUserId);
+
+
                 }else {
                     //user does not exist, add to DB
                     usersDatabase.child(userId).setValue(user);
                //     Toast.makeText(MainActivity.this,"User doesnt exist ",Toast.LENGTH_SHORT).show();
-
+                    // TODO This method is causing issues,
+                    userHasPhoneNumber(mUserId);
                 }
             }
 
@@ -150,7 +154,32 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+    // TODO Write new group so we dont get null error with new users
+    private void writeNewGroup(String userId){
+        final String groupId = userId;
 
+        groupsDatabase.child(groupId).addListenerForSingleValueEvent(new ValueEventListener() {
+            Group group = new Group(groupId, groupId);
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null){
+
+                }else {
+                    //group does not exist, add to DB
+                    groupsDatabase.child(groupId).setValue(group);
+                    //     Toast.makeText(MainActivity.this,"User doesnt exist ",Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     // TODO Check if user has input phone number - causing issues
@@ -160,21 +189,27 @@ public class MainActivity extends AppCompatActivity {
             usersDatabase.child(userId).child("phoneNum").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null) {
-                        //user has phone, do something
+                    if (dataSnapshot.exists() )  {
+                        //user has phone number, do something
                         Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
 
                     } else {
                         //user does not have phone number, do something else
                         Toast.makeText(MainActivity.this, "User does NOT have phone num ", Toast.LENGTH_SHORT).show();
+                        // Begin the transaction
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        // Replace the contents of the container with the new fragment
+                        ft.replace(R.id.your_placeholder, new InputPhoneFragment());
+                        // or ft.add(R.id.your_placeholder, new FooFragment());
+                        // Complete the changes added above
+                        ft.commit();
 
                     }
                 }
 
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    Toast.makeText(MainActivity.this,"ERROR", Toast.LENGTH_SHORT).show();
                 }
             });
         }else{
@@ -207,7 +242,9 @@ public class MainActivity extends AppCompatActivity {
     //read listener attached /  //
     private void onSignedInInitialize(String username, String userId) {
         mUsername = username;
-        userId = userId;
+        mUserId = userId;
+
+        writeNewGroup(mUserId);
 
 
 
@@ -288,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode == RC_SIGN_IN){
             if(resultCode == RESULT_OK){
+
             }else if(resultCode == RESULT_CANCELED){
                 Toast.makeText(this,"Sign in Cancelled ",Toast.LENGTH_SHORT).show();
                 finish();

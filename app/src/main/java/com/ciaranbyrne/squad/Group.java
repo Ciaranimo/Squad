@@ -10,16 +10,16 @@ import java.util.Map;
 public class Group {
 
     private String groupId;
-    private String memberId;
+    private String adminId;
     private Map<String, Boolean> members = new HashMap<>();
 
     public Group() {
 
     }
 
-    public Group(String groupId, String memberId) {
+    public Group(String groupId, String adminId) {
         this.groupId = groupId;
-        this.memberId = memberId;
+        this.adminId = adminId;
     }
 
     public String getGroupId() {
@@ -30,12 +30,12 @@ public class Group {
         this.groupId = groupId;
     }
 
-    public String getMember() {
-        return memberId;
+    public String getAdminId() {
+        return adminId;
     }
 
-    public void setMember(String memberId) {
-        this.memberId = memberId;
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
     }
 
     public Map<String, Boolean> getMembers() {

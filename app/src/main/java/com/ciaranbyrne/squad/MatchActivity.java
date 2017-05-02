@@ -113,6 +113,7 @@ public class MatchActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+               // TODO if no value cannot read from db
                 readMatchTimes();
 
             }
@@ -251,12 +252,16 @@ public class MatchActivity extends AppCompatActivity {
 
     // Read Match days from DB
     private void readMatchDays() {
+        //TODO Add Value event listener to see if NULL
+
         matchesDatabase.child("matchDay").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String matchDay = dataSnapshot.getValue().toString();
-                daySpin.setSelection(adapterDaysSpinner.getPosition(matchDay));
-                //mySpinner.setSelection(arrayAdapter.getPosition("Category 2"))
+                if(dataSnapshot.exists()) {
+                    String matchDay = dataSnapshot.getValue().toString();
+                    daySpin.setSelection(adapterDaysSpinner.getPosition(matchDay));
+                    //mySpinner.setSelection(arrayAdapter.getPosition("Category 2"))
+                }
             }
 
             @Override
@@ -271,8 +276,10 @@ public class MatchActivity extends AppCompatActivity {
         matchesDatabase.child("matchTime").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String matchTime = dataSnapshot.getValue().toString();
-                timeSpin.setSelection(adapterTimesSpinner.getPosition(matchTime));
+                if(dataSnapshot.exists()) {
+                    String matchTime = dataSnapshot.getValue().toString();
+                    timeSpin.setSelection(adapterTimesSpinner.getPosition(matchTime));
+                }
             }
 
             @Override
@@ -286,8 +293,10 @@ public class MatchActivity extends AppCompatActivity {
         matchesDatabase.child("weekly").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Boolean matchWeekly = Boolean.valueOf(dataSnapshot.getValue().toString());
-                switchWeekly.setChecked(matchWeekly);
+                if(dataSnapshot.exists()) {
+                    Boolean matchWeekly = Boolean.valueOf(dataSnapshot.getValue().toString());
+                    switchWeekly.setChecked(matchWeekly);
+                }
             }
 
             @Override
@@ -301,8 +310,10 @@ public class MatchActivity extends AppCompatActivity {
         matchesDatabase.child("evenTeams").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Boolean matchEven = Boolean.valueOf(dataSnapshot.getValue().toString());
-                switchEvenTeams.setChecked(matchEven);
+                if(dataSnapshot.exists()) {
+                    Boolean matchEven = Boolean.valueOf(dataSnapshot.getValue().toString());
+                    switchEvenTeams.setChecked(matchEven);
+                }
             }
 
             @Override
@@ -316,10 +327,12 @@ public class MatchActivity extends AppCompatActivity {
         matchesDatabase.child("matchNumbers").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //Boolean matchEven = Boolean.valueOf(dataSnapshot.getValue().toString());
-                //switchEvenTeams.setChecked(matchEven);
-                int matchNum = Integer.parseInt(dataSnapshot.getValue().toString());
-                seekBarPlayersNum.setProgress(matchNum);
+                if(dataSnapshot.exists()) {
+                    //Boolean matchEven = Boolean.valueOf(dataSnapshot.getValue().toString());
+                    //switchEvenTeams.setChecked(matchEven);
+                    int matchNum = Integer.parseInt(dataSnapshot.getValue().toString());
+                    seekBarPlayersNum.setProgress(matchNum);
+                }
             }
 
             @Override
