@@ -1,5 +1,8 @@
 package com.ciaranbyrne.squad;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by ciaranbyrne on 05/03/2017.
  */
@@ -9,6 +12,7 @@ public class User {
     private String name;
     private String email;
     private String phoneNum;
+    private Map<String, Boolean> groups = new HashMap<>();
 
 
     public User(String uId, String name, String email, String phoneNum) {
@@ -51,5 +55,13 @@ public class User {
 
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
+    }
+
+    public Map<String, Boolean> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Map<String, Boolean> groups) {
+        this.groups = groups;
     }
 }

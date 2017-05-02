@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        mUserId = mFirebaseAuth.getCurrentUser().getUid();
+      //  mUserId = mFirebaseAuth.getCurrentUser().getUid();
 
         //Initialize views
         tvDisplayName = (TextView) findViewById(R.id.tv_display_name);
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // TODO Check if user has input phone number - causing issues
+    // TODO Check if user has input phone number - causing issues - FIXED i think
     private void userHasPhoneNumber(String userId){
         if(userId != null) {
             // Checks if phonNum exists
