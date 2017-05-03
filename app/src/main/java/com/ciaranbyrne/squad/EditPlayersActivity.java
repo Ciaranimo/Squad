@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.ciaranbyrne.squad.R.string.weekly;
 import static java.lang.Boolean.TRUE;
 
 public class EditPlayersActivity extends AppCompatActivity {
@@ -57,6 +58,7 @@ public class EditPlayersActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser firebaseUser;
     private ChildEventListener mChildEventListener;
+
 
     // 7 Firebase Authenticate TODO
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -93,12 +95,15 @@ public class EditPlayersActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         playersDatabase = mFirebaseDatabase.getReference().child("players");
         groupsDatabase = mFirebaseDatabase.getReference().child("groups");
-       // usersDatabase = mFirebaseDatabase.getReference().child("users");
-        usersDatabase = mFirebaseDatabase.getReference().child("users").child(userId);
+        usersDatabase = mFirebaseDatabase.getReference().child("users");
+        //usersDatabase = mFirebaseDatabase.getReference().child("users").child(userId);
         usersGroupDatabase = mFirebaseDatabase.getReference().child("groups").child(groupId).child("members");
 
         mDatabase = mFirebaseDatabase.getReference();
 
+        // Match Info Variables TODO
+
+        String matchTime = groupsDatabase.child(firebaseUser.getUid()).child()
         // Initialize references to views
         playersListView = (ListView) findViewById(R.id.list_players);
 
@@ -227,13 +232,15 @@ public class EditPlayersActivity extends AppCompatActivity {
         //checkIfPlayerIsUser(phoneNum);
         //checkPlayerIsUser(phoneNum);
 
-        checkPlayerNum(phoneNum);
+        //checkPlayerNum(phoneNum);
+
+        checkingNumber(phoneNum);
 
     }
 
     //TODO 2nd attempt to find player in users db
     public void checkPlayerIsUser(final String phoneNum){
-        usersDatabase.addValueEventListener(new ValueEventListener() {
+        usersDatabase.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot child : dataSnapshot.getChildren())
@@ -254,6 +261,9 @@ public class EditPlayersActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
     // TODO Check to see if player exists in Database, search by phone
     public void checkIfPlayerIsUser(final String phoneNum) {
         ValueEventListener valueEventListener = new ValueEventListener() {
@@ -297,10 +307,70 @@ public class EditPlayersActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         };
-        usersDatabase.addListenerForSingleValueEvent(valueEventListener);
+        usersDatabase.child(firebaseUser.getUid()).addListenerForSingleValueEvent(valueEventListener);
     }
 
-    //TODO other try
+    // TODO *********
+    public void checkingNumber(final String phoneNum){
+        DatabaseReference mDatabaseReference =
+                FirebaseDatabase.getInstance().getReference().child("users");
+        final Query query = mDatabaseReference;
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getValue() != null) {
+                    // String key = String.valueOf(dataSnapshot.getValue());
+                    User mUser = dataSnapshot.getValue(User.class);
+
+                   // String uId = mUser.getUid();
+                    // usersDatabase.child(mUser.getUid());
+                     // Log.d("TAG",uId);
+                    if(mUser.getPhoneNum().equals(phoneNum)) {
+                       String uId= mUser.getUid();
+                        String email = mUser.getEmail();
+                        String name = mUser.getName();
+
+                        //Match details
+
+                        String groupId = firebaseUser.getUid(); // Logged in users id as he is adding the player
+                        String matchTime = groupsDatabase.child(firebaseUser.getUid())
+
+
+                        String userGroupsKey = mDatabase.child("users").child(uId).child("groups").push().getKey();
+
+                       // Match match = new Match(matchTime, matchDay, matchNumbers, evenTeams, weekly, groupId);
+                     //   Map<String, Object> childUpdates = new HashMap<>();
+
+                        Toast.makeText(getApplicationContext(), "* found **" + " " + uId + " " + " " + email + " " + name, Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //TODO other try -is working
     public void checkPlayerNum(final String phoneNum) {
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("users");
@@ -312,7 +382,13 @@ public class EditPlayersActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
-                        Toast.makeText(getApplicationContext(), "****PLAYER FOUND****", Toast.LENGTH_LONG).show();
+                       // String key = String.valueOf(dataSnapshot.getValue());
+                       User mUser = dataSnapshot.getValue(User.class);
+
+                        String uId = mUser.getUid();
+                       // usersDatabase.child(mUser.getUid());
+                        Log.d("TAG",uId);
+                        Toast.makeText(getApplicationContext(), "* found **"+ uId , Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
                     }
@@ -321,6 +397,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {}
             };
+
 
             phoneNumReference.addListenerForSingleValueEvent(phoneNumValueEventListener);
 

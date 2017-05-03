@@ -64,4 +64,6 @@ public class User {
     public void setGroups(Map<String, Boolean> groups) {
         this.groups = groups;
     }
+
+
 }

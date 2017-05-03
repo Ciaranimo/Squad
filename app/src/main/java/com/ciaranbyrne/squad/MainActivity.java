@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // TODO Check if user has input phone number - causing issues - FIXED i think
+    //  Check if user has input phone number - causing issues - FIXED i think
     private void userHasPhoneNumber(String userId){
         if(userId != null) {
             // Checks if phonNum exists
@@ -190,8 +191,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists() )  {
+                        Log.d(TAG,"User has phone");
                         //user has phone number, do something
-                        Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
 
                     } else {
                         //user does not have phone number, do something else
