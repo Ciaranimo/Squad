@@ -19,10 +19,12 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Firebase Authentication state listener initialize TODO
+        // Firebase Authentication state listener initialize - from Firebase docs
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             //on signedInInitialize called
             @Override
@@ -101,11 +103,9 @@ public class MainActivity extends AppCompatActivity {
                     onSignedInInitialize(user.getDisplayName(),user.getUid());
                     // add user instance to realtime database
 
-                    writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),null);
+                    writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),null,null);
                     readUserInfo(user.getDisplayName());
                     Toast.makeText(MainActivity.this, "Signed in" , Toast.LENGTH_SHORT).show();
-
-
                 }else{
                     //user is not signed in - commence with login flow (built in to firebase)
                     onSignedOutCleanUp();
@@ -121,13 +121,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
+        User loggedInUser = new User();
+        String userPhone = loggedInUser.getPhoneNum();
+     //   checkingNumber(userPhone);
 
     }// End of onCreate
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
-    private void writeNewUser(final String userId, final String name, final String email, final String phoneNum) {
-        final User user = new User(userId, name, email, phoneNum);
+    private void writeNewUser(final String userId, final String name, final String email, final String phoneNum, final String searchNum) {
+        final User user = new User(userId, name, email, phoneNum, searchNum);
 
         // Checks if user exists
         usersDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -136,26 +138,23 @@ public class MainActivity extends AppCompatActivity {
                 if(dataSnapshot.getValue() != null){
                     //user exists, do something
                   //  Toast.makeText(MainActivity.this,"User exists ",Toast.LENGTH_SHORT).show();
-
-                    // TODO This method is causing issues,
                     userHasPhoneNumber(mUserId);
-
-
                 }else {
                     //user does not exist, add to DB
                     usersDatabase.child(userId).setValue(user);
-               //     Toast.makeText(MainActivity.this,"User doesnt exist ",Toast.LENGTH_SHORT).show();
-                    // TODO This method is causing issues,
                     userHasPhoneNumber(mUserId);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(MainActivity.this,"Error ",Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
+
     // TODO Write new group so we dont get null error with new users
     private void writeNewGroup(String userId){
         final String groupId = userId;
@@ -175,27 +174,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    //  Check if user has input phone number - causing issues - FIXED i think
+    //  Check if user has input phone number -
     private void userHasPhoneNumber(String userId){
         if(userId != null) {
             // Checks if phonNum exists
             usersDatabase.child(userId).child("phoneNum").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists() )  {
+                    String ds =dataSnapshot.toString();
+                    if ( ds.length() == 0 || dataSnapshot.getValue() == null)  {
                         Log.d(TAG,"User has phone");
-                        //user has phone number, do something
-                        //Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
-
-                    } else {
                         //user does not have phone number, do something else
                         Toast.makeText(MainActivity.this, "User does NOT have phone num ", Toast.LENGTH_SHORT).show();
                         // Begin the transaction
@@ -205,6 +200,11 @@ public class MainActivity extends AppCompatActivity {
                         // or ft.add(R.id.your_placeholder, new FooFragment());
                         // Complete the changes added above
                         ft.commit();
+                    } else {
+
+                        //user has phone number, do something
+                        Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
+
 
                     }
                 }
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }else{
-            Toast.makeText(MainActivity.this,"Phone Number check didnt work", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -334,6 +334,56 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    // TODO ********* works  - TURN INTO BOOLEAN RETURN FOR WRITE TO WORK?
+    public void checkingNumber(final String phoneNum){
+        DatabaseReference mDatabaseReference =
+                FirebaseDatabase.getInstance().getReference().child("players");
+        final Query query = mDatabaseReference;
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String ds =dataSnapshot.toString();
+                if ( ds.length() != 0 || dataSnapshot.getValue() != null){
+               // if (dataSnapshot.getValue() != null)
+
+                    Player mPlayer = dataSnapshot.getValue(Player.class);
+
+                    if(mPlayer.getPhoneNum().equals(phoneNum)) {
+                        String uId= mPlayer.getUid();
+                        String groupId = mPlayer.getGroupId();
+                        String name = mPlayer.getName();
+                        Toast.makeText(getApplicationContext(), "* found **" + " " + name, Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                }
+
+
+
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     //

@@ -2,18 +2,15 @@ package com.ciaranbyrne.squad;
 
 import android.app.SearchManager;
 import android.app.SearchableInfo;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ciaranbyrne.squad.R.string.weekly;
 import static java.lang.Boolean.TRUE;
 
 public class EditPlayersActivity extends AppCompatActivity {
@@ -52,12 +48,18 @@ public class EditPlayersActivity extends AppCompatActivity {
     private DatabaseReference usersGroupDatabase;
     private DatabaseReference mDatabase;
     private DatabaseReference phoneNumReference;
+    private DatabaseReference matchesDatabase;
     private FirebaseDatabase mFirebaseDatabase;
+
+    private DatabaseReference usersGroupsRef;
+    private DatabaseReference matchesRef;
 
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser firebaseUser;
     private ChildEventListener mChildEventListener;
+
+    private ChildEventListener matchChildEventListener;
 
 
     // 7 Firebase Authenticate TODO
@@ -73,6 +75,7 @@ public class EditPlayersActivity extends AppCompatActivity {
     private ArrayList<Player> playerList;
     // ARRAY LIST FOR KEYS
     private ArrayList<String> keysList;
+
 
     // For read permissions on Contacts
     final private int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 987;
@@ -99,11 +102,13 @@ public class EditPlayersActivity extends AppCompatActivity {
         //usersDatabase = mFirebaseDatabase.getReference().child("users").child(userId);
         usersGroupDatabase = mFirebaseDatabase.getReference().child("groups").child(groupId).child("members");
 
+
+
         mDatabase = mFirebaseDatabase.getReference();
 
-        // Match Info Variables TODO
 
-        String matchTime = groupsDatabase.child(firebaseUser.getUid()).child()
+
+
         // Initialize references to views
         playersListView = (ListView) findViewById(R.id.list_players);
 
@@ -146,8 +151,11 @@ public class EditPlayersActivity extends AppCompatActivity {
                 // TODO SUB STRING TO ALLOW SEARCHING
                 String playerNum = resultNum.getText().toString();
                 playerNum = playerNum.replace(" ","");
+                playerNum = playerNum.replace(" ","");
+                Log.d("TAGG 1",playerNum);
 
-                String searchNum = playerNum.substring(playerNum.length() - 8); // gets phone , for case with +353 or 086 etc
+                String searchNum = playerNum.substring(playerNum.length() -7); // gets phone , for case with +353 or 086 etc
+                Log.d("TAGG 2",searchNum);
                 writeNewPlayer("ID STRING123", playerName, TRUE, groupId, playerNum, searchNum);
                 resultText.setText("");
                 resultNum.setText("");
@@ -216,7 +224,9 @@ public class EditPlayersActivity extends AppCompatActivity {
     }
 
     // Write player to players & groups node method
-    public void writeNewPlayer(String uid, String name, Boolean playing, String groupId, String phoneNum, String searchNum) {
+    public void writeNewPlayer(String uid, String name, Boolean playing, final String groupId, String phoneNum, String searchNum) {
+
+        final String ph = phoneNum;
         String groupsKey = mDatabase.child("groups").push().getKey();
         String playersKey = mDatabase.child("players").push().getKey();
 
@@ -226,7 +236,11 @@ public class EditPlayersActivity extends AppCompatActivity {
 
         childUpdates.put("/players/" + playersKey, playerValues);
         childUpdates.put("/groups/" + groupId + "/members/" + groupsKey, playerValues);
-        mDatabase.updateChildren(childUpdates);
+     //   mDatabase.updateChildren(childUpdates);
+
+        Log.d("write player phone ",phoneNum);
+
+        // *** *
 
         // TODO - Causing issues
         //checkIfPlayerIsUser(phoneNum);
@@ -234,121 +248,53 @@ public class EditPlayersActivity extends AppCompatActivity {
 
         //checkPlayerNum(phoneNum);
 
-        checkingNumber(phoneNum);
+         checkingNumber(phoneNum);
+
+
+        mDatabase.updateChildren(childUpdates);
 
     }
 
-    //TODO 2nd attempt to find player in users db
-    public void checkPlayerIsUser(final String phoneNum){
-        usersDatabase.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot child : dataSnapshot.getChildren())
-                {
-                    for(DataSnapshot grandChild : child.getChildren())
-                    {
-                        if(grandChild.getValue() == phoneNum){
-                            Toast.makeText(getApplicationContext(), "****FOUND****", Toast.LENGTH_LONG).show();
-
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
 
 
-    // TODO Check to see if player exists in Database, search by phone
-    public void checkIfPlayerIsUser(final String phoneNum) {
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String userKey = ds.getKey();
-                //    Log.d("Tag", userKey); passess as ok
-
-                    DatabaseReference userKeyDatabase =  mFirebaseDatabase.getReference().child("users").child(userKey);
-                    ValueEventListener eventListener = new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.d("Tag", String.valueOf(dataSnapshot.child("phoneNum").getValue()));
-                            /*
-                            if (dataSnapshot.child("phoneNum").getValue() == null) {
-                                Toast.makeText(getApplicationContext(), "****NULLL****", Toast.LENGTH_LONG).show();
-                                Log.d("Tag", String.valueOf(dataSnapshot.child("phoneNum").getValue()));
-
-                            } else if(dataSnapshot.child("phoneNum").getValue().equals(phoneNum)){
-                                // player added is in user database
-                                Toast.makeText(getApplicationContext(), "****PLAYER FOUND****", Toast.LENGTH_LONG).show();
-
-                            } else {
-                                Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
-
-                            }
-                            */
-
-                        }
-
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {}
-                    };
-                    userKeyDatabase.addListenerForSingleValueEvent(eventListener);
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        };
-        usersDatabase.child(firebaseUser.getUid()).addListenerForSingleValueEvent(valueEventListener);
-    }
-
-    // TODO *********
-    public void checkingNumber(final String phoneNum){
+    // TODO ********* works  - TURN INTO BOOLEAN RETURN FOR WRITE TO WORK?
+    public void checkingNumber(final String playerPhoneNum){
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("users");
         final Query query = mDatabaseReference;
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null) {
-                    // String key = String.valueOf(dataSnapshot.getValue());
-                    User mUser = dataSnapshot.getValue(User.class);
+                if (dataSnapshot.getValue() != null || !dataSnapshot.getValue().toString().equals("")) {
 
-                   // String uId = mUser.getUid();
-                    // usersDatabase.child(mUser.getUid());
-                     // Log.d("TAG",uId);
-                    if(mUser.getPhoneNum().equals(phoneNum)) {
-                       String uId= mUser.getUid();
+                    User mUser = dataSnapshot.getValue(User.class);
+                    String userPhone = mUser.getPhoneNum();
+
+                    userPhone = userPhone.replace(" ", "");
+                    Log.d("TAGG 3",userPhone);
+                    Log.d("TAGG 4",playerPhoneNum);
+
+                  //  String userSearchNum = userPhone.substring( userPhone.length()-7);
+                 //  String playerSearchNum = playerPhoneNum.substring( playerPhoneNum.length() -7);
+
+                 //   Log.d("TAGG 5",userSearchNum);
+                 //   Log.d("TAGG 6", playerSearchNum);
+                    if(userPhone.equals(playerPhoneNum)) {
+                        String uId= mUser.getUid();
                         String email = mUser.getEmail();
+
                         String name = mUser.getName();
 
-                        //Match details
+                       moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
+                                usersDatabase.child(uId).child("groups"));
 
-                        String groupId = firebaseUser.getUid(); // Logged in users id as he is adding the player
-                        String matchTime = groupsDatabase.child(firebaseUser.getUid())
-
-
-                        String userGroupsKey = mDatabase.child("users").child(uId).child("groups").push().getKey();
-
-                       // Match match = new Match(matchTime, matchDay, matchNumbers, evenTeams, weekly, groupId);
-                     //   Map<String, Object> childUpdates = new HashMap<>();
-
-                        Toast.makeText(getApplicationContext(), "* found **" + " " + uId + " " + " " + email + " " + name, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "* found **" + " " + uId, Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
                 }
-
             }
-
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
@@ -369,112 +315,125 @@ public class EditPlayersActivity extends AppCompatActivity {
 
             }
         });
+
     }
-    //TODO other try -is working
-    public void checkPlayerNum(final String phoneNum) {
-        DatabaseReference mDatabaseReference =
-                FirebaseDatabase.getInstance().getReference().child("users");
 
-        if (!TextUtils.isEmpty(phoneNum)) {
-            final Query phoneNumReference = mDatabaseReference.orderByChild("phoneNum").equalTo(phoneNum);
+    //TODO MYATTEMpT
+    public void copyNode(String playerId){
+        DatabaseReference matchesNode = usersDatabase.child(playerId).child("matchDetails");
+        DatabaseReference fromNode = groupsDatabase.child(firebaseUser.getUid()).child("matches");
 
-            ValueEventListener phoneNumValueEventListener = new ValueEventListener() {
+
+    }
+
+//TODO NOT WORKING EITHER
+    public void moveFirebaseRecord(DatabaseReference fromPath, final DatabaseReference toPath) {
+
+            Log.d("moveRec", String.valueOf(fromPath));
+             Log.d("moveRec", String.valueOf(toPath));
+
+        fromPath.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null) {
-                       // String key = String.valueOf(dataSnapshot.getValue());
-                       User mUser = dataSnapshot.getValue(User.class);
+                public void onDataChange(final DataSnapshot dataSnapshot) {
+                    Log.d("moveRec", String.valueOf(dataSnapshot));
 
-                        String uId = mUser.getUid();
-                       // usersDatabase.child(mUser.getUid());
-                        Log.d("TAG",uId);
-                        Toast.makeText(getApplicationContext(), "* found **"+ uId , Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
-                    }
+
+                    toPath.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            Log.d("moveRec", String.valueOf(dataSnapshot));
+                            Log.d("moveRec", String.valueOf(toPath));
+
+
+                            if (databaseError != null) {
+                                Toast.makeText(getApplicationContext(), "COPY FAILED", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "COPY SUCCESS", Toast.LENGTH_LONG).show();
+
+                            }
+                        }
+                    });
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {}
-            };
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getApplicationContext(), "onCancelled- copy fail", Toast.LENGTH_LONG).show();
 
+                }
+            });
 
-            phoneNumReference.addListenerForSingleValueEvent(phoneNumValueEventListener);
-
-
-        } else {
-            Log.e("Error","phoneNum is null");
-        }
     }
 
-    public void fetchContacts() {
+    public void writeUsersGroups(String playerId){
+        usersGroupsRef = mFirebaseDatabase.getReference().child("users").child(playerId).child("groups");
+        matchesRef = mFirebaseDatabase.getReference().child("groups").child(firebaseUser.getUid()).child("matches");
 
-        String phoneNumber = null;
-        String email = null;
+// Listen for status updates
+        usersGroupsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-        Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
-        String _ID = ContactsContract.Contacts._ID;
-        String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
-        String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
-
-        Uri PhoneCONTENT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        String Phone_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
-        String NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
-
-        Uri EmailCONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
-        String EmailCONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
-        String DATA = ContactsContract.CommonDataKinds.Email.DATA;
-
-        StringBuffer output = new StringBuffer();
-
-        ContentResolver contentResolver = getContentResolver();
-
-        Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null);
-
-        // Loop for every contact in the phone
-        if (cursor.getCount() > 0) {
-
-            while (cursor.moveToNext()) {
-
-                String contact_id = cursor.getString(cursor.getColumnIndex(_ID));
-                String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
-
-                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
-
-                if (hasPhoneNumber > 0) {
-
-                    output.append("\n First Name:" + name);
-
-                    // Query and loop for every phone number of the contact
-                    Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[]{contact_id}, null);
-
-                    while (phoneCursor.moveToNext()) {
-                        phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-                        output.append("\n Phone number:" + phoneNumber);
-
-                    }
-
-                    phoneCursor.close();
-
-                    // Query and loop for every email of the contact
-                    Cursor emailCursor = contentResolver.query(EmailCONTENT_URI, null, EmailCONTACT_ID + " = ?", new String[]{contact_id}, null);
-
-                    while (emailCursor.moveToNext()) {
-
-                        email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
-
-                        output.append("\nEmail:" + email);
-
-                    }
-
-                    emailCursor.close();
-                }
-
-                output.append("\n");
             }
 
-            // outputText.setText(output);
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+    // TODO NOT WORKING
+    public void copyFirebaseData(String playerId) {
+        //FROM
+        matchesRef = mFirebaseDatabase.getReference().child("groups").child(firebaseUser.getUid()).child("matches");
+
+        Log.d("COPY TAG + matchesRef", matchesRef.toString());
+        //TO
+        usersGroupsRef = mFirebaseDatabase.getReference().child("users").child(playerId).child("matches");
+        Log.d("COPY TAG + usersGroups", usersGroupsRef.toString());
+
+        matchesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("COPY TAG + dataSnap", dataSnapshot.toString());
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d("COPY TAG + snapshot", snapshot.toString());
+
+                    String snapshotKey = snapshot.getKey();
+
+                    Log.d("COPY TAG + snapshot key", snapshotKey.toString());
+
+                    String mt = snapshot.child("matchTime").getValue(String.class);
+
+                    Log.d("COPY TAG +  match time", mt);
+
+                    String md = snapshot.child("matchDay").getValue(String.class);
+                 //   int mn = snapshot.child("matchNumbers").getValue(Integer.class);
+                    Boolean et = snapshot.child("evenTeams").getValue(Boolean.class);
+                    Boolean wk = snapshot.child("weekly").getValue(Boolean.class);
+                    String groupId = snapshot.child("groupId").getValue(String.class);
+
+                    usersGroupsRef.child(snapshotKey).child("matchTime").setValue(mt);
+                    usersGroupsRef.child(snapshotKey).child("matchDay").setValue(md);
+                 //   usersGroupsRef.child(snapshotKey).child("matchNumbers").setValue(mn);
+                    usersGroupsRef.child(snapshotKey).child("evenTeams").setValue(et);
+                    usersGroupsRef.child(snapshotKey).child("weekly").setValue(wk);
+                    usersGroupsRef.child(snapshotKey).child("groupId").setValue(groupId);
+
+                    Toast.makeText(getApplicationContext(), "WORKED" + groupId, Toast.LENGTH_SHORT).show();
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -575,6 +534,7 @@ public class EditPlayersActivity extends AppCompatActivity {
             if (phones != null) {
                 while (phones.moveToNext()) {
                     phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
                 }
             }
 

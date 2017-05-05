@@ -1,5 +1,10 @@
 package com.ciaranbyrne.squad;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by ciaranbyrne on 28/04/2017.
  */
@@ -12,6 +17,8 @@ public class Match {
     private Boolean evenTeams;
     private Boolean weekly;
     private String groupId;
+    public Map<String, Boolean> matches = new HashMap<>();
+
 
     public Match(String matchTime, String matchDay, int matchNumbers, Boolean evenTeams, Boolean weekly, String groupId) {
         this.matchTime = matchTime;
@@ -72,5 +79,21 @@ public class Match {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public void setGroups(Map<String, Boolean> matches) {
+        this.matches = matches;
+    }
+    @Exclude
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("matchTime", matchTime);
+        result.put("matchDay", matchDay);
+        result.put("matchNumbers", matchNumbers);
+        result.put("evenTeams", evenTeams);
+        result.put("weekly", evenTeams);
+        result.put("groupId", groupId);
+
+        return result;
     }
 }

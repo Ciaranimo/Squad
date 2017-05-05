@@ -7,6 +7,7 @@ package com.ciaranbyrne.squad;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,9 @@ public class InputPhoneFragment extends Fragment{
         firebaseUser = mFirebaseAuth.getCurrentUser();
         String uId = firebaseUser.getUid();
 
-        FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+        final FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        usersDatabase = mFirebaseDatabase.getReference().child("users").child(uId).child("phoneNum");
+        usersDatabase = mFirebaseDatabase.getReference().child("users");
         // Initialize variables
         etInputNum = (EditText) view.findViewById(R.id.etInputPhoneNum);
         btnSavePhoneNum = (Button)view.findViewById(R.id.btnSavePhoneNum);
@@ -58,7 +59,10 @@ public class InputPhoneFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 String ph = etInputNum.getText().toString();
-                usersDatabase.setValue(ph);
+                String searchNum = ph.substring( ph.length()-7);
+                Log.d("FRAGM",searchNum);
+                usersDatabase.child(firebaseUser.getUid()).child("phoneNum").setValue(ph);
+                usersDatabase.child(firebaseUser.getUid()).child("searchNum").setValue(searchNum);
                 Toast.makeText(getActivity()," Save button clicked" + ph, Toast.LENGTH_LONG).show();
 
                 etInputNum.setText("");
