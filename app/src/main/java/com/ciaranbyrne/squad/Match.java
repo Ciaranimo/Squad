@@ -17,16 +17,18 @@ public class Match {
     private Boolean evenTeams;
     private Boolean weekly;
     private String groupId;
+    private String adminName;
     public Map<String, Boolean> matches = new HashMap<>();
 
 
-    public Match(String matchTime, String matchDay, int matchNumbers, Boolean evenTeams, Boolean weekly, String groupId) {
+    public Match(String matchTime, String matchDay, int matchNumbers, Boolean evenTeams, Boolean weekly, String groupId, String adminName) {
         this.matchTime = matchTime;
         this.matchDay = matchDay;
         this.matchNumbers = matchNumbers;
         this.evenTeams = evenTeams;
         this.weekly = weekly;
         this.groupId = groupId;
+        this.adminName = adminName;
     }
 
     public Match() {
@@ -81,6 +83,14 @@ public class Match {
         this.groupId = groupId;
     }
 
+    public String getAdminName() {
+        return adminName;
+    }
+
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
+
     public void setGroups(Map<String, Boolean> matches) {
         this.matches = matches;
     }
@@ -93,6 +103,7 @@ public class Match {
         result.put("evenTeams", evenTeams);
         result.put("weekly", evenTeams);
         result.put("groupId", groupId);
+        result.put("adminName", adminName);
 
         return result;
     }

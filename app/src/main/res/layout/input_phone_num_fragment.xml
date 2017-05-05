@@ -4,7 +4,7 @@
 
     <EditText
         android:id="@+id/etInputPhoneNum"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
@@ -13,11 +13,10 @@
 
     <Button
         android:id="@+id/btnSavePhoneNum"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/save_phone_number"
         android:layout_below="@+id/etInputPhoneNum"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:text="@string/save_phone_number" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

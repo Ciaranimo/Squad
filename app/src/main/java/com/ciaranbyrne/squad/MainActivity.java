@@ -121,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        User loggedInUser = new User();
-        String userPhone = loggedInUser.getPhoneNum();
-     //   checkingNumber(userPhone);
+      //  User loggedInUser = new User();
+       // String userPhone = loggedInUser.getPhoneNum();
+      //  checkingNumber(userPhone);
 
     }// End of onCreate
 
@@ -138,7 +138,9 @@ public class MainActivity extends AppCompatActivity {
                 if(dataSnapshot.getValue() != null){
                     //user exists, do something
                   //  Toast.makeText(MainActivity.this,"User exists ",Toast.LENGTH_SHORT).show();
+
                     userHasPhoneNumber(mUserId);
+
                 }else {
                     //user does not exist, add to DB
                     usersDatabase.child(userId).setValue(user);
@@ -155,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    // TODO Write new group so we dont get null error with new users
+    //  Write new group so we dont get null error with new users
     private void writeNewGroup(String userId){
         final String groupId = userId;
 
@@ -181,6 +183,42 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //TODO Check if user has been added to match
+    private void userAddedToMatch(String userId){
+        if(userId != null){
+            usersDatabase.child(userId).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String ds = dataSnapshot.toString();
+                    Log.d("DS",ds);
+                    if (ds.length() == 0 || dataSnapshot.getValue() == null){
+                        Log.d("DS", dataSnapshot.toString());
+                        // user has not been added to a match
+                        Toast.makeText(MainActivity.this, "User has not been added to any matches ", Toast.LENGTH_SHORT).show();
+
+                    }else{
+                        Toast.makeText(MainActivity.this, "User has been added to a match ", Toast.LENGTH_SHORT).show();
+
+                        // Begin the transaction
+                        FragmentTransaction fragT = getSupportFragmentManager().beginTransaction();
+                        // Replace the contents of the container with the new fragment
+                        fragT.replace(R.id.your_placeholder, new DisplayMatchFragment());
+                        // or ft.add(R.id.your_placeholder, new FooFragment());
+                        // Complete the changes added above
+                        fragT.commit();
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(MainActivity.this, "ERROR ", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
+
+    }
     //  Check if user has input phone number -
     private void userHasPhoneNumber(String userId){
         if(userId != null) {
@@ -188,15 +226,18 @@ public class MainActivity extends AppCompatActivity {
             usersDatabase.child(userId).child("phoneNum").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
+
                     String ds =dataSnapshot.toString();
                     if ( ds.length() == 0 || dataSnapshot.getValue() == null)  {
-                        Log.d(TAG,"User has phone");
                         //user does not have phone number, do something else
                         Toast.makeText(MainActivity.this, "User does NOT have phone num ", Toast.LENGTH_SHORT).show();
+                        // CODE FROM HERE - http://stackoverflow.com/questions/14347588/show-hide-fragment-in-android
                         // Begin the transaction
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         // Replace the contents of the container with the new fragment
-                        ft.replace(R.id.your_placeholder, new InputPhoneFragment());
+                          ft.replace(R.id.your_placeholder, new InputPhoneFragment());
+
                         // or ft.add(R.id.your_placeholder, new FooFragment());
                         // Complete the changes added above
                         ft.commit();
@@ -204,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //user has phone number, do something
                         Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
-
+                        Log.d(TAG,"User has phone");
 
                     }
                 }
@@ -220,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //GET CURRENT USER INFO
+
 
     private void readUserInfo(String mUsername) {
         user = mFirebaseAuth.getCurrentUser();
@@ -237,6 +279,8 @@ public class MainActivity extends AppCompatActivity {
             */
 
             tvDisplayName.setText(userInfo());
+
+            userAddedToMatch(user.getUid());
         }
     }
 
@@ -247,8 +291,6 @@ public class MainActivity extends AppCompatActivity {
         mUserId = userId;
 
         writeNewGroup(mUserId);
-
-
 
         //call method when user signed in
      //   attachDatabaseReadListener();
@@ -337,31 +379,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // TODO ********* works  - TURN INTO BOOLEAN RETURN FOR WRITE TO WORK?
-    public void checkingNumber(final String phoneNum){
+    public void checkingNumber(final String userPhoneNum){
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("players");
+
         final Query query = mDatabaseReference;
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String ds =dataSnapshot.toString();
-                if ( ds.length() != 0 || dataSnapshot.getValue() != null){
-               // if (dataSnapshot.getValue() != null)
+                if (dataSnapshot.getValue() != null) {
 
                     Player mPlayer = dataSnapshot.getValue(Player.class);
+                    String playerPhone = mPlayer.getPhoneNum();
+                    if (playerPhone != null || !playerPhone.equals("")){
+                        playerPhone = playerPhone.replace(" ", "");
+                        Log.d("TAGG 3",playerPhone);
+                        Log.d("TAGG 4",userPhoneNum);
 
-                    if(mPlayer.getPhoneNum().equals(phoneNum)) {
-                        String uId= mPlayer.getUid();
-                        String groupId = mPlayer.getGroupId();
-                        String name = mPlayer.getName();
-                        Toast.makeText(getApplicationContext(), "* found **" + " " + name, Toast.LENGTH_LONG).show();
+                        // String userSearchNum = userPhone.substring( userPhone.length()-7);
+                        //     String playerSearchNum = playerPhoneNum.substring( playerPhoneNum.length() -7);
+
+                        //Log.d("TAGG 5",userSearchNum);
+                        //     Log.d("TAGG 6", playerSearchNum);
+                        if(playerPhone != null){
+                            if(playerPhone.equals(userPhoneNum)) {
+                                String name = mPlayer.getName();
+                               // moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
+                              //          usersDatabase.child(uId).child("groups"));
+
+                                Toast.makeText(getApplicationContext(), "* found **" + " " + name, Toast.LENGTH_LONG).show();
+
+                            }else if(playerPhone == null){
+                                Toast.makeText(getApplicationContext(), "3 CHECKECK", Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "THERE IS A PLAYER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
+
+                            }
+                        }else{
+                            Toast.makeText(getApplicationContext(), "PLAYER PHONE NULL " , Toast.LENGTH_LONG).show();
+
+                        }
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
                 }
-
-
-
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -385,7 +447,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
     //
     private void onSignedOutCleanUp(){
         // unset user name

@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class Player {
 
-    public String uid;
     public String name;
     public Boolean playing;
     public String groupId;
@@ -20,9 +19,9 @@ public class Player {
     public Map<String, Boolean> groups = new HashMap<>();
 
 
-    public Player(String uid, String name, Boolean playing, String groupId, String phoneNum, String searchNum) {
+    public Player( String name, Boolean playing, String groupId, String phoneNum, String searchNum) {
         this.name = name;
-        this.uid = uid;
+
         this.playing = playing;
         this.groupId = groupId;
         this.phoneNum = phoneNum;
@@ -41,13 +40,7 @@ public class Player {
         this.name = name;
     }
 
-    public String getUid() {
-        return uid;
-    }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
 
     public Boolean getPlaying() {
         return playing;
@@ -92,7 +85,6 @@ public class Player {
     @Exclude
     public Map<String, Object> toMap(){
         HashMap<String, Object> result = new HashMap<>();
-        result.put("uid", uid);
         result.put("name", name);
         result.put("playing", playing);
         result.put("groupId", groupId);

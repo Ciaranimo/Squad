@@ -102,12 +102,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         //usersDatabase = mFirebaseDatabase.getReference().child("users").child(userId);
         usersGroupDatabase = mFirebaseDatabase.getReference().child("groups").child(groupId).child("members");
 
-
-
         mDatabase = mFirebaseDatabase.getReference();
-
-
-
 
         // Initialize references to views
         playersListView = (ListView) findViewById(R.id.list_players);
@@ -133,8 +128,44 @@ public class EditPlayersActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String clickedKey = keysList.get(position);
+                DatabaseReference usersGroupRef = usersGroupDatabase.child(clickedKey).child("phoneNum");
+                final Query query = usersGroupRef;
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String ds = dataSnapshot.toString();
+                        Log.d("1DATA",dataSnapshot.toString());
+                        if (dataSnapshot == null || ds.length() == 0) {
+                            Toast.makeText(getApplicationContext(), "NULL",Toast.LENGTH_SHORT).show();
+                        }else{
+                            String phoneNum = dataSnapshot.getValue().toString();
+                            Log.d("1DATA PHONE",phoneNum);
+                            checkNumForDelete(phoneNum);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+
+
+
+
+
+
+
                 usersGroupDatabase.child(clickedKey).removeValue();
+                //usersDatabase.child()
                 Toast.makeText(getApplicationContext(), "Player removed from your Squad", Toast.LENGTH_LONG).show();
+                Log.d("KEY",clickedKey);
+                checkNumForDelete(clickedKey);
 
                 return true;
             }
@@ -152,14 +183,14 @@ public class EditPlayersActivity extends AppCompatActivity {
                 String playerNum = resultNum.getText().toString();
                 playerNum = playerNum.replace(" ","");
                 playerNum = playerNum.replace(" ","");
+
                 Log.d("TAGG 1",playerNum);
 
                 String searchNum = playerNum.substring(playerNum.length() -7); // gets phone , for case with +353 or 086 etc
                 Log.d("TAGG 2",searchNum);
-                writeNewPlayer("ID STRING123", playerName, TRUE, groupId, playerNum, searchNum);
+                writeNewPlayer( playerName, TRUE, groupId, playerNum, searchNum);
                 resultText.setText("");
                 resultNum.setText("");
-
 
                 Toast.makeText(getApplicationContext(), "" + playerName + " added to your Squad", Toast.LENGTH_LONG).show();
             }
@@ -224,13 +255,15 @@ public class EditPlayersActivity extends AppCompatActivity {
     }
 
     // Write player to players & groups node method
-    public void writeNewPlayer(String uid, String name, Boolean playing, final String groupId, String phoneNum, String searchNum) {
-
+    public void writeNewPlayer( String name, Boolean playing, final String groupId, String phoneNum, String searchNum) {
+        if(phoneNum.contains("+353")){
+            phoneNum = phoneNum.replace("+353", "0");
+        }
         final String ph = phoneNum;
         String groupsKey = mDatabase.child("groups").push().getKey();
         String playersKey = mDatabase.child("players").push().getKey();
 
-        Player player = new Player(uid, name, playing, groupId, phoneNum, searchNum);
+        Player player = new Player( name, playing, groupId, phoneNum, searchNum);
         Map<String, Object> playerValues = player.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
 
@@ -242,11 +275,7 @@ public class EditPlayersActivity extends AppCompatActivity {
 
         // *** *
 
-        // TODO - Causing issues
-        //checkIfPlayerIsUser(phoneNum);
-        //checkPlayerIsUser(phoneNum);
 
-        //checkPlayerNum(phoneNum);
 
          checkingNumber(phoneNum);
 
@@ -255,41 +284,123 @@ public class EditPlayersActivity extends AppCompatActivity {
 
     }
 
+    // TODO delete match from user's node
+    public void deleteMathcFromUser(String uId){
+        String userId = uId;
+        if(usersDatabase.child(userId).child("groups") != null) {
+            usersDatabase.child(uId).child("groups").removeValue();
+        }
+    }
 
-
-
-    // TODO ********* works  - TURN INTO BOOLEAN RETURN FOR WRITE TO WORK?
-    public void checkingNumber(final String playerPhoneNum){
+    // TODO *****
+    public void checkNumForDelete(final String playerPhoneNum){
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("users");
+
         final Query query = mDatabaseReference;
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null || !dataSnapshot.getValue().toString().equals("")) {
+                if (dataSnapshot.getValue() != null) {
 
                     User mUser = dataSnapshot.getValue(User.class);
                     String userPhone = mUser.getPhoneNum();
+                    if (userPhone != null || !userPhone.equals("")){
+                        userPhone = userPhone.replace(" ", "");
+                        Log.d("TAGG 3",userPhone);
+                        Log.d("TAGG 4",playerPhoneNum);
 
-                    userPhone = userPhone.replace(" ", "");
-                    Log.d("TAGG 3",userPhone);
-                    Log.d("TAGG 4",playerPhoneNum);
+                        // String userSearchNum = userPhone.substring( userPhone.length()-7);
+                        //     String playerSearchNum = playerPhoneNum.substring( playerPhoneNum.length() -7);
 
-                  //  String userSearchNum = userPhone.substring( userPhone.length()-7);
-                 //  String playerSearchNum = playerPhoneNum.substring( playerPhoneNum.length() -7);
+                        //Log.d("TAGG 5",userSearchNum);
+                        //     Log.d("TAGG 6", playerSearchNum);
+                        if(userPhone != null){
+                            if(userPhone.equals(playerPhoneNum)) {
+                                String uId = mUser.getUid();
+                              deleteMathcFromUser(uId);
+                                Toast.makeText(getApplicationContext(), "FOUND NUM TO DELETE" + " " + uId, Toast.LENGTH_LONG).show();
 
-                 //   Log.d("TAGG 5",userSearchNum);
-                 //   Log.d("TAGG 6", playerSearchNum);
-                    if(userPhone.equals(playerPhoneNum)) {
-                        String uId= mUser.getUid();
-                        String email = mUser.getEmail();
+                            }else if(userPhone == null){
+                                Toast.makeText(getApplicationContext(), "DELETE NUM CHECK NULL", Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
 
-                        String name = mUser.getName();
+                            }
+                        }else{
+                            Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_LONG).show();
 
-                       moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
-                                usersDatabase.child(uId).child("groups"));
+                        }
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                        Toast.makeText(getApplicationContext(), "* found **" + " " + uId, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    // working now
+    public void checkingNumber(final String playerPhoneNum){
+        DatabaseReference mDatabaseReference =
+                FirebaseDatabase.getInstance().getReference().child("users");
+
+        final Query query = mDatabaseReference;
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getValue() != null) {
+
+                    User mUser = dataSnapshot.getValue(User.class);
+                    String userPhone = mUser.getPhoneNum();
+                    if (userPhone != null || !userPhone.equals("")){
+                        userPhone = userPhone.replace(" ", "");
+                        Log.d("TAGG 3",userPhone);
+                        Log.d("TAGG 4",playerPhoneNum);
+
+                    // String userSearchNum = userPhone.substring( userPhone.length()-7);
+                //     String playerSearchNum = playerPhoneNum.substring( playerPhoneNum.length() -7);
+
+                        //Log.d("TAGG 5",userSearchNum);
+                   //     Log.d("TAGG 6", playerSearchNum);
+                        if(userPhone != null){
+                            if(userPhone.equals(playerPhoneNum)) {
+                                String uId = mUser.getUid();
+                                moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
+                                        usersDatabase.child(uId).child("groups"));
+
+                                Toast.makeText(getApplicationContext(), "* found **" + " " + uId, Toast.LENGTH_LONG).show();
+
+                            }else if(userPhone == null){
+                                Toast.makeText(getApplicationContext(), "3 CHECKECK", Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
+
+                            }
+                    }else{
+                            Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_LONG).show();
+
+                        }
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
@@ -318,15 +429,8 @@ public class EditPlayersActivity extends AppCompatActivity {
 
     }
 
-    //TODO MYATTEMpT
-    public void copyNode(String playerId){
-        DatabaseReference matchesNode = usersDatabase.child(playerId).child("matchDetails");
-        DatabaseReference fromNode = groupsDatabase.child(firebaseUser.getUid()).child("matches");
 
-
-    }
-
-//TODO NOT WORKING EITHER
+// Working now
     public void moveFirebaseRecord(DatabaseReference fromPath, final DatabaseReference toPath) {
 
             Log.d("moveRec", String.valueOf(fromPath));
@@ -534,6 +638,7 @@ public class EditPlayersActivity extends AppCompatActivity {
             if (phones != null) {
                 while (phones.moveToNext()) {
                     phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
 
                 }
             }

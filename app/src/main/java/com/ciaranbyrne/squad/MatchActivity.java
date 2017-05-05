@@ -243,7 +243,7 @@ public class MatchActivity extends AppCompatActivity {
         Boolean isEvenChecked = switchEvenTeams.isChecked();
         Boolean isWeeklyChecked = switchWeekly.isChecked();
 
-        Match match = new Match(matchTime, matchDay, matchNumber, isEvenChecked, isWeeklyChecked,groupId);
+        Match match = new Match(matchTime, matchDay, matchNumber, isEvenChecked, isWeeklyChecked,groupId,firebaseUser.getDisplayName());
 
         matchesDatabase.setValue(match);
 
