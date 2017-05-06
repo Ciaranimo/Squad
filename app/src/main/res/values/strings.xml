@@ -29,4 +29,5 @@
     <string name="day">Day</string>
     <string name="save_phone_number">Save Phone Number</string>
     <string name="enter_phone_number_and_save">Enter your phone Number and Save....</string>
+    <string name="can_you_play">Can you play?</string>
 </resources>

@@ -52,7 +52,7 @@ public class DisplayMatchFragment extends Fragment {
         //FIREBASE
         mFirebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = mFirebaseAuth.getCurrentUser();
-        String uId = firebaseUser.getUid();
+        final String uId = firebaseUser.getUid();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         usersDatabase = mFirebaseDatabase.getReference().child("users");
@@ -73,13 +73,86 @@ public class DisplayMatchFragment extends Fragment {
             }
         });
 
+        btnConfirmStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Boolean isPlayingExtraMatch = switchPlaying.isChecked();
+
+                usersDatabase.child(uId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists() || dataSnapshot.getValue() != null){
+
+                            User mUser = dataSnapshot.getValue(User.class);
+                            String userPhone = mUser.getPhoneNum();
+
+                            Group mGroup = dataSnapshot.child("groups").getValue(Group.class);
+                            String groupId = mGroup.getGroupId();
+
+                            mUser.setAdditionalMatch(isPlayingExtraMatch);
+
+                            groupsDatabase.child(groupId).child("members").child(userPhone).setValue(mUser);
+
+                        }else{
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                usersDatabase.child(uId).child("additionalMatch").setValue(isPlayingExtraMatch);
+            }
+        });
 
         readAddedBy(uId);
-      //  readMatchDay(uId);
-      //  readMatchTime(uId);
+        readMatchDay(uId);
+        readMatchTime(uId);
+
+
 
         return view;
     }// end onCreate
+
+    private void updateResponse(String groupId) {
+
+
+    }
+/*
+    public void getUserPhoneNum(String uId){
+        usersDatabase.child(uId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists() || dataSnapshot.getValue() != null){
+
+                    User mUser = dataSnapshot.getValue(User.class);
+                    String userPhone = mUser.getPhoneNum();
+
+                    Group mGroup = dataSnapshot.child("groups").getValue(Group.class);
+                    String groupId = mGroup.getGroupId();
+
+                   groupsDatabase.child(groupId).child("members").child(userPhone).child("playing").setValue()
+                    if(userPhone != null){
+
+
+                    }
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+*/
+
 
 
     //Read added by
@@ -88,7 +161,9 @@ public class DisplayMatchFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String ds = dataSnapshot.toString();
-                if (!dataSnapshot.exists() || ds.equals("")) {
+                if (dataSnapshot.exists() || !ds.equals("") || dataSnapshot.getValue() != null) {
+                    String adminName = dataSnapshot.getValue().toString();
+                    tvAddedBy.setText(adminName);
 
                 } else {
 
@@ -96,8 +171,6 @@ public class DisplayMatchFragment extends Fragment {
 
                     Log.e("Read Error", dataSnapshot.toString());
 
-                    String adminName = dataSnapshot.getValue().toString();
-                    tvAddedBy.setText(adminName);
                 }
             }
 
@@ -115,7 +188,8 @@ public class DisplayMatchFragment extends Fragment {
         usersDatabase.child(uid).child("groups").child("matchDay").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                String ds = dataSnapshot.toString();
+                if (dataSnapshot.exists() || !ds.equals("") || dataSnapshot.getValue() != null) {
                     String matchDay = dataSnapshot.getValue().toString();
                     tvMatchDay.setText(matchDay);
                 } else {
@@ -140,7 +214,8 @@ public class DisplayMatchFragment extends Fragment {
         usersDatabase.child(uid).child("groups").child("matchTime").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                String ds = dataSnapshot.toString();
+                if (dataSnapshot.exists() || !ds.equals("") || dataSnapshot.getValue() != null) {
                     String matchTime = dataSnapshot.getValue().toString();
                     tvMatchTime.setText(matchTime);
                 } else {

@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference usersDatabase;
     private DatabaseReference groupsDatabase;
+    private DatabaseReference rootDatabase;
 
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
@@ -65,10 +66,12 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize Firebase components
         // get database reference to read data
-        usersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-        groupsDatabase = FirebaseDatabase.getInstance().getReference().child("groups");
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+        rootDatabase = mFirebaseDatabase.getReference();
+        usersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+        groupsDatabase = FirebaseDatabase.getInstance().getReference().child("groups");
 
       //  mUserId = mFirebaseAuth.getCurrentUser().getUid();
 
@@ -103,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     onSignedInInitialize(user.getDisplayName(),user.getUid());
                     // add user instance to realtime database
 
-                    writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),null,null);
+                    writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),null,null,null);
                     readUserInfo(user.getDisplayName());
                     Toast.makeText(MainActivity.this, "Signed in" , Toast.LENGTH_SHORT).show();
                 }else{
@@ -128,31 +131,34 @@ public class MainActivity extends AppCompatActivity {
     }// End of onCreate
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
-    private void writeNewUser(final String userId, final String name, final String email, final String phoneNum, final String searchNum) {
-        final User user = new User(userId, name, email, phoneNum, searchNum);
+    private void writeNewUser(final String userId, final String name, final String email, final String phoneNum, final String searchNum, final Boolean additionalMatch) {
+        final User user = new User(userId, name, email, phoneNum, searchNum, additionalMatch);
 
         // Checks if user exists
-        usersDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue() != null){
-                    //user exists, do something
-                  //  Toast.makeText(MainActivity.this,"User exists ",Toast.LENGTH_SHORT).show();
+        if(usersDatabase !=  null ) {
+            usersDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.d("MAIN",dataSnapshot.toString());
+                    if (dataSnapshot.getValue() != null) {
+                        //user exists, do something
+                        //  Toast.makeText(MainActivity.this,"User exists ",Toast.LENGTH_SHORT).show();
 
-                    userHasPhoneNumber(mUserId);
+                        userHasPhoneNumber(mUserId);
 
-                }else {
-                    //user does not exist, add to DB
-                    usersDatabase.child(userId).setValue(user);
-                    userHasPhoneNumber(mUserId);
+                    } else {
+                        //user does not exist, add to DB
+                        usersDatabase.child(userId).setValue(user);
+                        userHasPhoneNumber(mUserId);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this,"Error ",Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(MainActivity.this, "Error ", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 
@@ -184,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //TODO Check if user has been added to match
-    private void userAddedToMatch(String userId){
+    private void userAddedToMatch(final String userId){
         if(userId != null){
             usersDatabase.child(userId).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -198,6 +204,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }else{
                         Toast.makeText(MainActivity.this, "User has been added to a match ", Toast.LENGTH_SHORT).show();
+
+                         usersDatabase.child(userId).child("additionalMatch").setValue(false);
 
                         // Begin the transaction
                         FragmentTransaction fragT = getSupportFragmentManager().beginTransaction();
@@ -223,16 +231,18 @@ public class MainActivity extends AppCompatActivity {
     private void userHasPhoneNumber(String userId){
         if(userId != null) {
             // Checks if phonNum exists
+
             usersDatabase.child(userId).child("phoneNum").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                    String ds =dataSnapshot.toString();
+                    String ds = dataSnapshot.toString();
                     if ( ds.length() == 0 || dataSnapshot.getValue() == null)  {
                         //user does not have phone number, do something else
                         Toast.makeText(MainActivity.this, "User does NOT have phone num ", Toast.LENGTH_SHORT).show();
-                        // CODE FROM HERE - http://stackoverflow.com/questions/14347588/show-hide-fragment-in-android
+
+                        // CODE REF - http://stackoverflow.com/questions/14347588/show-hide-fragment-in-android
                         // Begin the transaction
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         // Replace the contents of the container with the new fragment
@@ -280,7 +290,17 @@ public class MainActivity extends AppCompatActivity {
 
             tvDisplayName.setText(userInfo());
 
-            userAddedToMatch(user.getUid());
+            // TODO IF STATEMENT TO FOR USER ADDED TO MATCH
+            if (usersDatabase.child(user.getUid()).child("phoneNum") == null ){
+
+                //user does not have phone do not start check for match
+                Toast.makeText(MainActivity.this, "User does not have phone do not start match check",Toast.LENGTH_SHORT).show();
+            }else{
+                // user has phoe num
+                userAddedToMatch(user.getUid());
+
+            }
+
         }
     }
 

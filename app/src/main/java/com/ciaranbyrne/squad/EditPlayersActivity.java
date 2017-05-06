@@ -121,15 +121,21 @@ public class EditPlayersActivity extends AppCompatActivity {
         playersListView.setAdapter(playersAdapter);
         //  INITIALIZE KEYS ARRAY
         keysList = new ArrayList<>();
+
         // LONG CLICK REMOVES PLAYERS
         playersListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
+
                 String clickedKey = keysList.get(position);
+               // clickedKey = clickedKey.get
+                Log.d("1DATA",clickedKey);
+
                 DatabaseReference usersGroupRef = usersGroupDatabase.child(clickedKey).child("phoneNum");
-                final Query query = usersGroupRef;
+               final Query query = usersGroupRef;
 
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -141,31 +147,25 @@ public class EditPlayersActivity extends AppCompatActivity {
                         }else{
                             String phoneNum = dataSnapshot.getValue().toString();
                             Log.d("1DATA PHONE",phoneNum);
-                            checkNumForDelete(phoneNum);
+                           //TODO checkNumForDelete(phoneNum);
                         }
-
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(getApplicationContext(), "DATABASE ERROR", Toast.LENGTH_SHORT).show();
 
                     }
                 });
+                if (clickedKey != null) {
+                    usersGroupDatabase.child(clickedKey).removeValue();
+                    //usersDatabase.child()
+                    Toast.makeText(getApplicationContext(), "Player removed from your Squad", Toast.LENGTH_SHORT).show();
+                    Log.d("KEY", clickedKey);
+                    checkNumForDelete(clickedKey);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Player does not exist", Toast.LENGTH_SHORT).show();
 
-
-
-
-
-
-
-
-
-
-                usersGroupDatabase.child(clickedKey).removeValue();
-                //usersDatabase.child()
-                Toast.makeText(getApplicationContext(), "Player removed from your Squad", Toast.LENGTH_LONG).show();
-                Log.d("KEY",clickedKey);
-                checkNumForDelete(clickedKey);
+                }
 
                 return true;
             }
@@ -179,16 +179,20 @@ public class EditPlayersActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String playerName = resultText.getText().toString();
+
                 // TODO SUB STRING TO ALLOW SEARCHING
                 String playerNum = resultNum.getText().toString();
-                playerNum = playerNum.replace(" ","");
-                playerNum = playerNum.replace(" ","");
+                if (playerNum.equals("") || playerNum.length() == 0){
+                    Toast.makeText(getApplicationContext(), "player num null", Toast.LENGTH_LONG).show();
 
-                Log.d("TAGG 1",playerNum);
 
-                String searchNum = playerNum.substring(playerNum.length() -7); // gets phone , for case with +353 or 086 etc
-                Log.d("TAGG 2",searchNum);
-                writeNewPlayer( playerName, TRUE, groupId, playerNum, searchNum);
+                }else{
+                    playerNum = playerNum.replace(" ","");
+                    playerNum = playerNum.replace(" ","");
+
+                    Log.d("TAGG 1",playerNum);
+                }
+                writeNewPlayer( playerName, TRUE, groupId, playerNum);
                 resultText.setText("");
                 resultNum.setText("");
 
@@ -255,15 +259,22 @@ public class EditPlayersActivity extends AppCompatActivity {
     }
 
     // Write player to players & groups node method
-    public void writeNewPlayer( String name, Boolean playing, final String groupId, String phoneNum, String searchNum) {
-        if(phoneNum.contains("+353")){
-            phoneNum = phoneNum.replace("+353", "0");
+    public void writeNewPlayer( String name, Boolean playing, final String groupId, String phoneNum) {
+
+        if(phoneNum.length() != 0){
+            if(phoneNum.contains("+353")){
+
+                phoneNum = phoneNum.replace("+353", "0");
+
+            }
         }
         final String ph = phoneNum;
-        String groupsKey = mDatabase.child("groups").push().getKey();
-        String playersKey = mDatabase.child("players").push().getKey();
+      // String groupsKey = mDatabase.child("groups").push().getKey();
+        String groupsKey = phoneNum;
+      // String playersKey = mDatabase.child("players").push().getKey();
+        String playersKey = phoneNum;
 
-        Player player = new Player( name, playing, groupId, phoneNum, searchNum);
+        Player player = new Player( name, playing, groupId, phoneNum);
         Map<String, Object> playerValues = player.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
 
@@ -272,10 +283,6 @@ public class EditPlayersActivity extends AppCompatActivity {
      //   mDatabase.updateChildren(childUpdates);
 
         Log.d("write player phone ",phoneNum);
-
-        // *** *
-
-
 
          checkingNumber(phoneNum);
 
@@ -301,39 +308,44 @@ public class EditPlayersActivity extends AppCompatActivity {
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null) {
+                String ds = dataSnapshot.toString();
+                if (dataSnapshot.getValue() != null || !dataSnapshot.exists() || !ds.equals("")) {
 
                     User mUser = dataSnapshot.getValue(User.class);
                     String userPhone = mUser.getPhoneNum();
-                    if (userPhone != null || !userPhone.equals("")){
-                        userPhone = userPhone.replace(" ", "");
-                        Log.d("TAGG 3",userPhone);
-                        Log.d("TAGG 4",playerPhoneNum);
+                    if (userPhone == null || userPhone.equals("") || userPhone.length() == 0 ){
+
+                        Toast.makeText(getApplicationContext(), "USER PHONE NULL YOY OYOY OY " , Toast.LENGTH_LONG).show();
 
                         // String userSearchNum = userPhone.substring( userPhone.length()-7);
                         //     String playerSearchNum = playerPhoneNum.substring( playerPhoneNum.length() -7);
 
                         //Log.d("TAGG 5",userSearchNum);
                         //     Log.d("TAGG 6", playerSearchNum);
-                        if(userPhone != null){
-                            if(userPhone.equals(playerPhoneNum)) {
-                                String uId = mUser.getUid();
-                              deleteMathcFromUser(uId);
-                                Toast.makeText(getApplicationContext(), "FOUND NUM TO DELETE" + " " + uId, Toast.LENGTH_LONG).show();
+                        if(userPhone == null){
+                            Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_LONG).show();
 
-                            }else if(userPhone == null){
-                                Toast.makeText(getApplicationContext(), "DELETE NUM CHECK NULL", Toast.LENGTH_LONG).show();
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
 
                             }
                         }else{
-                            Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_LONG).show();
+
+                            //TODO
+
+                        if(userPhone.equals(playerPhoneNum)) {
+                            String uId = mUser.getUid();
+                            deleteMathcFromUser(uId);
+                            Toast.makeText(getApplicationContext(), "FOUND NUM TO DELETE" + " " + uId, Toast.LENGTH_LONG).show();
+
+                        }else if(userPhone == null){
+                            Toast.makeText(getApplicationContext(), "DELETE NUM CHECK NULL", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
 
                         }
                     }
                 } else {
+                    //TODO
                     Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
                 }
             }
@@ -359,7 +371,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         });
     }
 
-    // working now
+    // working now .. TODO not anymore
     public void checkingNumber(final String playerPhoneNum){
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("users");
@@ -368,21 +380,23 @@ public class EditPlayersActivity extends AppCompatActivity {
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null) {
+                String ds = dataSnapshot.toString();
+                if (dataSnapshot.getValue() != null || !dataSnapshot.exists() || !ds.equals("")) {
 
                     User mUser = dataSnapshot.getValue(User.class);
                     String userPhone = mUser.getPhoneNum();
-                    if (userPhone != null || !userPhone.equals("")){
-                        userPhone = userPhone.replace(" ", "");
+                    if (userPhone == null || userPhone.equals("") ){
+                        Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+
+
+                } else {
+                    //TODO
                         Log.d("TAGG 3",userPhone);
                         Log.d("TAGG 4",playerPhoneNum);
 
-                    // String userSearchNum = userPhone.substring( userPhone.length()-7);
-                //     String playerSearchNum = playerPhoneNum.substring( playerPhoneNum.length() -7);
-
-                        //Log.d("TAGG 5",userSearchNum);
-                   //     Log.d("TAGG 6", playerSearchNum);
                         if(userPhone != null){
+                            userPhone = userPhone.replace(" ", "");
+
                             if(userPhone.equals(playerPhoneNum)) {
                                 String uId = mUser.getUid();
                                 moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
@@ -397,13 +411,11 @@ public class EditPlayersActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
 
                             }
-                    }else{
+                        }else{
                             Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_LONG).show();
 
                         }
                     }
-                } else {
-                    Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
                 }
             }
             @Override
@@ -426,7 +438,6 @@ public class EditPlayersActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 

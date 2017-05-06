@@ -21,14 +21,6 @@
         android:id="@+id/tvWelcome" />
 
     <Button
-        android:id="@+id/btnBookPitchMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnEditSquad"
-        android:layout_alignParentStart="true"
-        android:text="Book Pitch" />
-
-    <Button
         android:id="@+id/btnEditSquad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
