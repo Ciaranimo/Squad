@@ -73,6 +73,8 @@ public class EditPlayersActivity extends AppCompatActivity {
     private ListView playersListView;
     private PlayersAdapter playersAdapter;
     private ArrayList<Player> playerList;
+    private TextView tvMaxPlayers;
+    private TextView tvPlayerCount;
     // ARRAY LIST FOR KEYS
     private ArrayList<String> keysList;
 
@@ -92,7 +94,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
         // Adding users to groups - Setting Group ID to be the same as User Id
         final String groupId = firebaseUser.getUid();
-        String userId = firebaseUser.getUid();
+        final String userId = firebaseUser.getUid();
 
         // get database reference to read data
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -107,6 +109,40 @@ public class EditPlayersActivity extends AppCompatActivity {
         // Initialize references to views
         playersListView = (ListView) findViewById(R.id.list_players);
 
+        tvPlayerCount = (TextView)findViewById(R.id.tvPlayerCount);
+
+
+        //setting player count
+        groupsDatabase.child(userId).child("members").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long count =dataSnapshot.getChildrenCount();
+
+                String l = String.valueOf(count);
+                Log.d("COUNT", l);
+
+                if(dataSnapshot.getValue() == null) {
+                    Log.d("Null","Null");
+                    tvPlayerCount.setText("");
+
+                }else {
+
+                    if (count > 0) {
+                        tvMaxPlayers.setText("Current number of players: " + count);
+                    } else {
+                        tvMaxPlayers.setText("No players in your Squad");
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         etNewPlayer = (SearchView) findViewById(R.id.etNewPlayer);
         // for contacts picker
         // outputText = (TextView) findViewById(R.id.textView1);
@@ -114,6 +150,8 @@ public class EditPlayersActivity extends AppCompatActivity {
         //  For contact search
         resultText = (TextView) findViewById(R.id.searchViewResult);
         resultNum = (TextView) findViewById(R.id.searchViewNum);
+
+
 
         //Initialize ListView and adapter for Database Reading players list
         playerList = new ArrayList<>();
@@ -177,7 +215,6 @@ public class EditPlayersActivity extends AppCompatActivity {
         btnAddPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String playerName = resultText.getText().toString();
 
                 // TODO SUB STRING TO ALLOW SEARCHING
@@ -191,7 +228,10 @@ public class EditPlayersActivity extends AppCompatActivity {
                     playerNum = playerNum.replace(" ","");
 
                     Log.d("TAGG 1",playerNum);
+
                 }
+
+               ;
                 writeNewPlayer( playerName, TRUE, groupId, playerNum);
                 resultText.setText("");
                 resultNum.setText("");
@@ -268,6 +308,8 @@ public class EditPlayersActivity extends AppCompatActivity {
 
             }
         }
+
+
         final String ph = phoneNum;
         String groupsKey = mDatabase.child("groups").push().getKey();
         //  final String groupsKey = phoneNum;

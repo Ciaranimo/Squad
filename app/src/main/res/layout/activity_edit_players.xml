@@ -27,6 +27,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/list_players"
         android:layout_above="@+id/btnAddPlayer"
+        android:layout_below="@+id/tvPlayerCount"
         android:layout_marginTop="60dp" />
 
     <Button
@@ -53,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etNewPlayer"
         android:layout_centerHorizontal="true"
-        android:text="hello" />
+        android:text=" " />
 
     <TextView
         android:id="@+id/searchViewNum"
@@ -61,6 +62,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/searchViewResult"
         android:layout_centerHorizontal="true"
-        android:text="hello" />
+        android:text=" " />
+
+    <TextView
+        android:id="@+id/tvPlayerCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvHeadingEditPlayers"
+        android:layout_centerHorizontal="true"
+        android:text="No Players in your Squad" />
 
 </RelativeLayout>
