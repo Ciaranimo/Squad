@@ -19,12 +19,10 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         usersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         groupsDatabase = FirebaseDatabase.getInstance().getReference().child("groups");
 
-      //  mUserId = mFirebaseAuth.getCurrentUser().getUid();
+        //  mUserId = mFirebaseAuth.getCurrentUser().getUid();
 
         //Initialize views
         tvDisplayName = (TextView) findViewById(R.id.tv_display_name);
@@ -100,16 +98,18 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 //check if user logged in
-                if(user != null){
+                if (user != null) {
                     //user is signed in
                     //calls methods at boottom
-                    onSignedInInitialize(user.getDisplayName(),user.getUid());
+                    onSignedInInitialize(user.getDisplayName(), user.getUid());
                     // add user instance to realtime database
 
-                    writeNewUser(user.getUid(),user.getDisplayName(),user.getEmail(),null,null,null);
+                    writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail(), null, null, null);
                     readUserInfo(user.getDisplayName());
-                    Toast.makeText(MainActivity.this, "Signed in" , Toast.LENGTH_SHORT).show();
-                }else{
+                    Toast.makeText(MainActivity.this, "Signed in", Toast.LENGTH_SHORT).show();
+
+
+                } else {
                     //user is not signed in - commence with login flow (built in to firebase)
                     onSignedOutCleanUp();
                     startActivityForResult(
@@ -124,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-      //  User loggedInUser = new User();
-       // String userPhone = loggedInUser.getPhoneNum();
-      //  checkingNumber(userPhone);
+        //  User loggedInUser = new User();
+        // String userPhone = loggedInUser.getPhoneNum();
+        //  checkingNumber(userPhone);
 
     }// End of onCreate
 
@@ -135,11 +135,11 @@ public class MainActivity extends AppCompatActivity {
         final User user = new User(userId, name, email, phoneNum, searchNum, additionalMatch);
 
         // Checks if user exists
-        if(usersDatabase !=  null ) {
+        if (usersDatabase != null) {
             usersDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.d("MAIN",dataSnapshot.toString());
+                    Log.d("MAIN", dataSnapshot.toString());
                     if (dataSnapshot.getValue() != null) {
                         //user exists, do something
                         //  Toast.makeText(MainActivity.this,"User exists ",Toast.LENGTH_SHORT).show();
@@ -162,9 +162,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     //  Write new group so we dont get null error with new users
-    private void writeNewGroup(String userId){
+    private void writeNewGroup(String userId) {
         final String groupId = userId;
 
         groupsDatabase.child(groupId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -172,9 +171,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue() != null){
+                if (dataSnapshot.getValue() != null) {
 
-                }else {
+                } else {
                     //group does not exist, add to DB
                     groupsDatabase.child(groupId).setValue(group);
                     //     Toast.makeText(MainActivity.this,"User doesnt exist ",Toast.LENGTH_SHORT).show();
@@ -184,28 +183,28 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     //TODO Check if user has been added to match
-    private void userAddedToMatch(final String userId){
-        if(userId != null){
+    private void userAddedToMatch(final String userId) {
+        if (userId != null) {
             usersDatabase.child(userId).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String ds = dataSnapshot.toString();
-                    Log.d("DS",ds);
-                    if (ds.length() == 0 || dataSnapshot.getValue() == null){
+                    Log.d("DS", ds);
+                    if (ds.length() == 0 || dataSnapshot.getValue() == null) {
                         Log.d("DS", dataSnapshot.toString());
                         // user has not been added to a match
                         Toast.makeText(MainActivity.this, "User has not been added to any matches ", Toast.LENGTH_SHORT).show();
 
-                    }else{
+                    } else {
                         Toast.makeText(MainActivity.this, "User has been added to a match ", Toast.LENGTH_SHORT).show();
 
-                         usersDatabase.child(userId).child("additionalMatch").setValue(false);
+                        usersDatabase.child(userId).child("additionalMatch").setValue(false);
 
                         // Begin the transaction
                         FragmentTransaction fragT = getSupportFragmentManager().beginTransaction();
@@ -227,9 +226,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
     //  Check if user has input phone number -
-    private void userHasPhoneNumber(String userId){
-        if(userId != null) {
+    private void userHasPhoneNumber(String userId) {
+        if (userId != null) {
             // Checks if phonNum exists
 
             usersDatabase.child(userId).child("phoneNum").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     String ds = dataSnapshot.toString();
-                    if ( ds.length() == 0 || dataSnapshot.getValue() == null)  {
+                    if (ds.length() == 0 || dataSnapshot.getValue() == null) {
                         //user does not have phone number, do something else
                         Toast.makeText(MainActivity.this, "User does NOT have phone num ", Toast.LENGTH_SHORT).show();
 
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                         // Begin the transaction
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         // Replace the contents of the container with the new fragment
-                          ft.replace(R.id.your_placeholder, new InputPhoneFragment());
+                        ft.replace(R.id.your_placeholder, new InputPhoneFragment());
 
                         // or ft.add(R.id.your_placeholder, new FooFragment());
                         // Complete the changes added above
@@ -255,18 +255,18 @@ public class MainActivity extends AppCompatActivity {
 
                         //user has phone number, do something
                         Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG,"User has phone");
+                        Log.d(TAG, "User has phone");
 
                     }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(MainActivity.this,"ERROR", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
                 }
             });
-        }else{
-            Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -291,11 +291,11 @@ public class MainActivity extends AppCompatActivity {
             tvDisplayName.setText(userInfo());
 
             // TODO IF STATEMENT TO FOR USER ADDED TO MATCH
-            if (usersDatabase.child(user.getUid()).child("phoneNum") == null ){
+            if (usersDatabase.child(user.getUid()).child("phoneNum") == null) {
 
                 //user does not have phone do not start check for match
-                Toast.makeText(MainActivity.this, "User does not have phone do not start match check",Toast.LENGTH_SHORT).show();
-            }else{
+                Toast.makeText(MainActivity.this, "User does not have phone do not start match check", Toast.LENGTH_SHORT).show();
+            } else {
                 // user has phoe num
                 userAddedToMatch(user.getUid());
 
@@ -303,6 +303,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+
 
 
     //read listener attached /  //
@@ -313,14 +315,16 @@ public class MainActivity extends AppCompatActivity {
         writeNewGroup(mUserId);
 
         //call method when user signed in
-     //   attachDatabaseReadListener();
+        //   attachDatabaseReadListener();
     }
+
     // TODO
-    private void attachDatabaseReadListener(){
+    private void attachDatabaseReadListener() {
 
     }
+
     //get logged in user information
-    public String userInfo(){
+    public String userInfo() {
         // Access user information
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -352,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         //Auth state change called - database listener attacehd
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
@@ -362,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
     // Sign out
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.sign_out_menu:
                 //sign out
                 AuthUI.getInstance().signOut(this);
@@ -385,97 +389,28 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO
     @Override
-    public void onActivityResult (int requestCode,int resultCode, Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode == RC_SIGN_IN){
-            if(resultCode == RESULT_OK){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
 
-            }else if(resultCode == RESULT_CANCELED){
-                Toast.makeText(this,"Sign in Cancelled ",Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Sign in Cancelled ", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
         }
     }
 
-    // TODO ********* works  - TURN INTO BOOLEAN RETURN FOR WRITE TO WORK?
-    public void checkingNumber(final String userPhoneNum){
-        DatabaseReference mDatabaseReference =
-                FirebaseDatabase.getInstance().getReference().child("players");
 
-        final Query query = mDatabaseReference;
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null) {
 
-                    Player mPlayer = dataSnapshot.getValue(Player.class);
-                    String playerPhone = mPlayer.getPhoneNum();
-                    if (playerPhone != null || !playerPhone.equals("")){
-                        playerPhone = playerPhone.replace(" ", "");
-                        Log.d("TAGG 3",playerPhone);
-                        Log.d("TAGG 4",userPhoneNum);
 
-                        // String userSearchNum = userPhone.substring( userPhone.length()-7);
-                        //     String playerSearchNum = playerPhoneNum.substring( playerPhoneNum.length() -7);
-
-                        //Log.d("TAGG 5",userSearchNum);
-                        //     Log.d("TAGG 6", playerSearchNum);
-                        if(playerPhone != null){
-                            if(playerPhone.equals(userPhoneNum)) {
-                                String name = mPlayer.getName();
-                               // moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
-                              //          usersDatabase.child(uId).child("groups"));
-
-                                Toast.makeText(getApplicationContext(), "* found **" + " " + name, Toast.LENGTH_LONG).show();
-
-                            }else if(playerPhone == null){
-                                Toast.makeText(getApplicationContext(), "3 CHECKECK", Toast.LENGTH_LONG).show();
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(), "THERE IS A PLAYER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
-
-                            }
-                        }else{
-                            Toast.makeText(getApplicationContext(), "PLAYER PHONE NULL " , Toast.LENGTH_LONG).show();
-
-                        }
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
-                }
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-    //
-    private void onSignedOutCleanUp(){
+    private void onSignedOutCleanUp() {
         // unset user name
         mUsername = ANONYMOUS;
         //clear messages from adapter, user not signed in should be able to see msgs
-       // mMessageAdapter.clear();
+        // mMessageAdapter.clear();
         //detach listener
-      //  detachDatabaseReadListener();
+        //  detachDatabaseReadListener();
     }
-
-
 }

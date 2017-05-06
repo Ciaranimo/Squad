@@ -350,5 +350,6 @@ public class MatchActivity extends AppCompatActivity {
         readWeeklySwitch();
         readMatchDays();
         readMatchTimes();
+
     }
 }

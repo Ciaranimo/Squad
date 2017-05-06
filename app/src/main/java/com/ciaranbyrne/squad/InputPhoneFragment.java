@@ -69,15 +69,20 @@ public class InputPhoneFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 String ph = etInputNum.getText().toString();
+
+                // METHOD I AM CALLING
+                checkingNumber(ph);
+
+
                 String searchNum = ph.substring( ph.length()-7);
                 Log.d("FRAGM",searchNum);
                 usersDatabase.child(firebaseUser.getUid()).child("phoneNum").setValue(ph);
                 usersDatabase.child(firebaseUser.getUid()).child("searchNum").setValue(searchNum);
+                Log.d("FRAGPHONE",ph);
+
                 Toast.makeText(getActivity()," Save button clicked" + ph, Toast.LENGTH_LONG).show();
 
                 etInputNum.setText("");
-
-              //  checkingNumber(ph);
 
 
                 getView().setVisibility(View.GONE);
@@ -105,7 +110,8 @@ public class InputPhoneFragment extends Fragment{
     // TODO ********* works  - check to see if user exists in groups node
     public void checkingNumber(final String userPhoneNum){
         DatabaseReference mDatabaseReference =
-                FirebaseDatabase.getInstance().getReference().child("groups");
+                FirebaseDatabase.getInstance().getReference().child("players");
+        Toast.makeText(getActivity(), "TESSSSSSST", Toast.LENGTH_LONG).show();
 
         final Query query = mDatabaseReference;
         query.addChildEventListener(new ChildEventListener() {
@@ -117,15 +123,8 @@ public class InputPhoneFragment extends Fragment{
                     String playerPhone = mPlayer.getPhoneNum();
                     String groupId = mPlayer.getGroupId();
 
-                    if (playerPhone != null || !playerPhone.equals("")){
+                    if (playerPhone != null ){
                         playerPhone = playerPhone.replace(" ", "");
-                        Log.d("TAGG 3",playerPhone);
-                        Log.d("TAGG 4",userPhoneNum);
-
-                        // String userSearchNum = userPhone.substring( userPhone.length()-7);
-                        //     String playerSearchNum = playerPhoneNum.substring( playerPhoneNum.length() -7);
-
-                        //Log.d("TAGG 5",userSearchNum);
 
                         if(playerPhone.equals(userPhoneNum)) {
                             String name = mPlayer.getName();
@@ -136,7 +135,7 @@ public class InputPhoneFragment extends Fragment{
                                     usersDatabase.child(firebaseUser.getUid()).child("groups"));
 
                         }else if(playerPhone == null){
-                            Toast.makeText(getActivity(), "3 CHECKECK", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "", Toast.LENGTH_LONG).show();
                         }
                         else{
                             Toast.makeText(getActivity(), "THERE IS A PLAYER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
