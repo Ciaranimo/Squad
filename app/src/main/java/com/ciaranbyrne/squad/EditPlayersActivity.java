@@ -261,30 +261,29 @@ public class EditPlayersActivity extends AppCompatActivity {
     // Write player to players & groups node method
     public void writeNewPlayer( String name, Boolean playing, final String groupId, String phoneNum) {
 
-        if(phoneNum.length() != 0){
-            if(phoneNum.contains("+353")){
+        if (phoneNum.length() != 0) {
+            if (phoneNum.contains("+353")) {
 
                 phoneNum = phoneNum.replace("+353", "0");
 
             }
         }
         final String ph = phoneNum;
-      // String groupsKey = mDatabase.child("groups").push().getKey();
-        String groupsKey = phoneNum;
-      // String playersKey = mDatabase.child("players").push().getKey();
-        String playersKey = phoneNum;
+        String groupsKey = mDatabase.child("groups").push().getKey();
+        //  final String groupsKey = phoneNum;
+        String playersKey = mDatabase.child("players").push().getKey();
+        //final String playersKey = phoneNum;
 
-        Player player = new Player( name, playing, groupId, phoneNum);
-        Map<String, Object> playerValues = player.toMap();
-        Map<String, Object> childUpdates = new HashMap<>();
+        Player player = new Player(name, playing, groupId, phoneNum);
+        final Map<String, Object> playerValues = player.toMap();
+        final Map<String, Object> childUpdates = new HashMap<>();
+
 
         childUpdates.put("/players/" + playersKey, playerValues);
         childUpdates.put("/groups/" + groupId + "/members/" + groupsKey, playerValues);
-     //   mDatabase.updateChildren(childUpdates);
+        Log.d("write player phone ", ph);
 
-        Log.d("write player phone ",phoneNum);
-
-         checkingNumber(phoneNum);
+        checkingNumber(ph);
 
 
         mDatabase.updateChildren(childUpdates);
