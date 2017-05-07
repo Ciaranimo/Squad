@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.Boolean.TRUE;
+import static java.lang.Boolean.FALSE;
 
 public class EditPlayersActivity extends AppCompatActivity {
 
@@ -73,7 +73,6 @@ public class EditPlayersActivity extends AppCompatActivity {
     private ListView playersListView;
     private PlayersAdapter playersAdapter;
     private ArrayList<Player> playerList;
-    private TextView tvMaxPlayers;
     private TextView tvPlayerCount;
     // ARRAY LIST FOR KEYS
     private ArrayList<String> keysList;
@@ -111,7 +110,7 @@ public class EditPlayersActivity extends AppCompatActivity {
 
         tvPlayerCount = (TextView)findViewById(R.id.tvPlayerCount);
 
-
+        // TODO THIS IS CAUSING ERRORS! ***
         //setting player count
         groupsDatabase.child(userId).child("members").addValueEventListener(new ValueEventListener() {
             @Override
@@ -121,16 +120,16 @@ public class EditPlayersActivity extends AppCompatActivity {
                 String l = String.valueOf(count);
                 Log.d("COUNT", l);
 
-                if(dataSnapshot.getValue() == null) {
+                if((count == 0) || (dataSnapshot.getValue() == null)) {
                     Log.d("Null","Null");
-                    tvPlayerCount.setText("");
+                  //  tvPlayerCount.setText("");
 
                 }else {
 
                     if (count > 0) {
-                        tvMaxPlayers.setText("Current number of players: " + count);
+                        tvPlayerCount.setText("Current number of players: " + count);
                     } else {
-                        tvMaxPlayers.setText("No players in your Squad");
+                        tvPlayerCount.setText("No players in your Squad");
                     }
                 }
 
@@ -160,14 +159,11 @@ public class EditPlayersActivity extends AppCompatActivity {
         //  INITIALIZE KEYS ARRAY
         keysList = new ArrayList<>();
 
-        // LONG CLICK REMOVES PLAYERS
+        // LONG CLICK REMOVES PLAYERS - code ref http://stackoverflow.com/questions/36252478/how-to-remove-items-from-firebase-recyclerview
         playersListView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-
                 String clickedKey = keysList.get(position);
                // clickedKey = clickedKey.get
                 Log.d("1DATA",clickedKey);
@@ -185,7 +181,8 @@ public class EditPlayersActivity extends AppCompatActivity {
                         }else{
                             String phoneNum = dataSnapshot.getValue().toString();
                             Log.d("1DATA PHONE",phoneNum);
-                           //TODO checkNumForDelete(phoneNum);
+                            //TODO CHECK THIS WORKS!!!
+                            checkNumForDelete(phoneNum);
                         }
                     }
                     @Override
@@ -217,29 +214,22 @@ public class EditPlayersActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String playerName = resultText.getText().toString();
 
-                // TODO SUB STRING TO ALLOW SEARCHING
+                //  SUB STRING TO ALLOW SEARCHING
                 String playerNum = resultNum.getText().toString();
                 if (playerNum.equals("") || playerNum.length() == 0){
-                    Toast.makeText(getApplicationContext(), "player num null", Toast.LENGTH_LONG).show();
-
-
+                    Toast.makeText(getApplicationContext(), "player num null", Toast.LENGTH_SHORT).show();
                 }else{
                     playerNum = playerNum.replace(" ","");
                     playerNum = playerNum.replace(" ","");
-
                     Log.d("TAGG 1",playerNum);
-
                 }
-
-               ;
-                writeNewPlayer( playerName, TRUE, groupId, playerNum);
+                writeNewPlayer( playerName, FALSE, groupId, playerNum);
                 resultText.setText("");
                 resultNum.setText("");
 
                 Toast.makeText(getApplicationContext(), "" + playerName + " added to your Squad", Toast.LENGTH_LONG).show();
             }
         });
-
 
         // Read from the database
         mChildEventListener = new ChildEventListener() {
@@ -308,9 +298,8 @@ public class EditPlayersActivity extends AppCompatActivity {
 
             }
         }
-
-
         final String ph = phoneNum;
+
         String groupsKey = mDatabase.child("groups").push().getKey();
         //  final String groupsKey = phoneNum;
         String playersKey = mDatabase.child("players").push().getKey();
@@ -321,11 +310,12 @@ public class EditPlayersActivity extends AppCompatActivity {
         final Map<String, Object> childUpdates = new HashMap<>();
 
 
+
         childUpdates.put("/players/" + playersKey, playerValues);
         childUpdates.put("/groups/" + groupId + "/members/" + groupsKey, playerValues);
         Log.d("write player phone ", ph);
 
-        checkingNumber(ph);
+        checkingNumber(ph,groupId);
 
 
         mDatabase.updateChildren(childUpdates);
@@ -340,7 +330,11 @@ public class EditPlayersActivity extends AppCompatActivity {
         }
     }
 
-    // TODO *****
+    //TODO CHECK GROUP ID BEFORE INVITE
+
+
+
+    // checking by phone number for async deletion
     public void checkNumForDelete(final String playerPhoneNum){
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("users");
@@ -365,7 +359,6 @@ public class EditPlayersActivity extends AppCompatActivity {
                         //     Log.d("TAGG 6", playerSearchNum);
                         if(userPhone == null){
                             Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_LONG).show();
-
 
                             }
                         }else{
@@ -412,11 +405,10 @@ public class EditPlayersActivity extends AppCompatActivity {
         });
     }
 
-    // working now .. TODO not anymore
-    public void checkingNumber(final String playerPhoneNum){
+    // working now ..not sure
+    public void checkingNumber(final String playerPhoneNum, final String playerGroupId){
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("users");
-
         final Query query = mDatabaseReference;
         query.addChildEventListener(new ChildEventListener() {
             @Override
@@ -428,8 +420,6 @@ public class EditPlayersActivity extends AppCompatActivity {
                     String userPhone = mUser.getPhoneNum();
                     if (userPhone == null || userPhone.equals("") ){
                         Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
-
-
                 } else {
                     //TODO
                         Log.d("TAGG 3",userPhone);
@@ -439,21 +429,50 @@ public class EditPlayersActivity extends AppCompatActivity {
                             userPhone = userPhone.replace(" ", "");
 
                             if(userPhone.equals(playerPhoneNum)) {
-                                String uId = mUser.getUid();
-                                moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
-                                        usersDatabase.child(uId).child("groups"));
+                                final String invitedUid = mUser.getUid();
+                                Log.d("Invited 1",invitedUid);
+                                // TODO IF INVITE GROUP ID MATCHES USER INVITED GROUP ID OR DOES NOT EXIST
+                                usersDatabase.child(invitedUid).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.getValue() != null) {
+                                            String ds = dataSnapshot.getValue().toString();
+                                            if (ds.equals(playerGroupId)) {
+                                                // then it matches so we can move data
+                                                Log.d("Invited 2", ds);
+                                                Log.d("Invited 3", playerGroupId);
+                                                moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
+                                                        usersDatabase.child(invitedUid).child("groups"));
 
-                                Toast.makeText(getApplicationContext(), "* found **" + " " + uId, Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getApplicationContext(), "* found **" + " " + invitedUid, Toast.LENGTH_SHORT).show();
+
+                                            } else {
+                                                // it does not matchh so warn inviting user that thay are already involved in a match
+                                                Log.e("EditPlayer", "Player already member of group");
+
+                                                String pushKey = dataSnapshot.getKey();
+                                                Log.d("push", pushKey);
+                                                Toast.makeText(getApplicationContext(), "This player is already a member of a Squad, please update", Toast.LENGTH_SHORT).show();
+                                                //usersDatabase.child(firebaseUser.getUid()).child("members").child(pushKey).child("additionalMatch").setValue(false);
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Toast.makeText(getApplicationContext(), "Error with invite copy", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
                             }else if(userPhone == null){
-                                Toast.makeText(getApplicationContext(), "3 CHECKECK", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "3 CHECKECK", Toast.LENGTH_SHORT).show();
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_SHORT).show();
 
                             }
                         }else{
-                            Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -642,7 +661,8 @@ public class EditPlayersActivity extends AppCompatActivity {
     }
 
 
-    //  Handle suggestion pick user action
+    //  Handle suggestion pick user action     // CODE REF - https://looksok.wordpress.com/2013/06/15/android-searchview-tutorial-edittext-with-phone-contacts-search-and-autosuggestion/
+
     @Override
     protected void onNewIntent(Intent intent) {
         if (ContactsContract.Intents.SEARCH_SUGGESTION_CLICKED.equals(intent.getAction())) {
@@ -657,9 +677,7 @@ public class EditPlayersActivity extends AppCompatActivity {
             resultText.setText("should search for query: '" + query + "'...");
         }
     }
-    // got contact picker from here
-    // https://looksok.wordpress.com/2013/06/15/android-searchview-tutorial-edittext-with-phone-contacts-search-and-autosuggestion/
-
+    // CODE REF - https://looksok.wordpress.com/2013/06/15/android-searchview-tutorial-edittext-with-phone-contacts-search-and-autosuggestion/
     //  get contact display name
     private String getDisplayNameForContact(Intent intent) {
         Cursor phoneCursor = getContentResolver().query(intent.getData(), null, null, null, null);
@@ -671,8 +689,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         phoneCursor.close();
         return name;
     }
-
-    // get contact Phone num
+    // get contact Phone num     // CODE REF - https://looksok.wordpress.com/2013/06/15/android-searchview-tutorial-edittext-with-phone-contacts-search-and-autosuggestion/
     private String getPhoneNumForContact(Intent intent) {
         Cursor phoneCursor = getContentResolver().query(intent.getData(), null, null, null, null);
         phoneCursor.moveToFirst();
@@ -683,18 +700,14 @@ public class EditPlayersActivity extends AppCompatActivity {
             hasPhone = "true";
         else
             hasPhone = "false";
-
         String phoneNumber = null;
         if (Boolean.parseBoolean(hasPhone)) {
             Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
             if (phones != null) {
                 while (phones.moveToNext()) {
                     phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-
                 }
             }
-
             phones.close();
         }
         return phoneNumber;

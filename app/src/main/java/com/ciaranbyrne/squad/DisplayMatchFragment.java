@@ -16,11 +16,14 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
 
 /**
  * Created by ciaranbyrne on 05/05/2017.
@@ -78,6 +81,12 @@ public class DisplayMatchFragment extends Fragment {
             public void onClick(View v) {
                 final Boolean isPlayingExtraMatch = switchPlaying.isChecked();
 
+                String phTest = "0876877924";
+                String groupTest = "irlmWlRNRiWeF9THOKUilzwOfid2";
+
+                // TODO
+
+
                 usersDatabase.child(uId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -88,13 +97,12 @@ public class DisplayMatchFragment extends Fragment {
 
                             Group mGroup = dataSnapshot.child("groups").getValue(Group.class);
                             String groupId = mGroup.getGroupId();
+                            checkingNumberInMembers(userPhone,isPlayingExtraMatch.toString(),groupId);
 
-                            mUser.setAdditionalMatch(isPlayingExtraMatch);
-
-                            groupsDatabase.child(groupId).child("members").child(userPhone).setValue(mUser);
 
                         }else{
 
+                            //TODO
                         }
                     }
 
@@ -103,7 +111,6 @@ public class DisplayMatchFragment extends Fragment {
 
                     }
                 });
-
 
                 usersDatabase.child(uId).child("additionalMatch").setValue(isPlayingExtraMatch);
             }
@@ -118,8 +125,108 @@ public class DisplayMatchFragment extends Fragment {
         return view;
     }// end onCreate
 
-    private void updateResponse(String groupId) {
+    public void checkingNumberInMembers(final String userPhoneNum, final String isPlayingExtraMatch,String groupId){
+        DatabaseReference mDatabaseReference =
+                FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("members");
+        Log.d("DUPL0",userPhoneNum);
 
+        final Query query = mDatabaseReference;
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String ds = dataSnapshot.toString();
+                if (dataSnapshot.getValue() != null || !dataSnapshot.exists() || !ds.equals("")) {
+                    Log.d("DUPL1",ds);
+                    Player mPlayer = dataSnapshot.getValue(Player.class);
+                    String playerPhone = mPlayer.getPhoneNum();
+                    Log.d("DUPL2",playerPhone);
+
+                    if (playerPhone == null || playerPhone.equals("") ){
+                        Toast.makeText(getActivity(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+
+
+                    } else {
+                        //TODO
+                        Log.d("DUPL 3",playerPhone);
+                        Log.d("DUPL 4",userPhoneNum);
+
+                        if(playerPhone != null){
+                          //  pla = userPhone.replace(" ", "");
+
+                            if(playerPhone.equals(userPhoneNum)) {
+                                String groupId = mPlayer.getGroupId();
+                                String playerPushKey = dataSnapshot.getKey();
+
+                                String extraMatch = isPlayingExtraMatch.toString();
+                               updateResponse(groupId, firebaseUser.getUid(),playerPushKey,extraMatch);
+
+                                Toast.makeText(getActivity(), "FOUND HERE" + " " + groupId, Toast.LENGTH_LONG).show();
+
+                            }else if(playerPhone == null){
+                                Toast.makeText(getActivity(), "3 CHECKECK", Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Toast.makeText(getActivity(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
+
+                            }
+                        }else{
+                            Toast.makeText(getActivity(), "USER PHONE NULL " , Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void updateResponse(String groupId, String thisUserId, final String playerPushKey, final String isPlayingExtraMatch) {
+        usersDatabase.child(thisUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists() || dataSnapshot.getValue() != null){
+
+                    User mUser = dataSnapshot.getValue(User.class);
+                    String userPhone = mUser.getPhoneNum();
+
+                    Group mGroup = dataSnapshot.child("groups").getValue(Group.class);
+                    String groupId = mGroup.getGroupId();
+
+                    Boolean extraMatch= Boolean.valueOf(isPlayingExtraMatch);
+                    Log.d("extraMatch",extraMatch.toString());
+                    mUser.setAdditionalMatch(extraMatch);
+
+                    groupsDatabase.child(groupId).child("members").child(playerPushKey).setValue(mUser);
+
+                }else{
+
+                    //TODO
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 /*

@@ -32,26 +32,6 @@
         android:layout_alignParentStart="true" />
 
 
-    <Switch
-        android:id="@+id/switchEvenTeams"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Even Teams"
-        android:layout_alignTop="@+id/switchWeekly"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="47dp" />
-
-    <Switch
-        android:id="@+id/switchWeekly"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="12sp"
-        android:text="Weekly"
-        android:textAlignment="viewStart"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/switchEvenTeams"
-        android:layout_marginEnd="25dp" />
-
     <Button
         android:id="@+id/btnSaveMatch"
         android:layout_width="match_parent"
@@ -76,22 +56,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="21dp" />
 
-    <SeekBar
-        android:id="@+id/seekBarPlayers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="19dp"
-        android:layout_above="@+id/switchEvenTeams"
-        android:layout_alignParentStart="true" />
-
     <TextView
         android:id="@+id/tvNumberOfPlayers"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select the number of players from slider"
-        android:layout_above="@+id/seekBarPlayers"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="10dp" />
+        android:layout_alignEnd="@+id/tvHeadingEditMatch"
+        android:layout_below="@+id/daySpinner"
+        android:layout_marginTop="26dp"
+        android:text="Number of players playing" />
 
     <TextView
         android:id="@+id/tvResultPlayerNum"
@@ -105,17 +77,18 @@
         android:id="@+id/tvDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/switchWeekly"
-        android:layout_below="@+id/switchWeekly"
-        android:layout_marginTop="28dp" />
+        android:text="Day of @string/edit_match"
+        android:layout_below="@+id/tvNumberOfPlayers"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp" />
 
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvDay"
-        android:layout_alignEnd="@+id/switchEvenTeams"
-        android:layout_marginEnd="22dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:layout_below="@+id/tvNumberOfPlayers"
+        android:layout_marginTop="15dp"
+         />
 
 </RelativeLayout>

@@ -2,13 +2,11 @@ package com.ciaranbyrne.squad;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -76,11 +74,8 @@ public class MatchActivity extends AppCompatActivity {
         final String groupId = firebaseUser.getUid();
 
         //Initialize Variables
-        seekBarPlayersNum = (SeekBar) findViewById(R.id.seekBarPlayers);
         btnEditPlayers = (Button) findViewById(com.ciaranbyrne.squad.R.id.btnEditPlayers);
         btnSaveMatch = (Button) findViewById(com.ciaranbyrne.squad.R.id.btnSaveMatch);
-        switchEvenTeams = (Switch) findViewById(R.id.switchEvenTeams);
-        switchWeekly = (Switch) findViewById(R.id.switchWeekly);
         tvResultPlayerNum = (TextView) findViewById(R.id.tvResultPlayerNum);
         tvDays = (TextView) findViewById(tvDay);
         tvTimes = (TextView) findViewById(R.id.tvTime);
@@ -168,50 +163,7 @@ public class MatchActivity extends AppCompatActivity {
 
 
 
-        // Seekbar
-        seekBarPlayersNum = (SeekBar) findViewById(R.id.seekBarPlayers);
-        seekBarPlayersNum.setMax(22);
-     //   readSeekbarNum();
-        seekBarPlayersNum.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                tvResultPlayerNum.setText(String.valueOf(i));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        }); // END SEEKBAR
-
-
-
-        //Switches //
-        //set the switch to ON
-       // readWeeklySwitch();
-        //attach a listener to check for changes in state
-        switchWeekly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isWeeklyChecked) {
-                Snackbar.make(compoundButton, "Weekly: " + isWeeklyChecked, Snackbar.LENGTH_LONG)
-                        .setAction("ACTION", null).show();
-            }
-        });
-
-       // readEvenTeamsSwitch();
-        switchEvenTeams.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isEvenChecked) {
-                Snackbar.make(compoundButton, "Even Teams: " + isEvenChecked, Snackbar.LENGTH_LONG)
-                        .setAction("ACTION", null).show();
-            }
-        });
 
         //create button to save match details
         //set on click listener
@@ -240,10 +192,9 @@ public class MatchActivity extends AppCompatActivity {
         String matchDay = tvDays.getText().toString();
         String matchTime = tvTimes.getText().toString();
         int matchNumber = Integer.parseInt(tvResultPlayerNum.getText().toString());
-        Boolean isEvenChecked = switchEvenTeams.isChecked();
-        Boolean isWeeklyChecked = switchWeekly.isChecked();
 
-        Match match = new Match(matchTime, matchDay, matchNumber, isEvenChecked, isWeeklyChecked,groupId,firebaseUser.getDisplayName());
+
+        Match match = new Match(matchTime, matchDay, matchNumber, groupId,firebaseUser.getDisplayName());
 
         matchesDatabase.setValue(match);
 
@@ -288,66 +239,12 @@ public class MatchActivity extends AppCompatActivity {
             }
         });
     }
-    // Read weekly switch from DB
-    private void readWeeklySwitch(){
-        matchesDatabase.child("weekly").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    Boolean matchWeekly = Boolean.valueOf(dataSnapshot.getValue().toString());
-                    switchWeekly.setChecked(matchWeekly);
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-    // Read even teams switch from DB
-    private void readEvenTeamsSwitch(){
-        matchesDatabase.child("evenTeams").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    Boolean matchEven = Boolean.valueOf(dataSnapshot.getValue().toString());
-                    switchEvenTeams.setChecked(matchEven);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-    //Read seekbar Number from DB
-    private void readSeekbarNum(){
-        matchesDatabase.child("matchNumbers").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    //Boolean matchEven = Boolean.valueOf(dataSnapshot.getValue().toString());
-                    //switchEvenTeams.setChecked(matchEven);
-                    int matchNum = Integer.parseInt(dataSnapshot.getValue().toString());
-                    seekBarPlayersNum.setProgress(matchNum);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
-        readSeekbarNum();
-        readEvenTeamsSwitch();
-        readWeeklySwitch();
+
         readMatchDays();
         readMatchTimes();
 

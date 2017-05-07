@@ -1,6 +1,7 @@
 package com.ciaranbyrne.squad;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ public class PlayersAdapter extends ArrayAdapter<Player> {
         super(context, resource, objects);
     }
 
-
+    //  REF - modified from https://firebaseui.com/docs/android/com/firebase/ui/FirebaseListAdapter.html
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -33,6 +34,16 @@ public class PlayersAdapter extends ArrayAdapter<Player> {
         // Populate the data into the template view using the data object
         tvName.setText(player.name);
         tvPhone.setText(player.phoneNum);
+
+        if(player.getPlaying() == true){
+            //playing
+            convertView.setBackgroundColor(Color.GREEN);
+        }else{
+            //not playing
+            convertView.setBackgroundColor(Color.RED);
+
+         }
+
         // Return the completed view to render on screen
         return convertView;
     }
