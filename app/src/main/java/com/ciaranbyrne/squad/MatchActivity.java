@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import static com.ciaranbyrne.squad.R.id.daySpinner;
@@ -34,6 +35,7 @@ public class MatchActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private DatabaseReference groupsDatabase;
     private DatabaseReference matchesDatabase;
+    private DatabaseReference usersDatabase;
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser firebaseUser;
@@ -67,7 +69,7 @@ public class MatchActivity extends AppCompatActivity {
         //GET CURRENT USER INFO
         mFirebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = mFirebaseAuth.getCurrentUser();
-        FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+        final FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
         // Adding users to groups - Setting Group ID to be the same as User Id
         final String groupId = firebaseUser.getUid();
 
@@ -84,6 +86,7 @@ public class MatchActivity extends AppCompatActivity {
         groupsDatabase = mFirebaseDatabase.getReference().child("groups");
         matchesDatabase = mFirebaseDatabase.getReference().child("groups").child(groupId).child("matches");
         mDatabase = mFirebaseDatabase.getReference();
+        usersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
 
         groupsDatabase.child(firebaseUser.getUid()).child("members").addValueEventListener(new ValueEventListener() {
@@ -202,7 +205,10 @@ public class MatchActivity extends AppCompatActivity {
         btnSaveMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            saveMatchDetails(groupId);
+                saveMatchDetails(groupId);
+
+
+
 
             }
         });
@@ -220,17 +226,55 @@ public class MatchActivity extends AppCompatActivity {
 
     }// end onCreate
 
-    private void saveMatchDetails(String groupId) {
-        String matchDay = tvDays.getText().toString();
-        String matchTime = tvTimes.getText().toString();
-        int matchNumber = Integer.parseInt(tvResultPlayerNum.getText().toString());
+    private void saveMatchDetails(final String groupId) {
+        final String matchDay = tvDays.getText().toString();
+        final String matchTime = tvTimes.getText().toString();
+        final int matchNumber = Integer.parseInt(tvResultPlayerNum.getText().toString());
+
+        groupsDatabase.child(firebaseUser.getUid()).child("members").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                Player mPlayer = dataSnapshot.getValue(Player.class);
+                String phoneNum = mPlayer.getPhoneNum().toString();
+                Log.d("MATCH 1",phoneNum);
+
+                checkingNumber(phoneNum, groupId);
 
 
-        Match match = new Match(matchTime, matchDay, matchNumber, groupId,firebaseUser.getDisplayName());
+                Match match = new Match(matchTime, matchDay, matchNumber, groupId,firebaseUser.getDisplayName());
 
-        matchesDatabase.setValue(match);
+                matchesDatabase.setValue(match);
 
-        Toast.makeText(this, "Match details added", Toast.LENGTH_SHORT).show();
+
+
+                Toast.makeText(MatchActivity.this, "Match details added", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String phoneNum = dataSnapshot.getValue().toString();
+                Log.d("phoneNum",phoneNum);
+
+                checkingNumber(phoneNum, groupId);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     // Read Match days from DB
@@ -244,6 +288,7 @@ public class MatchActivity extends AppCompatActivity {
                     String matchDay = dataSnapshot.getValue().toString();
                     daySpin.setSelection(adapterDaysSpinner.getPosition(matchDay));
                     //mySpinner.setSelection(arrayAdapter.getPosition("Category 2"))
+
                 }
             }
 
@@ -270,6 +315,144 @@ public class MatchActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void checkingNumber(final String playerPhoneNum, final String playerGroupId){
+        DatabaseReference mDatabaseReference =
+                FirebaseDatabase.getInstance().getReference().child("users");
+        final Query query = mDatabaseReference;
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String ds = dataSnapshot.getValue().toString();
+                if (dataSnapshot.getValue() != null || !dataSnapshot.exists() || ds.length()!= 0) {
+
+                    User mUser = dataSnapshot.getValue(User.class);
+                    String userPhone = mUser.getPhoneNum();
+                    if (userPhone == null || userPhone.equals("") ){
+                        Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                    } else {
+                        //TODO
+                        Log.d("MATCH 2",userPhone);
+                        Log.d("MATCH 3",playerPhoneNum);
+
+                        if(userPhone != null){
+                            userPhone = userPhone.replace(" ", "");
+
+                            if(userPhone.equals(playerPhoneNum)) {
+                                final String invitedUid = mUser.getUid();
+                                Log.d("MATCH 4",invitedUid);
+
+                                moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
+                                        usersDatabase.child(invitedUid).child("groups"));
+
+                                // TODO IF INVITE GROUP ID MATCHES USER INVITED GROUP ID OR DOES NOT EXIST
+                                usersDatabase.child(invitedUid).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.getValue() != null) {
+                                            String ds = dataSnapshot.getValue().toString();
+                                            if (ds.equals(playerGroupId)) {
+                                                // then it matches so we can move data
+                                                Log.d("MATCH 5", ds);
+                                                Log.d("MATCH 6", playerGroupId);
+                                                moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
+                                                        usersDatabase.child(invitedUid).child("groups"));
+
+                                                Toast.makeText(getApplicationContext(), "* found **" + " " + invitedUid, Toast.LENGTH_SHORT).show();
+
+                                            } else {
+                                                // it does not matchh so warn inviting user that thay are already involved in a match
+                                                Log.e("EditPlayer", "Player already member of group");
+
+                                                String pushKey = dataSnapshot.getKey();
+                                                Log.d("push", pushKey);
+                                                Toast.makeText(getApplicationContext(), "This player is already a member of a Squad, please update", Toast.LENGTH_SHORT).show();
+                                                //usersDatabase.child(firebaseUser.getUid()).child("members").child(pushKey).child("additionalMatch").setValue(false);
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Toast.makeText(getApplicationContext(), "Error with invite copy", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            }else if(userPhone == null){
+                                Toast.makeText(getApplicationContext(), "3 CHECKECK", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_SHORT).show();
+
+                            }
+                        }else{
+                            Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+
+    public void moveFirebaseRecord(DatabaseReference fromPath, final DatabaseReference toPath) {
+
+        Log.d("moveRec", String.valueOf(fromPath));
+        Log.d("moveRec", String.valueOf(toPath));
+
+        fromPath.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                Log.d("moveRec", String.valueOf(dataSnapshot));
+
+
+                toPath.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        Log.d("moveRec", String.valueOf(dataSnapshot));
+                        Log.d("moveRec", String.valueOf(toPath));
+
+
+                        if (databaseError != null) {
+                            Toast.makeText(getApplicationContext(), "COPY FAILED", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "COPY SUCCESS", Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "onCancelled- copy fail", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
     }
 
 
