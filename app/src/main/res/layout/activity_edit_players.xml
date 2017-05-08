@@ -21,9 +21,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="19dp"
-        android:text="Edit Squad"
-        android:textSize="32sp"
-        />
+        android:text="Edit Players"
+        android:textSize="32sp" />
 
     <ListView
         android:layout_width="match_parent"
@@ -78,5 +77,15 @@
         android:layout_below="@+id/tvHeadingEditPlayers"
         android:layout_centerHorizontal="true"
         android:text="No Players in your Squad" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvPlayerCount"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:text="Green players have confirmed attendance, White players are yet to confrim"
+        android:textAlignment="center" />
 
 </RelativeLayout>

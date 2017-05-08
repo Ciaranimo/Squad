@@ -27,9 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:textColor="@color/colorText"
         android:background="@color/colorPrimary"
-        android:text="Edit Squad" />
+        android:text="My Match Details"
+        android:textColor="@color/colorText" />
 
     <TextView
         android:id="@+id/tv_display_name"

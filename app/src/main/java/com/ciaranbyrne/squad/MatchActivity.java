@@ -3,13 +3,12 @@ package com.ciaranbyrne.squad;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,9 +45,8 @@ public class MatchActivity extends AppCompatActivity {
     private TextView tvResultPlayerNum;
     private TextView tvDays;
     private TextView tvTimes;
-    private SeekBar seekBarPlayersNum;
-    private Switch switchWeekly;
-    private Switch switchEvenTeams;
+
+    private TextView tvHeadingPlayersNum;
     private Button btnEditPlayers;
     private Button btnSaveMatch;
 
@@ -77,6 +75,7 @@ public class MatchActivity extends AppCompatActivity {
         btnEditPlayers = (Button) findViewById(com.ciaranbyrne.squad.R.id.btnEditPlayers);
         btnSaveMatch = (Button) findViewById(com.ciaranbyrne.squad.R.id.btnSaveMatch);
         tvResultPlayerNum = (TextView) findViewById(R.id.tvResultPlayerNum);
+        tvHeadingPlayersNum = (TextView)findViewById(R.id.tvHeadingNumOfPlayers);
         tvDays = (TextView) findViewById(tvDay);
         tvTimes = (TextView) findViewById(R.id.tvTime);
 
@@ -85,6 +84,39 @@ public class MatchActivity extends AppCompatActivity {
         groupsDatabase = mFirebaseDatabase.getReference().child("groups");
         matchesDatabase = mFirebaseDatabase.getReference().child("groups").child(groupId).child("matches");
         mDatabase = mFirebaseDatabase.getReference();
+
+
+        groupsDatabase.child(firebaseUser.getUid()).child("members").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long count =dataSnapshot.getChildrenCount();
+
+                String l = String.valueOf(count);
+                Log.d("COUNT", l);
+
+                if((count == 0) || (dataSnapshot.getValue() == null)) {
+                    Log.d("Null","Null");
+                    //  tvPlayerCount.setText("");
+
+                }else {
+
+                    if (count > 0) {
+                        String c = Long.toString(count);
+                        tvResultPlayerNum.setText(c);
+                        tvHeadingPlayersNum.setText("Current number of players: ");
+                    } else {
+                        tvResultPlayerNum.setText("No players in your Squad");
+                        tvHeadingPlayersNum.setText("");
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         //instantiate arrays for days and times spinners
         days = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};

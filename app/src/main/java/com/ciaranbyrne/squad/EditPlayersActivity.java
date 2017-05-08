@@ -127,7 +127,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                 }else {
 
                     if (count > 0) {
-                        tvPlayerCount.setText("Current number of players: " + count);
+                        tvPlayerCount.setText("Players added: " + count);
                     } else {
                         tvPlayerCount.setText("No players in your Squad");
                     }
@@ -214,20 +214,35 @@ public class EditPlayersActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String playerName = resultText.getText().toString();
 
-                //  SUB STRING TO ALLOW SEARCHING
-                String playerNum = resultNum.getText().toString();
-                if (playerNum.equals("") || playerNum.length() == 0){
-                    Toast.makeText(getApplicationContext(), "player num null", Toast.LENGTH_SHORT).show();
-                }else{
-                    playerNum = playerNum.replace(" ","");
-                    playerNum = playerNum.replace(" ","");
-                    Log.d("TAGG 1",playerNum);
-                }
-                writeNewPlayer( playerName, FALSE, groupId, playerNum);
-                resultText.setText("");
-                resultNum.setText("");
+                if(playerName.length() == 0 || playerName.equals(" ") || playerName == null){
+                    //null
+                    Toast.makeText(getApplicationContext(), "" + playerName + " Please enter a valid contact", Toast.LENGTH_SHORT).show();
 
-                Toast.makeText(getApplicationContext(), "" + playerName + " added to your Squad", Toast.LENGTH_LONG).show();
+                }else{
+                    //  SUB STRING TO ALLOW SEARCHING
+                    String playerNum = resultNum.getText().toString();
+                    if (playerNum.equals("") || playerNum.length() == 0){
+                        Toast.makeText(getApplicationContext(), "Please choose a contact with a valid phone number", Toast.LENGTH_SHORT).show();
+                    }else{
+                        playerNum = playerNum.replace(" ","");
+                        playerNum = playerNum.replace(" ","");
+                        Log.d("TAGG 1",playerNum);
+
+
+
+                        writeNewPlayer( playerName, FALSE, groupId, playerNum);
+                        resultText.setText("");
+                        resultNum.setText("");
+
+                        Toast.makeText(getApplicationContext(), "" + playerName + " added to your Squad", Toast.LENGTH_SHORT).show();
+
+
+
+                    }
+
+                }
+
+
             }
         });
 

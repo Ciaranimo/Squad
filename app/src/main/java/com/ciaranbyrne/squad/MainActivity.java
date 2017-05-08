@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                                     .setProviders(
                                             AuthUI.EMAIL_PROVIDER,
                                             AuthUI.GOOGLE_PROVIDER)
+                                    .setTheme(R.style.GreenTheme)
                                     .build(),
                             RC_SIGN_IN);
                 }

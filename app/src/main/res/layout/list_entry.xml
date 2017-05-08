@@ -16,14 +16,18 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:text="Player Name" />
+        tools:text="Player Name"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"/>
 
     <TextView
         android:id="@+id/playerPhoneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
+    android:textAppearance="?android:attr/textAppearanceSmall"
         tools:text="Player e-mail" />
 
 </LinearLayout>

@@ -20,7 +20,8 @@
         android:textAlignment="center"
         android:textSize="18sp"
         android:layout_above="@+id/tvAddedByMatchDisplay"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="15dp" />
 
     <TextView
         android:id="@+id/tvAddedByMatchDisplay"
@@ -28,9 +29,9 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="14sp"
-        android:layout_marginBottom="11dp"
-        android:layout_above="@+id/tvPlayStatus"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/tvMatchTime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp" />
 
     <TextView
         android:id="@+id/tvMatchTime"
@@ -38,26 +39,26 @@
         android:layout_height="wrap_content"
         android:text="Match Time:"
         android:layout_above="@+id/tvMatchDay"
-        android:layout_toStartOf="@+id/tvAddedByMatchDisplay" />
+        android:layout_alignStart="@+id/imageView3" />
 
     <TextView
         android:id="@+id/tvMatchDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Match Day:"
-        android:layout_marginBottom="10dp"
         android:layout_above="@+id/btnPlayingConfirm"
-        android:layout_alignEnd="@+id/tvMatchTime" />
+        android:layout_alignStart="@+id/tvMatchTime"
+        android:layout_marginBottom="10dp"
+        android:text="Match Day:" />
 
     <Switch
         android:id="@+id/switchPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/can_you_play"
-        android:textAppearance="@android:style/TextAppearance.Material.Small"
         android:layout_alignBottom="@+id/tvMatchDay"
-        android:layout_toEndOf="@+id/tvMatchTime"
-        android:layout_marginStart="27dp" />
+        android:layout_alignEnd="@+id/imageView3"
+        android:switchTextAppearance="@android:style/TextAppearance.Material.Small"
+        android:text="@string/can_you_play"
+        android:textAppearance="@android:style/TextAppearance.Material.Small" />
 
     <Button
         android:id="@+id/btnPlayingConfirm"
@@ -69,15 +70,5 @@
         android:layout_marginBottom="50dp"
         android:textColor="@color/colorText"
         android:background="@color/colorPrimary"/>
-
-    <TextView
-        android:id="@+id/tvPlayStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvMatchTime"
-        android:layout_alignStart="@+id/tvAddedByMatchDisplay"
-        android:layout_marginBottom="13dp"
-        android:text="TextView"
-        android:textAlignment="center" />
 
 </RelativeLayout>

@@ -64,30 +64,10 @@ public class DisplayMatchFragment extends Fragment {
         tvMatchTime = (TextView) view.findViewById(R.id.tvMatchTime);
         tvMatchDay = (TextView) view.findViewById(R.id.tvMatchDay);
 
-        tvPlayingStatus = (TextView) view.findViewById(R.id.tvPlayStatus);
         switchPlaying = (Switch) view.findViewById(R.id.switchPlay);
 
         btnConfirmStatus = (Button) view.findViewById(R.id.btnPlayingConfirm);
 
-        usersDatabase.child(firebaseUser.getUid()).child("playingExtra").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String ds = dataSnapshot.getValue().toString();
-                if (ds.length() != 0){
-                    Boolean play = (Boolean)dataSnapshot.getValue();
-                    tvPlayingStatus.setText("Current play status: " + play.toString());
-                }else{
-                    //is null
-                    Toast.makeText(getActivity(), "****null****", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
         switchPlaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

@@ -1,7 +1,6 @@
 package com.ciaranbyrne.squad;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,10 +36,14 @@ public class PlayersAdapter extends ArrayAdapter<Player> {
 
         if(player.getPlayingExtra() == true){
             //playing
-            convertView.setBackgroundColor(Color.GREEN);
+            convertView.setBackgroundColor(getContext().getColor(R.color.colorPrimary));
+            tvName.setTextColor(getContext().getColor(R.color.white));
+            tvPhone.setTextColor(getContext().getColor(R.color.white));
+
+
         }else{
             //not playing
-            convertView.setBackgroundColor(Color.RED);
+            convertView.setBackgroundColor(getContext().getColor(R.color.white));
 
          }
 
