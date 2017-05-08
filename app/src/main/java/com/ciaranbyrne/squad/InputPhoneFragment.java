@@ -69,8 +69,6 @@ public class InputPhoneFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 String ph = etInputNum.getText().toString();
-
-                // METHOD I AM CALLING
                 checkingNumber(ph);
 
 
@@ -107,7 +105,7 @@ public class InputPhoneFragment extends Fragment{
     }
 
 
-    // TODO ********* works  - check to see if user exists in groups node
+    //   works  - check to see if user exists in groups node
     public void checkingNumber(final String userPhoneNum){
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("players");

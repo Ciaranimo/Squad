@@ -12,16 +12,16 @@ import java.util.Map;
 public class Player {
 
     public String name;
-    public Boolean playing;
+    public Boolean playingExtra;
     public String groupId;
     public String phoneNum;
     public Map<String, Boolean> groups = new HashMap<>();
 
 
-    public Player( String name, Boolean playing, String groupId, String phoneNum) {
+    public Player( String name, Boolean playingExtra, String groupId, String phoneNum) {
         this.name = name;
 
-        this.playing = playing;
+        this.playingExtra = playingExtra;
         this.groupId = groupId;
         this.phoneNum = phoneNum;
     }
@@ -40,12 +40,12 @@ public class Player {
 
 
 
-    public Boolean getPlaying() {
-        return playing;
+    public Boolean getPlayingExtra() {
+        return playingExtra;
     }
 
-    public void setPlaying(Boolean playing) {
-        this.playing = playing;
+    public void setPlayingExtra(Boolean playingExtra) {
+        this.playingExtra = playingExtra;
     }
 
     public String getGroupId() {
@@ -77,7 +77,7 @@ public class Player {
     public Map<String, Object> toMap(){
         HashMap<String, Object> result = new HashMap<>();
         result.put("name", name);
-        result.put("playing", playing);
+        result.put("playingExtra", playingExtra);
         result.put("groupId", groupId);
         result.put("phoneNum", phoneNum);
 

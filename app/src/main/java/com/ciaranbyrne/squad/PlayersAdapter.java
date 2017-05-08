@@ -35,7 +35,7 @@ public class PlayersAdapter extends ArrayAdapter<Player> {
         tvName.setText(player.name);
         tvPhone.setText(player.phoneNum);
 
-        if(player.getPlaying() == true){
+        if(player.getPlayingExtra() == true){
             //playing
             convertView.setBackgroundColor(Color.GREEN);
         }else{

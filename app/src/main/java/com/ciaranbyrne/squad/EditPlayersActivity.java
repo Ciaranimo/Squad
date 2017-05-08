@@ -289,7 +289,7 @@ public class EditPlayersActivity extends AppCompatActivity {
     }
 
     // Write player to players & groups node method
-    public void writeNewPlayer( String name, Boolean playing, final String groupId, String phoneNum) {
+    public void writeNewPlayer( String name, Boolean playingExtra, final String groupId, String phoneNum) {
 
         if (phoneNum.length() != 0) {
             if (phoneNum.contains("+353")) {
@@ -305,7 +305,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         String playersKey = mDatabase.child("players").push().getKey();
         //final String playersKey = phoneNum;
 
-        Player player = new Player(name, playing, groupId, phoneNum);
+        Player player = new Player(name, playingExtra, groupId, phoneNum);
         final Map<String, Object> playerValues = player.toMap();
         final Map<String, Object> childUpdates = new HashMap<>();
 
@@ -413,8 +413,8 @@ public class EditPlayersActivity extends AppCompatActivity {
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String ds = dataSnapshot.toString();
-                if (dataSnapshot.getValue() != null || !dataSnapshot.exists() || !ds.equals("")) {
+                String ds = dataSnapshot.getValue().toString();
+                if (dataSnapshot.getValue() != null || !dataSnapshot.exists() || ds.length()!= 0) {
 
                     User mUser = dataSnapshot.getValue(User.class);
                     String userPhone = mUser.getPhoneNum();
@@ -431,6 +431,10 @@ public class EditPlayersActivity extends AppCompatActivity {
                             if(userPhone.equals(playerPhoneNum)) {
                                 final String invitedUid = mUser.getUid();
                                 Log.d("Invited 1",invitedUid);
+
+                                moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
+                                        usersDatabase.child(invitedUid).child("groups"));
+                                
                                 // TODO IF INVITE GROUP ID MATCHES USER INVITED GROUP ID OR DOES NOT EXIST
                                 usersDatabase.child(invitedUid).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override

@@ -1,34 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/squad_logo" />
 
     <TextView
         android:id="@+id/tvHeadingMatchDisplay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="142dp"
+        android:layout_above="@+id/tvAddedByMatchDisplay"
+        android:layout_alignParentStart="true"
         android:text="You have been added to this match by: "
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tvAddedByMatchDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvHeadingMatchDisplay"
+        android:layout_above="@+id/tvMatchTime"
         android:layout_centerHorizontal="true"
         android:text="TextView"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tvMatchTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="Match Time:"
-        android:layout_below="@+id/tvAddedByMatchDisplay"
+        android:layout_above="@+id/tvMatchDay"
         android:layout_toStartOf="@+id/tvAddedByMatchDisplay" />
 
     <TextView
@@ -36,17 +44,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Match Day:"
-        android:layout_below="@+id/tvMatchTime"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/btnPlayingConfirm"
         android:layout_alignEnd="@+id/tvMatchTime" />
 
     <Switch
         android:id="@+id/switchPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvMatchDay"
-        android:layout_toEndOf="@+id/tvAddedByMatchDisplay"
         android:text="@string/can_you_play"
-        android:textAppearance="@android:style/TextAppearance.Material.Small" />
+        android:textAppearance="@android:style/TextAppearance.Material.Small"
+        android:layout_alignBottom="@+id/tvMatchDay"
+        android:layout_toEndOf="@+id/tvAddedByMatchDisplay" />
 
     <Button
         android:id="@+id/btnPlayingConfirm"
@@ -55,6 +64,8 @@
         android:text="Update Response"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="41dp" />
+        android:layout_marginBottom="50dp"
+        android:textColor="@color/colorText"
+        android:background="@color/colorPrimary"/>
 
 </RelativeLayout>

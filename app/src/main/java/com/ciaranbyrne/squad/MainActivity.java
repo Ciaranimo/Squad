@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     onSignedInInitialize(user.getDisplayName(), user.getUid());
                     // add user instance to realtime database
 
-                    writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail(), null, null, null);
+                    writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail(), null, null, null,null);
                     readUserInfo(user.getDisplayName());
                     Toast.makeText(MainActivity.this, "Signed in", Toast.LENGTH_SHORT).show();
 
@@ -131,8 +131,9 @@ public class MainActivity extends AppCompatActivity {
     }// End of onCreate
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
-    private void writeNewUser(final String userId, final String name, final String email, final String phoneNum, final String searchNum, final Boolean additionalMatch) {
-        final User user = new User(userId, name, email, phoneNum, searchNum, additionalMatch);
+    private void writeNewUser(final String userId, final String name, final String email,
+                              final String phoneNum, final String searchNum, final Boolean playingExtra,  String groupId) {
+        final User user = new User(userId, name, email, phoneNum, searchNum, playingExtra, groupId);
 
         // Checks if user exists
         if (usersDatabase != null) {
@@ -202,9 +203,16 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "User has not been added to any matches ", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        Toast.makeText(MainActivity.this, "User has been added to a match ", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(MainActivity.this, "User has been added to a match ", Toast.LENGTH_SHORT).show();
 
-                        usersDatabase.child(userId).child("additionalMatch").setValue(false);
+                        if(usersDatabase.child(userId).child("playingExtra") != null){
+                            // value in here alread
+                            Toast.makeText(MainActivity.this, "VALUE IN USERS PLAY EXTRA NODE ALREADY ", Toast.LENGTH_SHORT).show();
+                        }else{
+                            // empty
+                            usersDatabase.child(userId).child("playingExtra").setValue(false);
+                        }
+
 
                         // Begin the transaction
                         FragmentTransaction fragT = getSupportFragmentManager().beginTransaction();
@@ -228,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //  Check if user has input phone number -
-    private void userHasPhoneNumber(String userId) {
+    private void userHasPhoneNumber(final String userId) {
         if (userId != null) {
             // Checks if phonNum exists
 
@@ -254,9 +262,9 @@ public class MainActivity extends AppCompatActivity {
                     } else {
 
                         //user has phone number, do something
-                        Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "User has phone");
-
+                        userAddedToMatch(userId);
                     }
                 }
 

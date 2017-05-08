@@ -10,16 +10,19 @@ public class User {
     private String email;
     private String phoneNum;
     private String searchNum;
-    private Boolean additionalMatch;
+    private Boolean playingExtra;
+
+    public String groupId;
 
 
-    public User(String uId, String name, String email, String phoneNum, String searchNum, Boolean additionalMatch) {
+    public User(String uId, String name, String email, String phoneNum, String searchNum, Boolean playingExtra,  String groupId) {
         this.uId = uId;
         this.name = name;
         this.email = email;
         this.phoneNum = phoneNum;
         this.searchNum = searchNum;
-        this.additionalMatch = additionalMatch;
+        this.playingExtra = playingExtra;
+        this.groupId = groupId;
     }
     public User() {
 
@@ -65,11 +68,21 @@ public class User {
         this.searchNum = searchNum;
     }
 
-    public Boolean getAdditionalMatch() {
-        return additionalMatch;
+    public Boolean getPlayingExtra() {
+        return playingExtra;
     }
 
-    public void setAdditionalMatch(Boolean additionalMatch) {
-        this.additionalMatch = additionalMatch;
+
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public void setPlayingExtra(Boolean playingExtra) {
+        this.playingExtra = playingExtra;
     }
 }
