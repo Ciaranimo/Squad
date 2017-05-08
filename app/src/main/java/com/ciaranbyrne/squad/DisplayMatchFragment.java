@@ -2,7 +2,6 @@ package com.ciaranbyrne.squad;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,8 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-
-
 /**
  * Created by ciaranbyrne on 05/05/2017.
  */
@@ -35,6 +32,7 @@ public class DisplayMatchFragment extends Fragment {
     private TextView tvAddedBy;
     private TextView tvMatchTime;
     private TextView tvMatchDay;
+    private TextView tvPlayingStatus;
     private Switch switchPlaying;
 
     private Button btnConfirmStatus;
@@ -65,48 +63,73 @@ public class DisplayMatchFragment extends Fragment {
         tvAddedBy = (TextView) view.findViewById(R.id.tvAddedByMatchDisplay);
         tvMatchTime = (TextView) view.findViewById(R.id.tvMatchTime);
         tvMatchDay = (TextView) view.findViewById(R.id.tvMatchDay);
+
+        tvPlayingStatus = (TextView) view.findViewById(R.id.tvPlayStatus);
         switchPlaying = (Switch) view.findViewById(R.id.switchPlay);
 
         btnConfirmStatus = (Button) view.findViewById(R.id.btnPlayingConfirm);
 
+        usersDatabase.child(firebaseUser.getUid()).child("playingExtra").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String ds = dataSnapshot.getValue().toString();
+                if (ds.length() != 0){
+                    Boolean play = (Boolean)dataSnapshot.getValue();
+                    tvPlayingStatus.setText("Current play status: " + play.toString());
+                }else{
+                    //is null
+                    Toast.makeText(getActivity(), "****null****", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         switchPlaying.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean playingExtra) {
-                Snackbar.make(compoundButton, "Playing: " + playingExtra, Snackbar.LENGTH_SHORT)
-                        .setAction("ACTION", null).show();
+
+                usersDatabase.child(firebaseUser.getUid()).child("playingExtra").setValue(playingExtra);
+
+
+
+                //Snackbar.make(compoundButton, "Playing: " + playingExtra, Snackbar.LENGTH_SHORT)
+                     //   .setAction("ACTION", null).show();
             }
         });
 
 
 
+
         btnConfirmStatus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-                usersDatabase.child(uId).child("isPlayingExtra").addValueEventListener(new ValueEventListener() {
+            public void onClick (View v) {
+                usersDatabase.child(firebaseUser.getUid()).child("groups").child("groupId").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String ds = dataSnapshot.toString();
-                        if(dataSnapshot.exists() || dataSnapshot.getValue() != null || ds.length() != 0){
 
-                            Log.d("USER1",ds);
-                            String isPlayingExtraMatch = dataSnapshot.getValue().toString();
+                       final String groupId = dataSnapshot.getValue().toString();
 
-                            //Boolean playing = Boolean.valueOf(isPlayingExtraMatch);
-                            boolean playing = Boolean.parseBoolean(isPlayingExtraMatch);
+                        usersDatabase.child(firebaseUser.getUid()).child("phoneNum").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            usersDatabase.child(firebaseUser.getUid()).child("playingExtra").setValue(playing);
-                            Toast.makeText(getActivity(), "CLICKED", Toast.LENGTH_SHORT).show();
+                                String ph = dataSnapshot.getValue().toString();
+                                checkingNumberInMembers(ph,groupId);
 
-                            //TODO not working
-                         //   checkingNumberInMembers(userPhone,groupId);
+                            }
 
-                        }else{
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                            //TODO
-                            Toast.makeText(getActivity(), "NULL", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-                        }
                     }
 
                     @Override
@@ -120,7 +143,7 @@ public class DisplayMatchFragment extends Fragment {
 
 
         readMatchTime(firebaseUser.getUid());
-       // readPlaying();
+         readPlaying();
         readAddedBy(firebaseUser.getUid());
         readMatchDay(firebaseUser.getUid());
         return view;
@@ -132,13 +155,15 @@ public class DisplayMatchFragment extends Fragment {
         usersDatabase.child(firebaseUser.getUid()).child("playingExtra").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists() || dataSnapshot.getValue() != null) {
-                    Boolean playingExtra = Boolean.valueOf(dataSnapshot.getValue().toString());
+                if(!dataSnapshot.exists() || dataSnapshot.getValue() == null) {
 
-                    switchPlaying.setChecked(playingExtra);
+                    Toast.makeText(getActivity(), "NULL", Toast.LENGTH_SHORT).show();
+
                 }
                 else{
-                    Toast.makeText(getActivity(), "NULL", Toast.LENGTH_SHORT).show();
+                    //Boolean playingExtra = Boolean.valueOf(dataSnapshot.getValue().toString());
+                    Boolean playingExtra = dataSnapshot.getValue(Boolean.class);
+                    switchPlaying.setChecked(playingExtra);
 
                 }
             }
@@ -152,76 +177,79 @@ public class DisplayMatchFragment extends Fragment {
     }
 
 
-    public void checkingNumberInMembers(final String userPhoneNum, String groupId){
+        public void checkingNumberInMembers(final String userPhoneNum, String groupId){
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("members");
         Log.d("DUPL0",userPhoneNum);
 
-         Query query = mDatabaseReference;
+        Query query = mDatabaseReference;
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-               // String ds = dataSnapshot.getValue().toString();
+                // String ds = dataSnapshot.getValue().toString();
                 if (dataSnapshot.getValue() != null || !dataSnapshot.exists() ) {
 
-                     //   Log.d("DUPL1", ds);
-                        final Player mPlayer = dataSnapshot.getValue(Player.class);
-                        String playerPhone = mPlayer.getPhoneNum();
-                        if (playerPhone != null){
-                           // Log.d("DUPL2", playerPhone);
+                    //   Log.d("DUPL1", ds);
+                    final Player mPlayer = dataSnapshot.getValue(Player.class);
+                    String playerPhone = mPlayer.getPhoneNum();
+                    if (playerPhone != null){
+                        // Log.d("DUPL2", playerPhone);
 
-                            if (playerPhone == null || playerPhone.equals("") || playerPhone.length() == 0) {
-                                Toast.makeText(getActivity(), "****NOT FOUND****", Toast.LENGTH_SHORT).show();
-                            } else {
-                                //TODO
-                             //   Log.d("DUPL 3", playerPhone);
-                             //   Log.d("DUPL 4", userPhoneNum);
+                        if (playerPhone == null || playerPhone.equals("") || playerPhone.length() == 0) {
+                            Toast.makeText(getActivity(), "****NOT FOUND****", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //TODO
+                            //   Log.d("DUPL 3", playerPhone);
+                            //   Log.d("DUPL 4", userPhoneNum);
 
-                                if (playerPhone != null) {
+                            if (playerPhone != null) {
 
-                                    if (playerPhone.equals(userPhoneNum)) {
-                                        final String groupId = mPlayer.getGroupId();
-                                        final String playerPushKey = dataSnapshot.getKey();
+                                if (playerPhone.equals(userPhoneNum)) {
+                                    final String groupId = mPlayer.getGroupId();
+                                    final String playerPushKey = dataSnapshot.getKey();
 
 
-                                        usersDatabase.child(firebaseUser.getUid()).child("playingExtra").addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                if (dataSnapshot.getValue() != null){
+                                    usersDatabase.child(firebaseUser.getUid()).child("playingExtra").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.getValue() != null){
                                                 //    Log.d("DUPL 5", groupId);
-                                                  //  Log.d("DUPL 6", playerPushKey);
-                                        //            Boolean em = mPlayer.getPlayingExtra();
+                                                //  Log.d("DUPL 6", playerPushKey);
 
-                                                    Toast.makeText(getActivity(), "FOUND HERE" + " " + groupId, Toast.LENGTH_SHORT).show();
-                                                  //  Log.d("DUPL 8", mPlayer.toString());
-                                                    // TODO Why isnt this working - USE THE MOVE DATA METHOD - CURRRENTLY NOT COPYING DATA OVER PROPERTLY
-                                                  //  groupsDatabase.child(groupId).child("members").child(playerPushKey).child("playingExtra").setValue(em);
+                                                Boolean em = dataSnapshot.getValue(Boolean.class);
 
-                                                }
-                                            }
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
+                                                //Boolean em = mPlayer.getPlayingExtra(Boolean.class);
+
+                                                Toast.makeText(getActivity(), "FOUND HERE" + " " + groupId, Toast.LENGTH_SHORT).show();
+                                                //  Log.d("DUPL 8", mPlayer.toString());
+                                                // TODO Why isnt this working - USE THE MOVE DATA METHOD - CURRRENTLY NOT COPYING DATA OVER PROPERTLY
+                                                  groupsDatabase.child(groupId).child("members").child(playerPushKey).child("playingExtra").setValue(em);
 
                                             }
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
 
-                                        });
+                                        }
+
+                                    });
 
 
-                                    } else if (playerPhone == null) {
-                                        Toast.makeText(getActivity(), "3 CHECKECK", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(getActivity(), "THERE IS A USER IN DB WITH PHONE NULL ", Toast.LENGTH_SHORT).show();
-
-                                    }
+                                } else if (playerPhone == null) {
+                                    Toast.makeText(getActivity(), "3 CHECKECK", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(getActivity(), "USER PHONE NULL ", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "THERE IS A USER IN DB WITH PHONE NULL ", Toast.LENGTH_SHORT).show();
 
                                 }
-                            }
-                    }else{
-                            Toast.makeText(getActivity(), "player phone null", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), "USER PHONE NULL ", Toast.LENGTH_SHORT).show();
 
+                            }
                         }
+                    }else{
+                        Toast.makeText(getActivity(), "player phone null", Toast.LENGTH_SHORT).show();
+
+                    }
                 }
             }
             @Override
@@ -258,14 +286,14 @@ public class DisplayMatchFragment extends Fragment {
 
                     Group mGroup = dataSnapshot.child("groups").getValue(Group.class);
                     String groupId = mGroup.getGroupId();
-                 //   String p = isPlayingExtraMatch;
-                //    Log.d("DUPL8",p);
+                    //   String p = isPlayingExtraMatch;
+                    //    Log.d("DUPL8",p);
 
-               //     Boolean extraMatch= Boolean.valueOf(p);
-                //    Log.d("extraMatch",extraMatch.toString());
-                //    mPlayer.setPlayingExtra(extraMatch);
+                    //     Boolean extraMatch= Boolean.valueOf(p);
+                    //    Log.d("extraMatch",extraMatch.toString());
+                    //    mPlayer.setPlayingExtra(extraMatch);
 
-                 //   groupsDatabase.child(groupId).child("members").child(playerPushKey).setValue(mPlayer);
+                    //   groupsDatabase.child(groupId).child("members").child(playerPushKey).setValue(mPlayer);
 
                 }else{
 

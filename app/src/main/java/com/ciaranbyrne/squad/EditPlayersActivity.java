@@ -434,7 +434,7 @@ public class EditPlayersActivity extends AppCompatActivity {
 
                                 moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
                                         usersDatabase.child(invitedUid).child("groups"));
-                                
+
                                 // TODO IF INVITE GROUP ID MATCHES USER INVITED GROUP ID OR DOES NOT EXIST
                                 usersDatabase.child(invitedUid).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override

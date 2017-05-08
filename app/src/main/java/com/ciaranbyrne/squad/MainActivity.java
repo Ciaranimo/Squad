@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //TODO Check if user has been added to match
-    private void userAddedToMatch(final String userId) {
+    private void userAddedToMatch(final String userId) { // 2
         if (userId != null) {
             usersDatabase.child(userId).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
                         if(usersDatabase.child(userId).child("playingExtra") != null){
                             // value in here alread
                             Toast.makeText(MainActivity.this, "VALUE IN USERS PLAY EXTRA NODE ALREADY ", Toast.LENGTH_SHORT).show();
+
                         }else{
                             // empty
                             usersDatabase.child(userId).child("playingExtra").setValue(false);
@@ -264,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                         //user has phone number, do something
                       //  Toast.makeText(MainActivity.this, "User has phone Num ", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "User has phone");
-                        userAddedToMatch(userId);
+                        userAddedToMatch(userId); // 3
                     }
                 }
 
@@ -305,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "User does not have phone do not start match check", Toast.LENGTH_SHORT).show();
             } else {
                 // user has phoe num
-                userAddedToMatch(user.getUid());
+                userAddedToMatch(user.getUid()); // 1
 
             }
 
