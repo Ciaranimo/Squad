@@ -32,13 +32,14 @@ public class PlayersAdapter extends ArrayAdapter<Player> {
         TextView tvPhone = (TextView) convertView.findViewById(R.id.playerPhoneTextView);
         // Populate the data into the template view using the data object
         tvName.setText(player.name);
-        tvPhone.setText(player.phoneNum);
+        tvPhone.setText("Not Yet Confirmed");
 
         if(player.getPlayingExtra() == true){
             //playing
             convertView.setBackgroundColor(getContext().getColor(R.color.colorPrimary));
             tvName.setTextColor(getContext().getColor(R.color.white));
             tvPhone.setTextColor(getContext().getColor(R.color.white));
+            tvPhone.setText("Confirmed");
 
 
         }else{
