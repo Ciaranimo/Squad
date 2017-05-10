@@ -157,7 +157,8 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(MainActivity.this, "Error ", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Error ", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"Error");
                 }
             });
         }
@@ -185,7 +186,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"Error");
+
             }
         });
     }
@@ -201,14 +204,16 @@ public class MainActivity extends AppCompatActivity {
                     if (ds.length() == 0 || dataSnapshot.getValue() == null) {
                         Log.d("DS", dataSnapshot.toString());
                         // user has not been added to a match
-                        Toast.makeText(MainActivity.this, "User has not been added to any matches ", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "User has not been added to any matches ", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"User has not beend added to any matches");
 
                     } else {
                     //    Toast.makeText(MainActivity.this, "User has been added to a match ", Toast.LENGTH_SHORT).show();
 
                         if(usersDatabase.child(userId).child("playingExtra") != null){
                             // value in here alread
-                            Toast.makeText(MainActivity.this, "VALUE IN USERS PLAY EXTRA NODE ALREADY ", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(MainActivity.this, "VALUE IN USERS PLAY EXTRA NODE ALREADY ", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG,"value in node already");
 
                         }else{
                             // empty
@@ -229,7 +234,8 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(MainActivity.this, "ERROR ", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(MainActivity.this, "ERROR ", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"Error");
 
                 }
             });
@@ -250,7 +256,8 @@ public class MainActivity extends AppCompatActivity {
                     String ds = dataSnapshot.toString();
                     if (ds.length() == 0 || dataSnapshot.getValue() == null) {
                         //user does not have phone number, do something else
-                        Toast.makeText(MainActivity.this, "User does NOT have phone num ", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(MainActivity.this, "User does NOT have phone num ", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"user does not have phone");
 
                         // CODE REF - http://stackoverflow.com/questions/14347588/show-hide-fragment-in-android
                         // Begin the transaction
@@ -272,11 +279,15 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"Error");
+
                 }
             });
         } else {
-            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
+           // Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
+            Log.d(TAG,"Error");
+
         }
     }
 
@@ -304,7 +315,9 @@ public class MainActivity extends AppCompatActivity {
             if (usersDatabase.child(user.getUid()).child("phoneNum") == null) {
 
                 //user does not have phone do not start check for match
-                Toast.makeText(MainActivity.this, "User does not have phone do not start match check", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "User does not have phone do not start match check", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"user does not have phone ");
+
             } else {
                 // user has phoe num
                 userAddedToMatch(user.getUid()); // 1

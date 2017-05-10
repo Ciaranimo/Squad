@@ -177,7 +177,9 @@ public class EditPlayersActivity extends AppCompatActivity {
                         String ds = dataSnapshot.toString();
                         Log.d("1DATA",dataSnapshot.toString());
                         if (dataSnapshot == null || ds.length() == 0) {
-                            Toast.makeText(getApplicationContext(), "NULL",Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(getApplicationContext(), "NULL",Toast.LENGTH_SHORT).show();
+                            Log.d(TAG,"Null");
+
                         }else{
                             String phoneNum = dataSnapshot.getValue().toString();
                             Log.d("1DATA PHONE",phoneNum);
@@ -187,7 +189,9 @@ public class EditPlayersActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(getApplicationContext(), "DATABASE ERROR", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "DATABASE ERROR", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"DB error");
+
 
                     }
                 });
@@ -365,7 +369,8 @@ public class EditPlayersActivity extends AppCompatActivity {
                     String userPhone = mUser.getPhoneNum();
                     if (userPhone == null || userPhone.equals("") || userPhone.length() == 0 ){
 
-                        Toast.makeText(getApplicationContext(), "USER PHONE NULL YOY OYOY OY " , Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getApplicationContext(), "USER PHONE NULL YOY OYOY OY " , Toast.LENGTH_LONG).show();
+                        Log.d(TAG,"user phone null");
 
                         // String userSearchNum = userPhone.substring( userPhone.length()-7);
                         //     String playerSearchNum = playerPhoneNum.substring( playerPhoneNum.length() -7);
@@ -373,9 +378,10 @@ public class EditPlayersActivity extends AppCompatActivity {
                         //Log.d("TAGG 5",userSearchNum);
                         //     Log.d("TAGG 6", playerSearchNum);
                         if(userPhone == null){
-                            Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_LONG).show();
+                          //  Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_LONG).show();
+                            Log.d(TAG,"phone null");
 
-                            }
+                        }
                         }else{
 
                             //TODO
@@ -383,19 +389,25 @@ public class EditPlayersActivity extends AppCompatActivity {
                         if(userPhone.equals(playerPhoneNum)) {
                             String uId = mUser.getUid();
                             deleteMathcFromUser(uId);
-                            Toast.makeText(getApplicationContext(), "FOUND NUM TO DELETE" + " " + uId, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), "FOUND NUM TO DELETE" + " " + uId, Toast.LENGTH_LONG).show();
+                            Log.d(TAG,"found num to delete");
 
                         }else if(userPhone == null){
-                            Toast.makeText(getApplicationContext(), "DELETE NUM CHECK NULL", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getApplicationContext(), "DELETE NUM CHECK NULL", Toast.LENGTH_LONG).show();
+                            Log.d(TAG,"check null");
+
                         }
                         else{
-                            Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
+                         //   Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
+                            Log.d(TAG,"check null");
 
                         }
                     }
                 } else {
-                    //TODO
-                    Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                    //
+                  //  Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                    Log.d(TAG,"check null");
+
                 }
             }
             @Override
@@ -434,8 +446,10 @@ public class EditPlayersActivity extends AppCompatActivity {
                     User mUser = dataSnapshot.getValue(User.class);
                     String userPhone = mUser.getPhoneNum();
                     if (userPhone == null || userPhone.equals("") ){
-                        Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
-                } else {
+                       // Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                        Log.d(TAG,"not found");
+
+                    } else {
                     //TODO
                         Log.d("TAGG 3",userPhone);
                         Log.d("TAGG 4",playerPhoneNum);
@@ -484,14 +498,19 @@ public class EditPlayersActivity extends AppCompatActivity {
                                 });
 
                             }else if(userPhone == null){
-                                Toast.makeText(getApplicationContext(), "3 CHECKECK", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "3 CHECKECK", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG,"check null");
+
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_SHORT).show();
+                                Log.d(TAG,"check null");
 
                             }
                         }else{
-                            Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_SHORT).show();
+                            Log.d(TAG,"check null");
+
 
                         }
                     }

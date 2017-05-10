@@ -85,7 +85,7 @@
         android:layout_below="@+id/tvPlayerCount"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="11dp"
-        android:text="Green players have confirmed attendance, White players are yet to confrim"
+        android:text="Green players have confirmed attendance. Long click to delete players"
         android:textAlignment="center" />
 
 </RelativeLayout>

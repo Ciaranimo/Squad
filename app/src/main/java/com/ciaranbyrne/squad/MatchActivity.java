@@ -330,7 +330,9 @@ public class MatchActivity extends AppCompatActivity {
                     User mUser = dataSnapshot.getValue(User.class);
                     String userPhone = mUser.getPhoneNum();
                     if (userPhone == null || userPhone.equals("") ){
-                        Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getApplicationContext(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                        Log.d(TAG,"Not found");
+
                     } else {
                         //TODO
                         Log.d("MATCH 2",userPhone);
@@ -359,7 +361,7 @@ public class MatchActivity extends AppCompatActivity {
                                                 moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
                                                         usersDatabase.child(invitedUid).child("groups"));
 
-                                                Toast.makeText(getApplicationContext(), "* found **" + " " + invitedUid, Toast.LENGTH_SHORT).show();
+                                              //  Toast.makeText(getApplicationContext(), "* found **" + " " + invitedUid, Toast.LENGTH_SHORT).show();
 
                                             } else {
                                                 // it does not matchh so warn inviting user that thay are already involved in a match
@@ -367,7 +369,7 @@ public class MatchActivity extends AppCompatActivity {
 
                                                 String pushKey = dataSnapshot.getKey();
                                                 Log.d("push", pushKey);
-                                                Toast.makeText(getApplicationContext(), "This player is already a member of a Squad, please update", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "This player is already a member of a Squad", Toast.LENGTH_SHORT).show();
                                                 //usersDatabase.child(firebaseUser.getUid()).child("members").child(pushKey).child("additionalMatch").setValue(false);
                                             }
                                         }
@@ -375,19 +377,26 @@ public class MatchActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
-                                        Toast.makeText(getApplicationContext(), "Error with invite copy", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(getApplicationContext(), "Error with invite copy", Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG,"Error");
+
                                     }
                                 });
 
                             }else if(userPhone == null){
-                                Toast.makeText(getApplicationContext(), "3 CHECKECK", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "3 CHECKECK", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG,"Error");
+
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_SHORT).show();
+                              //  Toast.makeText(getApplicationContext(), "THERE IS A USER IN DB WITH PHONE NULL " , Toast.LENGTH_SHORT).show();
+                                Log.d(TAG,"user with null");
+
 
                             }
                         }else{
-                            Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), "USER PHONE NULL " , Toast.LENGTH_SHORT).show();
+                            Log.d(TAG,"user phone null");
 
                         }
                     }
@@ -437,9 +446,12 @@ public class MatchActivity extends AppCompatActivity {
 
 
                         if (databaseError != null) {
-                            Toast.makeText(getApplicationContext(), "COPY FAILED", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getApplicationContext(), "COPY FAILED", Toast.LENGTH_LONG).show();
+                            Log.d(TAG,"Copy fail");
+
                         } else {
-                            Toast.makeText(getApplicationContext(), "COPY SUCCESS", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), "COPY SUCCESS", Toast.LENGTH_LONG).show();
+                            Log.d(TAG,"copy success");
 
                         }
                     }
@@ -448,7 +460,9 @@ public class MatchActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "onCancelled- copy fail", Toast.LENGTH_LONG).show();
+          //      Toast.makeText(getApplicationContext(), "onCancelled- copy fail", Toast.LENGTH_LONG).show();
+                Log.d(TAG,"on cancel copy fail");
+
 
             }
         });

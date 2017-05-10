@@ -67,12 +67,12 @@
         android:id="@+id/tvResultPlayerNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0000"
-        android:textAlignment="center"
-        android:textSize="24sp"
         android:layout_below="@+id/tvHeadingNumOfPlayers"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp" />
+        android:layout_marginTop="21dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/tvDay"
@@ -81,7 +81,6 @@
         android:layout_below="@+id/tvResultPlayerNum"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:text="Day of @string/edit_match"
         android:textSize="24sp" />
 
     <TextView
@@ -91,7 +90,6 @@
         android:layout_below="@+id/tvDay"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="19dp"
-        android:text="TextView"
         android:textSize="24sp" />
 
     <TextView
@@ -101,7 +99,6 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/daySpinner"
         android:layout_marginTop="20dp"
-        android:text="TextView"
         android:textAlignment="center"
         android:textSize="18sp" />
 

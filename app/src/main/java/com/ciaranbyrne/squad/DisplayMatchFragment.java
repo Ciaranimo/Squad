@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
  */
 
 public class DisplayMatchFragment extends Fragment {
+    private static final String TAG = "DisplayMatch";
 
     private TextView tvAddedBy;
     private TextView tvMatchTime;
@@ -89,7 +90,7 @@ public class DisplayMatchFragment extends Fragment {
         btnConfirmStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
-                usersDatabase.child(firebaseUser.getUid()).child("groups").child("groupId").addValueEventListener(new ValueEventListener() {
+                usersDatabase.child(firebaseUser.getUid()).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -101,6 +102,7 @@ public class DisplayMatchFragment extends Fragment {
 
                                 String ph = dataSnapshot.getValue().toString();
                                 checkingNumberInMembers(ph,groupId);
+                                Toast.makeText(getActivity(),"Status updated",Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -132,13 +134,13 @@ public class DisplayMatchFragment extends Fragment {
 
     // Read playing times from DB
     private void readPlaying() {
-        usersDatabase.child(firebaseUser.getUid()).child("playingExtra").addValueEventListener(new ValueEventListener() {
+        usersDatabase.child(firebaseUser.getUid()).child("playingExtra").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists() || dataSnapshot.getValue() == null) {
 
-                    Toast.makeText(getActivity(), "NULL", Toast.LENGTH_SHORT).show();
-
+                  //  Toast.makeText(getActivity(), "NULL", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"null");
                 }
                 else{
                     //Boolean playingExtra = Boolean.valueOf(dataSnapshot.getValue().toString());
@@ -150,7 +152,9 @@ public class DisplayMatchFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"cancelled");
+
 
             }
         });
@@ -176,7 +180,9 @@ public class DisplayMatchFragment extends Fragment {
                         // Log.d("DUPL2", playerPhone);
 
                         if (playerPhone == null || playerPhone.equals("") || playerPhone.length() == 0) {
-                            Toast.makeText(getActivity(), "****NOT FOUND****", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(getActivity(), "****NOT FOUND****", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG,"not found");
+
                         } else {
                             //TODO
                             //   Log.d("DUPL 3", playerPhone);
@@ -189,7 +195,7 @@ public class DisplayMatchFragment extends Fragment {
                                     final String playerPushKey = dataSnapshot.getKey();
 
 
-                                    usersDatabase.child(firebaseUser.getUid()).child("playingExtra").addValueEventListener(new ValueEventListener() {
+                                    usersDatabase.child(firebaseUser.getUid()).child("playingExtra").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             if (dataSnapshot.getValue() != null){
@@ -200,8 +206,10 @@ public class DisplayMatchFragment extends Fragment {
 
                                                 //Boolean em = mPlayer.getPlayingExtra(Boolean.class);
 
-                                                Toast.makeText(getActivity(), "FOUND HERE" + " " + groupId, Toast.LENGTH_SHORT).show();
+                                             //   Toast.makeText(getActivity(), "FOUND HERE" + " " + groupId, Toast.LENGTH_SHORT).show();
                                                 //  Log.d("DUPL 8", mPlayer.toString());
+                                                Log.d(TAG,"check null");
+
                                                 // TODO Why isnt this working - USE THE MOVE DATA METHOD - CURRRENTLY NOT COPYING DATA OVER PROPERTLY
                                                   groupsDatabase.child(groupId).child("members").child(playerPushKey).child("playingExtra").setValue(em);
 
@@ -216,18 +224,23 @@ public class DisplayMatchFragment extends Fragment {
 
 
                                 } else if (playerPhone == null) {
-                                    Toast.makeText(getActivity(), "3 CHECKECK", Toast.LENGTH_SHORT).show();
+                                   // Toast.makeText(getActivity(), "3 CHECKECK", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG,"null");
+
                                 } else {
-                                    Toast.makeText(getActivity(), "THERE IS A USER IN DB WITH PHONE NULL ", Toast.LENGTH_SHORT).show();
+                                   // Toast.makeText(getActivity(), "THERE IS A USER IN DB WITH PHONE NULL ", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG,"null");
 
                                 }
                             } else {
-                                Toast.makeText(getActivity(), "USER PHONE NULL ", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getActivity(), "USER PHONE NULL ", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG,"null");
 
                             }
                         }
                     }else{
-                        Toast.makeText(getActivity(), "player phone null", Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(getActivity(), "player phone null", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"null");
 
                     }
                 }
@@ -310,9 +323,12 @@ public class DisplayMatchFragment extends Fragment {
 
 
                         if (databaseError != null) {
-                            Toast.makeText(getActivity(), "COPY FAILED", Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(getActivity(), "COPY FAILED", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG,"copy success");
+
                         } else {
-                            Toast.makeText(getActivity(), "COPY SUCCESS", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "COPY SUCCESS", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG,"copy faile");
 
                         }
                     }
@@ -321,7 +337,9 @@ public class DisplayMatchFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "onCancelled- copy fail", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getActivity(), "onCancelled- copy fail", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"copy fail");
+
 
             }
         });
@@ -341,7 +359,7 @@ public class DisplayMatchFragment extends Fragment {
 
                 } else {
 
-                    Toast.makeText(getActivity(), " Read error", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getActivity(), " Read error", Toast.LENGTH_SHORT).show();
 
                     Log.e("Read Error", dataSnapshot.toString());
 
@@ -350,7 +368,7 @@ public class DisplayMatchFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), " Database error", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getActivity(), " Database error", Toast.LENGTH_SHORT).show();
 
                 Log.e("Read Error", "Database error");
             }
@@ -368,7 +386,7 @@ public class DisplayMatchFragment extends Fragment {
                     tvMatchDay.setText(matchDay);
                 } else {
 
-                    Toast.makeText(getActivity(), " Read error", Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(getActivity(), " Read error", Toast.LENGTH_SHORT).show();
 
                     Log.e("Read Error", dataSnapshot.toString());
                 }
@@ -376,7 +394,7 @@ public class DisplayMatchFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), " Database error", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getActivity(), " Database error", Toast.LENGTH_SHORT).show();
 
                 Log.e("Read Error", "Database error");
             }
@@ -393,7 +411,7 @@ public class DisplayMatchFragment extends Fragment {
                     String matchTime = dataSnapshot.getValue().toString();
                     tvMatchTime.setText(matchTime);
                 } else {
-                    Toast.makeText(getActivity(), " Read error", Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(getActivity(), " Read error", Toast.LENGTH_SHORT).show();
 
                     Log.e("Read Error", dataSnapshot.toString());
                 }
@@ -401,7 +419,7 @@ public class DisplayMatchFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), " Database error", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(getActivity(), " Database error", Toast.LENGTH_SHORT).show();
 
                 Log.e("Read Error", databaseError.toString());
             }

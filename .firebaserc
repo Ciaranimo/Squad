@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "squad-b0402"
+    "default": "squad-b0402",
+    "squad": "squad-b0402"
   }
 }
