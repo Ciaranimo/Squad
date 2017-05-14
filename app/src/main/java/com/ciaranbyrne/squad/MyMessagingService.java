@@ -41,7 +41,7 @@ public class MyMessagingService extends FirebaseMessagingService {
         Uri notificationSoundURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder mNotificationBuilder = new NotificationCompat.Builder( this)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Android Tutorial Point FCM Tutorial")
+                .setContentTitle("You have been added to a group!")
                 .setContentText(messageBody)
                 .setAutoCancel( true )
                 .setSound(notificationSoundURI)

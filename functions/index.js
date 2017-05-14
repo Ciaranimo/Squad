@@ -92,7 +92,7 @@ exports.sendEmailGroupConf = functions.database.ref('/users/{uid}').onWrite(even
 ///push try
 /// PUSH NOTIFICATION - CODE REF - https://github.com/firebase/functions-samples/tree/master/fcm-notifications
 // DEVELOPED FROM ABOVE
-exports.sendNotification = functions.database.ref('/users/{uid}/')
+exports.sendNotification = functions.database.ref('/users/{uid}/groups')
     .onWrite(event => {
 
         const user = event.data.current.val();
@@ -117,8 +117,8 @@ exports.sendNotification = functions.database.ref('/users/{uid}/')
 
               const payload = {
         notification: {
-          title: 'You have a new follower!',
-          body: ` is now following you.`
+          title: 'You have a new follower!' ,
+          body: ` Check your Squad App for details.`
         }
   };
             admin.messaging().sendToDevice(refreshedToken, payload)
