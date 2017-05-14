@@ -105,20 +105,13 @@ public class MainActivity extends AppCompatActivity {
                     onSignedInInitialize(user.getDisplayName(), user.getUid());
                     // add user instance to realtime database
 
-                    writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail(), null, null,null, null,null);
+                    writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail(), null, null,null, null);
                     readUserInfo(user.getDisplayName());
                     Toast.makeText(MainActivity.this, "Signed in", Toast.LENGTH_SHORT).show();
 
                     // For FCM , gets refreshed token
                     // code ref - http://stackoverflow.com/questions/37787373/firebase-fcm-how-to-get-token
 
-                    String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-                    if (refreshedToken != null) {
-                        rootDatabase.child("users")
-                                .child(user.getUid())
-                                .child("refreshedToken")
-                                .setValue(refreshedToken);
-                    }
 
 
                 } else {
@@ -145,10 +138,18 @@ public class MainActivity extends AppCompatActivity {
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
     private void writeNewUser(final String userId, final String name, final String email,
-                              final String phoneNum, final String searchNum, final Boolean playingExtra, String groupId, final String refreshedToken) {
+                              final String phoneNum, final String searchNum, final Boolean playingExtra, String groupId) {
 
 
-
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        /*
+        if (refreshedToken != null) {
+            rootDatabase.child("users")
+                    .child(userId)
+                    .child("refreshedToken")
+                    .setValue(refreshedToken);
+        }
+        */
 
         final User user = new User(userId, name, email, phoneNum, searchNum, playingExtra, groupId, refreshedToken);
 
@@ -352,6 +353,8 @@ public class MainActivity extends AppCompatActivity {
     private void onSignedInInitialize(String username, String userId) {
         mUsername = username;
         mUserId = userId;
+
+
 
         writeNewGroup(mUserId);
 

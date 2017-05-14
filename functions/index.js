@@ -4,28 +4,8 @@ var admin = require('firebase-admin');
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
-
-/**
- * Copyright 2015 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 /// USER EMAIL REG NOTIFICATION
-
+// Code Ref - https://github.com/firebase/functions-samples 
 'use strict';
 
 const functions = require('firebase-functions');
@@ -63,36 +43,11 @@ exports.sendEmailConfirmation = functions.database.ref('/users/{uid}/uid').onWri
   });
 });
 
-/*
-// EMAIL TO SAY YOU HAVE BEEN ADDED TO A GROUP
-exports.sendEmailGroupConf = functions.database.ref('/users/{uid}').onWrite(event => {
-  const snapshot = event.data;
-  const val = snapshot.val();
-
-  if (!snapshot.changed('email')) {
-    return;
-  }
-
-  const mailOptions = {
-    from: '"Squad Dev Team" <noreply@firebase.com>',
-    to: val.email
-  };
-
-
-  // The user unsubscribed to the newsletter.
-  mailOptions.subject = 'You have been invited to a Match';
-  mailOptions.text = 'Please check your Squad App.';
-  return mailTransport.sendMail(mailOptions).then(() => {
-    console.log('Added to group confirmation email sent to:', val.email);
-  });
-  });
-
-*/
 
 ///push try
 /// PUSH NOTIFICATION - CODE REF - https://github.com/firebase/functions-samples/tree/master/fcm-notifications
 // DEVELOPED FROM ABOVE
-exports.sendNotification = functions.database.ref('/users/{uid}/groups')
+exports.sendNotification = functions.database.ref('/users/{uid}/')
     .onWrite(event => {
 
         const user = event.data.current.val();
@@ -117,7 +72,7 @@ exports.sendNotification = functions.database.ref('/users/{uid}/groups')
 
               const payload = {
         notification: {
-          title: 'You have a new follower!' ,
+          title: 'You have been added to a group!',
           body: ` Check your Squad App for details.`
         }
   };

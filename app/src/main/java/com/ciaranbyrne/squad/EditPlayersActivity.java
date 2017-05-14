@@ -34,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,7 +125,6 @@ public class EditPlayersActivity extends AppCompatActivity {
 
         tvPlayerCount = (TextView)findViewById(R.id.tvPlayerCount);
 
-        // TODO THIS IS CAUSING ERRORS! ***
         //setting player count
         groupsDatabase.child(userId).child("members").addValueEventListener(new ValueEventListener() {
             @Override
@@ -135,7 +135,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                 Log.d("COUNT", l);
 
                 if((count == 0) || (dataSnapshot.getValue() == null)) {
-                    Log.d("Null","Null");
+                    Log.d(TAG,"Null");
                   //  tvPlayerCount.setText("");
 
                 }else {
@@ -180,7 +180,7 @@ public class EditPlayersActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 String clickedKey = keysList.get(position);
                // clickedKey = clickedKey.get
-                Log.d("1DATA",clickedKey);
+                Log.d(TAG,clickedKey);
 
                 DatabaseReference usersGroupRef = usersGroupDatabase.child(clickedKey).child("phoneNum");
                final Query query = usersGroupRef;
@@ -189,7 +189,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String ds = dataSnapshot.toString();
-                        Log.d("1DATA",dataSnapshot.toString());
+                        Log.d(TAG,dataSnapshot.toString());
                         if (dataSnapshot == null || ds.length() == 0) {
                            // Toast.makeText(getApplicationContext(), "NULL",Toast.LENGTH_SHORT).show();
                             Log.d(TAG,"Null");
@@ -197,7 +197,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                         }else{
                             String phoneNum = dataSnapshot.getValue().toString();
                             Log.d("1DATA PHONE",phoneNum);
-                            //TODO CHECK THIS WORKS!!!
+                            // CHECK THIS WORKS!!!
                             checkNumForDelete(phoneNum);
                         }
                     }
@@ -311,6 +311,17 @@ public class EditPlayersActivity extends AppCompatActivity {
         permissionsCheck();
 
 
+
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+
+        if (refreshedToken != null) {
+            usersDatabase
+                    .child(userId)
+                    .child("refreshedToken")
+                    .setValue(refreshedToken);
+        }
+
+
     }// End of onCreate
 
 
@@ -355,7 +366,7 @@ public class EditPlayersActivity extends AppCompatActivity {
 
     }
 
-    // TODO delete match from user's node
+    //  delete match from user's node
     public void deleteMathcFromUser(String uId){
         String userId = uId;
         if(usersDatabase.child(userId).child("groups") != null) {
@@ -363,9 +374,8 @@ public class EditPlayersActivity extends AppCompatActivity {
         }
     }
 
-    //TODO CHECK GROUP ID BEFORE INVITE
 
-
+    // code modified from ref -http://stackoverflow.com/questions/43758597/firebase-datasnapshot-null-values?noredirect=1&lq=1
 
     // checking by phone number for async deletion
     public void checkNumForDelete(final String playerPhoneNum){
@@ -398,7 +408,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                         }
                         }else{
 
-                            //TODO
+                            //
 
                         if(userPhone.equals(playerPhoneNum)) {
                             String uId = mUser.getUid();
@@ -445,8 +455,9 @@ public class EditPlayersActivity extends AppCompatActivity {
             }
         });
     }
+    // code modified from ref -http://stackoverflow.com/questions/43758597/firebase-datasnapshot-null-values?noredirect=1&lq=1
 
-    // working now ..not sure
+    // check number for copying data to user profile
     public void checkingNumber(final String playerPhoneNum, final String playerGroupId){
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("users");
@@ -484,30 +495,40 @@ public class EditPlayersActivity extends AppCompatActivity {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         if (dataSnapshot.getValue() != null) {
                                             String ds = dataSnapshot.getValue().toString();
-                                            if (ds.equals(playerGroupId)) {
+                                            if (dataSnapshot.getValue() != playerGroupId) {
                                                 // then it matches so we can move data
+                                                Log.d("EditPlayer", "Player already member of group");
+
+                                                //   String pushKey = dataSnapshot.getKey();
+                                                //  Log.d("push", pushKey);
+                                                Toast.makeText(getApplicationContext(), "Player is already a member of a Squad, please update", Toast.LENGTH_SHORT).show();
+
+
+                                                //  Toast.makeText(getApplicationContext(), "* found **" + " " + invitedUid, Toast.LENGTH_SHORT).show();
+
+                                            } else if (dataSnapshot.getValue() == playerGroupId){
+                                                // it does not matchh so warn inviting user that thay are already involved in a match
+
                                                 Log.d("Invited 2", ds);
                                                 Log.d("Invited 3", playerGroupId);
                                                 moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
                                                         usersDatabase.child(invitedUid).child("groups"));
 
-                                              //  Toast.makeText(getApplicationContext(), "* found **" + " " + invitedUid, Toast.LENGTH_SHORT).show();
 
-                                            } else {
-                                                // it does not matchh so warn inviting user that thay are already involved in a match
+                                                //usersDatabase.child(firebaseUser.getUid()).child("members").child(pushKey).child("additionalMatch").setValue(false);
+                                            }else{
+
                                                 Log.e("EditPlayer", "Player already member of group");
 
-                                                String pushKey = dataSnapshot.getKey();
-                                                Log.d("push", pushKey);
-                                                Toast.makeText(getApplicationContext(), "This player is already a member of a Squad, please update", Toast.LENGTH_SHORT).show();
-                                                //usersDatabase.child(firebaseUser.getUid()).child("members").child(pushKey).child("additionalMatch").setValue(false);
                                             }
                                         }
                                     }
 
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
-                                        Toast.makeText(getApplicationContext(), "Error with invite copy", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(getApplicationContext(), "Error with invite copy", Toast.LENGTH_SHORT).show();
+                                        Log.e("EditPlayer", "error");
+
                                     }
                                 });
 
@@ -554,6 +575,7 @@ public class EditPlayersActivity extends AppCompatActivity {
 
 
 // Working now
+    // code modified from ref - https://gist.github.com/katowulf/6099042
     public void moveFirebaseRecord(DatabaseReference fromPath, final DatabaseReference toPath) {
 
             Log.d("moveRec", String.valueOf(fromPath));
@@ -574,9 +596,11 @@ public class EditPlayersActivity extends AppCompatActivity {
 
 
                             if (databaseError != null) {
-                                Toast.makeText(getApplicationContext(), "COPY FAILED", Toast.LENGTH_LONG).show();
+                             //   Toast.makeText(getApplicationContext(), "COPY FAILED", Toast.LENGTH_LONG).show();
+                                Log.d(TAG,"FAIL");
                             } else {
-                                Toast.makeText(getApplicationContext(), "COPY SUCCESS", Toast.LENGTH_LONG).show();
+                             //   Toast.makeText(getApplicationContext(), "COPY SUCCESS", Toast.LENGTH_LONG).show();
+                                Log.d(TAG,"Success");
 
                             }
                         }
@@ -704,7 +728,7 @@ public class EditPlayersActivity extends AppCompatActivity {
         }
     }
 
-    //  METHOD FOR SEARCHING CONTACTS
+    //  METHOD FOR accessing CONTACTS
     private void setupSearchView() {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) findViewById(R.id.etNewPlayer);

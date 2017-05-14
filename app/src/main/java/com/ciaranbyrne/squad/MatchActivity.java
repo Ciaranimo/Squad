@@ -325,6 +325,7 @@ public class MatchActivity extends AppCompatActivity {
             }
         });
     }
+    // code modified from ref -http://stackoverflow.com/questions/43758597/firebase-datasnapshot-null-values?noredirect=1&lq=1
 
     public void checkingNumber(final String playerPhoneNum, final String playerGroupId){
         DatabaseReference mDatabaseReference =
@@ -357,7 +358,7 @@ public class MatchActivity extends AppCompatActivity {
                                 moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
                                         usersDatabase.child(invitedUid).child("groups"));
 
-                                // TODO IF INVITE GROUP ID MATCHES USER INVITED GROUP ID OR DOES NOT EXIST
+                                //  IF INVITE GROUP ID MATCHES USER INVITED GROUP ID OR DOES NOT EXIST
                                 usersDatabase.child(invitedUid).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -435,6 +436,7 @@ public class MatchActivity extends AppCompatActivity {
 
 
 
+// code modified from ref https://gist.github.com/katowulf/6099042
     public void moveFirebaseRecord(DatabaseReference fromPath, final DatabaseReference toPath) {
 
         Log.d("moveRec", String.valueOf(fromPath));

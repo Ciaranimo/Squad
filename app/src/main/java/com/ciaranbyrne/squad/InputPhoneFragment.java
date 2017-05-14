@@ -78,7 +78,7 @@ public class InputPhoneFragment extends Fragment{
                 usersDatabase.child(firebaseUser.getUid()).child("searchNum").setValue(searchNum);
                 Log.d("FRAGPHONE",ph);
 
-                Toast.makeText(getActivity()," Save button clicked" + ph, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),"Phone number Saved: " + ph, Toast.LENGTH_LONG).show();
 
                 etInputNum.setText("");
 
@@ -92,11 +92,7 @@ public class InputPhoneFragment extends Fragment{
 
     }// end onCreate
 
-    private void savePhoneNum(String phoneNum) {
-        String ph = "TESTSTSTST";
-        usersDatabase.setValue(ph);
 
-    }
 
     @Override
     public void onDetach() {
@@ -104,13 +100,14 @@ public class InputPhoneFragment extends Fragment{
 
     }
 
+    // code modified from ref -http://stackoverflow.com/questions/43758597/firebase-datasnapshot-null-values?noredirect=1&lq=1
 
     //   works  - check to see if user exists in groups node
     public void checkingNumber(final String userPhoneNum){
         DatabaseReference mDatabaseReference =
                 FirebaseDatabase.getInstance().getReference().child("players");
-        Toast.makeText(getActivity(), "TESSSSSSST", Toast.LENGTH_LONG).show();
-
+       // Toast.makeText(getActivity(), "TESSSSSSST", Toast.LENGTH_LONG).show();
+            Log.d("checking","method start");
         final Query query = mDatabaseReference;
         query.addChildEventListener(new ChildEventListener() {
             @Override
@@ -127,22 +124,27 @@ public class InputPhoneFragment extends Fragment{
                         if(playerPhone.equals(userPhoneNum)) {
                             String name = mPlayer.getName();
 
-                            Toast.makeText(getActivity(), "* found **" + " " + name, Toast.LENGTH_LONG).show();
-                            //TODO copy match details to user node
+                            //Toast.makeText(getActivity(), "* found **" + " " + name, Toast.LENGTH_LONG).show();
+                            // copy match details to user node
                             moveFirebaseRecord(groupsDatabase.child(groupId).child("matches"),
                                     usersDatabase.child(firebaseUser.getUid()).child("groups"));
 
                         }else if(playerPhone == null){
-                            Toast.makeText(getActivity(), "", Toast.LENGTH_LONG).show();
+                          //  Toast.makeText(getActivity(), "", Toast.LENGTH_LONG).show();
+                            Log.d("checking number","method start");
+
                         }
                         else{
-                            Toast.makeText(getActivity(), "THERE IS A PLAYER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getActivity(), "THERE IS A PLAYER IN DB WITH PHONE NULL " , Toast.LENGTH_LONG).show();
+                            Log.d("checking number","method start");
 
                         }
 
                     }
                 } else {
-                    Toast.makeText(getActivity(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "****NOT FOUND****", Toast.LENGTH_LONG).show();
+                    Log.d("checking number","not found");
+
                 }
             }
             @Override
@@ -162,6 +164,7 @@ public class InputPhoneFragment extends Fragment{
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Log.d("checking number","DB error");
 
             }
         });
@@ -188,9 +191,12 @@ public class InputPhoneFragment extends Fragment{
 
 
                         if (databaseError != null) {
-                            Toast.makeText(getActivity(), "COPY FAILED", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getActivity(), "COPY FAILED", Toast.LENGTH_LONG).show();
+                            Log.d("input phone","fail");
+
                         } else {
-                            Toast.makeText(getActivity(), "COPY SUCCESS", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getActivity(), "COPY SUCCESS", Toast.LENGTH_LONG).show();
+                            Log.d("input phone","copy success");
 
                         }
                     }
@@ -199,7 +205,8 @@ public class InputPhoneFragment extends Fragment{
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "onCancelled- copy fail", Toast.LENGTH_LONG).show();
+             //   Toast.makeText(getActivity(), "onCancelled- copy fail", Toast.LENGTH_LONG).show();
+                Log.d("input phone","fail");
 
             }
         });
