@@ -43,14 +43,26 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.6.1'
 
     //Firebase
-    compile 'com.google.firebase:firebase-database:9.6.0'
-    compile 'com.google.firebase:firebase-auth:9.6.1'
-    compile 'com.google.firebase:firebase-storage:9.6.1'
-    compile 'com.google.firebase:firebase-messaging:9.6.1'
 
     //Firebase ui
-    compile 'com.firebaseui:firebase-ui-auth:0.6.0'
 
+    compile 'com.google.firebase:firebase-auth:10.2.0'
+    compile 'com.google.firebase:firebase-database:10.2.0'
+    compile 'com.google.firebase:firebase-messaging:10.2.0'
+    compile 'com.firebaseui:firebase-ui-database:1.2.0'
 
+    compile 'com.firebaseui:firebase-ui-auth:1.2.0'
+
+}
+
+allprojects {
+    repositories {
+        jcenter()
+
+        // Required for 'com.firebaseui:firebase-ui:1.1.1'
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
+    }
 }
 apply plugin: 'com.google.gms.google-services'

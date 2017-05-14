@@ -11,11 +11,12 @@ public class User {
     private String phoneNum;
     private String searchNum;
     private Boolean playingExtra;
+    private String groupId;
 
-    public String groupId;
+    private String refreshedToken;
 
 
-    public User(String uId, String name, String email, String phoneNum, String searchNum, Boolean playingExtra,  String groupId) {
+    public User(String uId, String name, String email, String phoneNum, String searchNum, Boolean playingExtra,  String groupId, String refreshedToken) {
         this.uId = uId;
         this.name = name;
         this.email = email;
@@ -23,6 +24,7 @@ public class User {
         this.searchNum = searchNum;
         this.playingExtra = playingExtra;
         this.groupId = groupId;
+        this.refreshedToken = refreshedToken;
     }
     public User() {
 
@@ -84,5 +86,9 @@ public class User {
 
     public void setPlayingExtra(Boolean playingExtra) {
         this.playingExtra = playingExtra;
+    }
+
+    public String getRefreshedToken() {
+        return refreshedToken;
     }
 }

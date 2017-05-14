@@ -42,7 +42,7 @@ const mailTransport = nodemailer.createTransport(
     `smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
 
 // Sends an email confirmation when a user changes his mailing list subscription.
-exports.sendEmailConfirmation = functions.database.ref('/users/{uid}').onWrite(event => {
+exports.sendEmailConfirmation = functions.database.ref('/users/{uid}/uid').onWrite(event => {
   const snapshot = event.data;
   const val = snapshot.val();
 
@@ -63,6 +63,7 @@ exports.sendEmailConfirmation = functions.database.ref('/users/{uid}').onWrite(e
   });
 });
 
+/*
 // EMAIL TO SAY YOU HAVE BEEN ADDED TO A GROUP
 exports.sendEmailGroupConf = functions.database.ref('/users/{uid}').onWrite(event => {
   const snapshot = event.data;
@@ -86,60 +87,46 @@ exports.sendEmailGroupConf = functions.database.ref('/users/{uid}').onWrite(even
   });
   });
 
+*/
+
+///push try
+/// PUSH NOTIFICATION - CODE REF - https://github.com/firebase/functions-samples/tree/master/fcm-notifications
+// DEVELOPED FROM ABOVE
+exports.sendNotification = functions.database.ref('/users/{uid}/')
+    .onWrite(event => {
+
+        const user = event.data.current.val();
+        const senderUid = user.groups.groupId;
+        const receiverUid = user.uid;
+        const promises = [];
 
 
-/// PUSH NOTIFICATION
-exports.sendAddedToGroupNotification = functions.database.ref('/users/{uId}/groups/{adminName}').onWrite(event => {
-  const uId = event.params.uId;
-  const adminName = event.params.adminName;
-  // If un-follow we exit the function.
-
-  console.log('We have a new player added to :', adminName , 'group');
-
-  // Get the list of device notification tokens.
-  const getDeviceTokensPromise = admin.database().ref(`/users/${uId}/notificationTokens`).once('value');
-
-  // Get the follower profile.
-  const getFollowerProfilePromise = admin.auth().getUser(uId);
-
-  return Promise.all([getDeviceTokensPromise, getFollowerProfilePromise]).then(results => {
-    const tokensSnapshot = results[0];
-    const user = results[1];
-
-    // Check if there are any device tokens.
-    if (!tokensSnapshot.hasChildren()) {
-      return console.log('There are no notification tokens to send to.');
-    }
-    console.log('There are', tokensSnapshot.numChildren(), 'tokens to send notifications to.');
-    console.log('Fetched follower profile', follower);
-
-    // Notification details.
-    const payload = {
-      notification: {
-        title: 'You have been added to a match!',
-        body: `${uId.name} Please check your Squad App`,
-      }
-    };
-
-    // Listing all tokens.
-    const tokens = Object.keys(tokensSnapshot.val());
-
-    // Send notifications to all tokens.
-    return admin.messaging().sendToDevice(tokens, payload).then(response => {
-      // For each message check if there was an error.
-      const tokensToRemove = [];
-      response.results.forEach((result, index) => {
-        const error = result.error;
-        if (error) {
-          console.error('Failure sending notification to', tokens[index], error);
-          // Cleanup the tokens who are not registered anymore.
-          if (error.code === 'messaging/invalid-registration-token' ||
-              error.code === 'messaging/registration-token-not-registered') {
-            tokensToRemove.push(tokensSnapshot.ref.child(tokens[index]).remove());
-          }
+        if (senderUid == receiverUid) {
+            //if sender is receiver, don't send notification
+            promises.push(event.data.current.ref.remove());
+            return Promise.all(promises);
         }
-      });
-      return Promise.all(tokensToRemove);
-    });
-  });
+
+        const getRefreshedTokenPromise = admin.database().ref(`/users/${receiverUid}/refreshedToken`).once('value');
+        const getReceiverUidPromise = admin.auth().getUser(receiverUid);
+
+        return Promise.all([getRefreshedTokenPromise, getReceiverUidPromise]).then(results => {
+            const refreshedToken = results[0].val();
+            const receiver = results[1];
+            console.log('notifying ' + receiverUid  +  ' from ' + senderUid);
+
+              const payload = {
+        notification: {
+          title: 'You have a new follower!',
+          body: ` is now following you.`
+        }
+  };
+            admin.messaging().sendToDevice(refreshedToken, payload)
+                .then(function (response) {
+                    console.log("Successfully sent message:", response);
+                })
+                .catch(function (error) {
+                    console.log("Error sending message:", error);
+                });
+        });
 });

@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -104,9 +105,20 @@ public class MainActivity extends AppCompatActivity {
                     onSignedInInitialize(user.getDisplayName(), user.getUid());
                     // add user instance to realtime database
 
-                    writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail(), null, null, null,null);
+                    writeNewUser(user.getUid(), user.getDisplayName(), user.getEmail(), null, null,null, null,null);
                     readUserInfo(user.getDisplayName());
                     Toast.makeText(MainActivity.this, "Signed in", Toast.LENGTH_SHORT).show();
+
+                    // For FCM , gets refreshed token
+                    // code ref - http://stackoverflow.com/questions/37787373/firebase-fcm-how-to-get-token
+
+                    String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                    if (refreshedToken != null) {
+                        rootDatabase.child("users")
+                                .child(user.getUid())
+                                .child("refreshedToken")
+                                .setValue(refreshedToken);
+                    }
 
 
                 } else {
@@ -133,8 +145,12 @@ public class MainActivity extends AppCompatActivity {
 
     // METHOD TO WRITE NEW USER WITHOUT DUPLCIATION
     private void writeNewUser(final String userId, final String name, final String email,
-                              final String phoneNum, final String searchNum, final Boolean playingExtra,  String groupId) {
-        final User user = new User(userId, name, email, phoneNum, searchNum, playingExtra, groupId);
+                              final String phoneNum, final String searchNum, final Boolean playingExtra, String groupId, final String refreshedToken) {
+
+
+
+
+        final User user = new User(userId, name, email, phoneNum, searchNum, playingExtra, groupId, refreshedToken);
 
         // Checks if user exists
         if (usersDatabase != null) {
@@ -151,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         //user does not exist, add to DB
                         usersDatabase.child(userId).setValue(user);
+
+
                         userHasPhoneNumber(mUserId);
                     }
                 }
@@ -193,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //TODO Check if user has been added to match
+    // Check if user has been added to match
     private void userAddedToMatch(final String userId) { // 2
         if (userId != null) {
             usersDatabase.child(userId).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {

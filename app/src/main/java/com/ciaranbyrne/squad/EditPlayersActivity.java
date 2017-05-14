@@ -12,6 +12,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -21,6 +24,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -65,6 +69,10 @@ public class EditPlayersActivity extends AppCompatActivity {
     // 7 Firebase Authenticate TODO
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+    public static final int RC_SIGN_IN = 1;
+    public static final String ANONYMOUS = "anonymous";
+
+
     // instance variables
     private TextView resultText;
     private TextView resultNum;
@@ -76,6 +84,9 @@ public class EditPlayersActivity extends AppCompatActivity {
     private TextView tvPlayerCount;
     // ARRAY LIST FOR KEYS
     private ArrayList<String> keysList;
+
+    private String mUsername;
+
 
 
     // For read permissions on Contacts
@@ -94,6 +105,9 @@ public class EditPlayersActivity extends AppCompatActivity {
         // Adding users to groups - Setting Group ID to be the same as User Id
         final String groupId = firebaseUser.getUid();
         final String userId = firebaseUser.getUid();
+
+        mUsername = ANONYMOUS;
+
 
         // get database reference to read data
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -464,7 +478,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                                 moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
                                         usersDatabase.child(invitedUid).child("groups"));
 
-                                // TODO IF INVITE GROUP ID MATCHES USER INVITED GROUP ID OR DOES NOT EXIST
+                                //  IF INVITE GROUP ID MATCHES USER INVITED GROUP ID OR DOES NOT EXIST
                                 usersDatabase.child(invitedUid).child("groups").child("groupId").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -477,7 +491,7 @@ public class EditPlayersActivity extends AppCompatActivity {
                                                 moveFirebaseRecord(groupsDatabase.child(firebaseUser.getUid()).child("matches"),
                                                         usersDatabase.child(invitedUid).child("groups"));
 
-                                                Toast.makeText(getApplicationContext(), "* found **" + " " + invitedUid, Toast.LENGTH_SHORT).show();
+                                              //  Toast.makeText(getApplicationContext(), "* found **" + " " + invitedUid, Toast.LENGTH_SHORT).show();
 
                                             } else {
                                                 // it does not matchh so warn inviting user that thay are already involved in a match
@@ -749,6 +763,66 @@ public class EditPlayersActivity extends AppCompatActivity {
             phones.close();
         }
         return phoneNumber;
+    }
+
+
+
+    // Sign out
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sign_out_menu:
+
+                //sign out
+                AuthUI.getInstance().signOut(this);
+                // user is now signed out
+
+                // Explicit Intent by specifying its class name
+                Intent i = new Intent(EditPlayersActivity.this, MainActivity.class);
+
+                // Starts TargetActivity
+                startActivity(i);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    //TODO
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Sign in Cancelled ", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+        }
+    }
+
+
+
+
+    private void onSignedOutCleanUp() {
+        // unset user name
+        mUsername = ANONYMOUS;
+        //clear messages from adapter, user not signed in should be able to see msgs
+        // mMessageAdapter.clear();
+        //detach listener
+        //  detachDatabaseReadListener();
     }
 
 }
