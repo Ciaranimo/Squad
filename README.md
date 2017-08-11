@@ -1,2 +1,8 @@
 # Squad
-NCI Final Year Project
+NCI Final Year Project - Please see Final Report Doc for Further details
+
+The Squad Application allows people who play sports on a casual basis with friends and acquaintances to more easily organise matches amongst themselves through one convenient application. The  app is designed to work on all modern Android devices and  will be developed using the most up to date and innovative Android based technologies Firebase Server side management, Firebase Realtime Database, Firebase Authentication Management and Cloud Functions.
+
+The project has been developed to demonstrate how  a sports complex encouraging users to use this application can make the whole process of organising a match  easier for the players. The application will provide the option for players to add users to their team, create regular matches, nominate regular  players. The application will allow the administrator of a group to easily visually see if a user has accepted an invitation or not, with confirmed players highlighted in green on their list. Synchronicity of data is key to the functionality of Squad. When a player is added to an Admin’s player list this data will synch over to that user’s home page. Prompting the user to accept or decline the invitation. Once the invitation is accepted or declined this data synchs back to the player list on the Admin users device.
+
+Businesses are always looking to take advantage of new convenient technology especially one that may separate them from the crowd. I believe the Squad app will  provide a solution to a problem for regular users of a Five a side pitch/ facilities for Football and other sports. Managers and administration staff  of sports complexes will  seize the opportunity to push this application out to its users once it has been developed.
